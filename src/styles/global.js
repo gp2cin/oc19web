@@ -9,11 +9,31 @@ export const GlobalStyle = createGlobalStyle`
   margin: 0;
   outline: 0;
 }
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
 body, html {
-  background: #eee;
+  background: #fff;
   font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
   text-rendering: optimizeLegibility !important;
   -webkit-font-smoothing: antialiased !important;
   height: 100%;
   width: 100%;
-}`;
+  font-size: 14px;
+}
+.container {
+  max-width: 960px;
+}
+.homeMap{
+  width: 100%;
+  height: 400px;
+  margin-top: 85px;
+  /* max-width: 700px; */
+};
+.navbar-brand img{
+  height: 60px;
+}
+
+`;
