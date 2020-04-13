@@ -8,39 +8,68 @@ import api from '../../services/api';
 
 export default function OfficialCases() {
 
-    const [states, setStates] = useState([{value: 26, label: 'Pernambuco'}]);
+    const [states, setStates] = useState([{ value: 26, label: 'Pernambuco' }]);
     //setStates([{value: 26, label: 'Pernambuco'}]);
     const [cities, setCities] = useState([]);
     const [confirmedCases, setConfirmedCases] = useState(0);
     const [suspectCases, setSuspectCases] = useState(0);
     const [deaths, setDeaths] = useState(0);
     const [discardedCases, setDiscardedCases] = useState(0);
+    const [selectedSatate, setSelectedState] = useState('');
 
     const animatedComponents = makeAnimated();
 
     function handleStateChoice(choice) {
-        if(choice !== null){
+        if (choice !== null) {
             fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${choice.value}/municipios`)
-            .then(res => res.json())
-            .then((data) => {
-                console.log(cities)
-                let arr = []
-                for (const i in data) {
-                    const itemToAdd = {value: `${data[i].id}`, label: `${data[i].nome}`};
-                    arr = [...arr, itemToAdd]
-                }
-                setCities(arr);
-            })
+                .then(res => res.json())
+                .then((data) => {
+                    console.log(cities)
+                    let arr = []
+                    for (const i in data) {
+                        const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
+                        arr = [...arr, itemToAdd]
+                    }
+                    setCities(arr);
+                    setSelectedState(choice.label);
+                })
         } else {
             setCities([]);
         }
     }
 
-    function handleCityChoice() {
+    function handleCityChoice(choice) {
         console.log('a')
+        if (choice !== null && selectedSatate !== '') {
+            api.get(`api/v1/cases?estado=${selectedSatate.toLowerCase()}&cidade=${choice.label.toLowerCase()}`)
+                .then(response => {
+                    console.log(response)
+                    if (response !== null) {
+                        console.log(response.data)
+                        if (response.data.confirmed) {
+                            setConfirmedCases(response.data.confirmed);
+                        }
+                        else if (response.data.suspect) {
+                            setSuspectCases(response.data.suspect);
+                        }
+                        else if (response.data.deaths) {
+                            setDeaths(response.data.deaths);
+                        }
+                        else if (response.data.discarded) {
+                            setDiscardedCases(response.data.discarded);
+                        } else {
+                            alert('Não foi possível carregar os dados para esta cidade.')
+                            setConfirmedCases('-');
+                            setSuspectCases('-');
+                            setDeaths('-');
+                            setDiscardedCases('-');
+                        }
+                    }
+                })
+        }
     }
 
-    return(
+    return (
         <div className="official-cases-container">
             <h1>Busque os casos registrados oficialmente por cidade.</h1>
             <div className="search-container col-10">
