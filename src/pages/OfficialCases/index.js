@@ -14,7 +14,7 @@ export default function OfficialCases() {
     const [confirmedCases, setConfirmedCases] = useState(0);
     const [suspectCases, setSuspectCases] = useState(0);
     const [deaths, setDeaths] = useState(0);
-    const [discardedCases, setDiscardedCases] = useState(0);
+    const [recoveredCases, setrecoveredCases] = useState(0);
     const [selectedSatate, setSelectedState] = useState('');
 
     const animatedComponents = makeAnimated();
@@ -41,28 +41,31 @@ export default function OfficialCases() {
     function handleCityChoice(choice) {
         console.log('a')
         if (choice !== null && selectedSatate !== '') {
-            api.get(`api/v1/cases?estado=${selectedSatate.toLowerCase()}&cidade=${choice.label.toLowerCase()}`)
+            console.log(choice.label.toLowerCase())
+            api.get(`api/v1/cases/state?cidade=${choice.label.toLowerCase()}`)
                 .then(response => {
                     console.log(response)
                     if (response !== null) {
                         console.log(response.data)
                         if (response.data.confirmed) {
                             setConfirmedCases(response.data.confirmed);
-                        }
-                        else if (response.data.suspect) {
-                            setSuspectCases(response.data.suspect);
-                        }
-                        else if (response.data.deaths) {
-                            setDeaths(response.data.deaths);
-                        }
-                        else if (response.data.discarded) {
-                            setDiscardedCases(response.data.discarded);
                         } else {
-                            alert('Não foi possível carregar os dados para esta cidade.')
                             setConfirmedCases('-');
+                        }
+                        if (response.data.suspects) {
+                            setSuspectCases(response.data.suspects);
+                        } else {
                             setSuspectCases('-');
+                        }
+                        if (response.data.deaths) {
+                            setDeaths(response.data.deaths);
+                        } else {
                             setDeaths('-');
-                            setDiscardedCases('-');
+                        }
+                        if (response.data.recovered) {
+                            setrecoveredCases(response.data.recovered);
+                        } else {
+                            setrecoveredCases('-');
                         }
                     }
                 })
@@ -116,8 +119,8 @@ export default function OfficialCases() {
                     <p1>{`${suspectCases}`}</p1>
                 </div>
                 <div className="result-cases col-7">
-                    <p>Número de casos descartados:</p>
-                    <p1>{`${discardedCases}`}</p1>
+                    <p>Número de casos recuperados:</p>
+                    <p1>{`${recoveredCases}`}</p1>
                 </div>
             </div>
         </div>
