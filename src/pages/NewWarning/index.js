@@ -133,11 +133,14 @@ export default function WarningCreation() {
 
     async function postWarning(data) {
         try {
-            await api.post('warnings', data);
-            console.log(data);
-            history.push('/');
+            await api.post('api/v1/warnings', data)
+                .then((d) => {
+                    console.log(d)
+                })
+            //console.log(data);
+            //history.push('/');
         } catch (error) {
-            alert('Erro ao cadastrar caso, tente novamente.');
+            alert(`Erro ao cadastrar caso, tente novamente. ${error}`);
             console.log(data);
         }
     }
@@ -150,7 +153,7 @@ export default function WarningCreation() {
                     const address = {
                         "location": {
                             "type": "Point",
-                            "coordinates": [position.coords.latitude, position.coords.longitude]
+                            "coordinates": [`${position.coords.latitude}`, `${position.coords.longitude}`]
                         }
                     };
 
