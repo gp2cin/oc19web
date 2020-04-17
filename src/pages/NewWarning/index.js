@@ -201,31 +201,31 @@ export default function WarningCreation() {
                 <h1>Informe o que você está sentindo</h1>
                 <p>Ao registrar informações aqui, você se responsabiliza legalmente pela veracidade delas.</p>
             </section>
-            <div className="content col-12">
-                <form className="col=12">
-                    <div className="personal-info col-11">
-                        <div className="email col-10">
+            <div className="content col-12 row">
+                <form>
+                    <div className="personal-info col-12">
+                        <div className="email col-11">
                             <p>Insira seu e-mail:*</p>
                             <input
                                 placeholder="E-mail"
-                                className="col-12"
+                                className="col-10"
                                 value={email}
                                 type="e-mail"
                                 onChange={e => setEmail(e.target.value)}
                             >
                             </input>
                         </div>
-                        <div className="birthdate-container col-10">
+                        <div className="birthdate-container col-11">
                             <p>Insira sua data de nascimento:*</p>
-                            <DatePicker maxDate={new Date()} className="date-picker col-12" dateFormat="dd/MM/yyyy" locale="BR" selected={date} onChange={date => handleBirthdate(date)} />
+                            <DatePicker maxDate={new Date()} className="date-picker" dateFormat="dd/MM/yyyy" locale="BR" selected={date} onChange={date => handleBirthdate(date)} />
                         </div>
 
                     </div>
-                    <div className="select-container col-11">
-                        <div className="symptoms-container col-10">
+                    <div className="select-container col-12">
+                        <div className="symptoms-container col-11">
                             <p>Quais dos sintomas abaixo você está apresentando?</p>
                             <Select
-                                className="select"
+                                className="select col-11"
                                 placeholder="Escolha"
                                 closeMenuOnSelect={false}
                                 components={animatedComponents}
@@ -237,10 +237,10 @@ export default function WarningCreation() {
                                 options={symptomOptions}
                             />
                         </div>
-                        <div className="deseases-container col-10">
+                        <div className="deseases-container col-11">
                             <p>Você é portador de alguma dessas morbidades?</p>
                             <Select
-                                className="select"
+                                className="select col-11"
                                 placeholder="Escolha"
                                 closeMenuOnSelect={false}
                                 components={animatedComponents}
@@ -253,60 +253,64 @@ export default function WarningCreation() {
                             />
                         </div>
                     </div>
-                    <div className="questions-container col-11">
-                        <FormControl component="fieldset">
-                            <p>Você manteve contato com caso suspeito ou confirmado para COVID-19 nos últimos 14 dias?*</p>
-                            <RadioGroup aria-label="q" name="q1" value={valueQ1} onChange={handleChangeQ1}>
-                                <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                <FormControlLabel value="no" control={<Radio />} label="Não" />
-                            </RadioGroup>
-                        </FormControl>
-                        <FormControl component="fieldset">
-                            <p>Você manteve contato domiciliar com caso confirmado por COVID-19 nos últimos 14 dias?*</p>
-                            <RadioGroup aria-label="q" name="q2" value={valueQ2} onChange={handleChangeQ2}>
-                                <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                <FormControlLabel value="no" control={<Radio />} label="Não" />
-                            </RadioGroup>
-                        </FormControl>
-                        <FormControl component="fieldset">
-                            <p>Você esteve em alguma unidade de saúde nos 14 dias antes do início dos sintomas?*</p>
-                            <RadioGroup aria-label="q" name="q3" value={valueQ3} onChange={handleChangeQ3}>
-                                <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                <FormControlLabel value="no" control={<Radio />} label="Não" />
-                            </RadioGroup>
-                        </FormControl>
-                        <FormControl component="fieldset">
-                            <p>Você passou por alguma avaliação médica para tratar dos sintomas que você está apresentando no momento?*</p>
-                            <RadioGroup aria-label="q" name="q4" value={valueQ4} onChange={handleChangeQ4}>
-                                <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                <FormControlLabel value="no" control={<Radio />} label="Não" />
-                            </RadioGroup>
-                        </FormControl>
-                        <FormControl component="fieldset">
-                            <p>Caso afirmativo para a questão anterior, a contaminação por COVID-19 foi descartada?{isRequiredQ5}</p>
-                            <RadioGroup aria-label="q" name="q5" value={valueQ5} onChange={handleChangeQ5}>
-                                <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                <FormControlLabel value="no" control={<Radio />} label="Não" />
-                            </RadioGroup>
-                        </FormControl>
-                        <FormControl component="fieldset">
-                            <p>Você fez algum exame para detectar o coronavírus?*</p>
-                            <RadioGroup aria-label="q" name="q6" value={valueQ6} onChange={handleChangeQ6}>
-                                <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                <FormControlLabel value="no" control={<Radio />} label="Não" />
-                            </RadioGroup>
-                        </FormControl>
-                        <FormControl component="fieldset">
-                            <p>Caso afirmativo para a questão anterior, qual o resultado do exame?{isRequiredQ7}</p>
-                            <RadioGroup aria-label="q" name="q7" value={valueQ7} onChange={handleChangeQ7}>
-                                <FormControlLabel value="positive" control={<Radio />} label="Positivo" />
-                                <FormControlLabel value="negative" control={<Radio />} label="Negativo" />
-                            </RadioGroup>
-                        </FormControl>
+                    <div className="questions-container col-12">
+                        <div className="questions-div col-11">
+                            <FormControl component="fieldset">
+                                <p>Você manteve contato com caso suspeito ou confirmado para COVID-19 nos últimos 14 dias?*</p>
+                                <RadioGroup aria-label="q" name="q1" value={valueQ1} onChange={handleChangeQ1}>
+                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                </RadioGroup>
+                            </FormControl>
+                            <FormControl component="fieldset" className="col-9">
+                                <p>Você manteve contato domiciliar com caso confirmado por COVID-19 nos últimos 14 dias?*</p>
+                                <RadioGroup aria-label="q" name="q2" value={valueQ2} onChange={handleChangeQ2}>
+                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                </RadioGroup>
+                            </FormControl>
+                            <FormControl component="fieldset" className="col-9">
+                                <p>Você esteve em alguma unidade de saúde nos 14 dias antes do início dos sintomas?*</p>
+                                <RadioGroup aria-label="q" name="q3" value={valueQ3} onChange={handleChangeQ3}>
+                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                </RadioGroup>
+                            </FormControl>
+                            <FormControl component="fieldset" className="col-9">
+                                <p>Você passou por alguma avaliação médica para tratar dos sintomas que você está apresentando no momento?*</p>
+                                <RadioGroup aria-label="q" name="q4" value={valueQ4} onChange={handleChangeQ4}>
+                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                </RadioGroup>
+                            </FormControl>
+                            <FormControl component="fieldset" className="col-9">
+                                <p>Caso afirmativo para a questão anterior, a contaminação por COVID-19 foi descartada?{isRequiredQ5}</p>
+                                <RadioGroup aria-label="q" name="q5" value={valueQ5} onChange={handleChangeQ5}>
+                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                </RadioGroup>
+                            </FormControl>
+                            <FormControl component="fieldset" className="col-9">
+                                <p>Você fez algum exame para detectar o coronavírus?*</p>
+                                <RadioGroup aria-label="q" name="q6" value={valueQ6} onChange={handleChangeQ6}>
+                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                </RadioGroup>
+                            </FormControl>
+                            <FormControl component="fieldset" className="col-9">
+                                <p>Caso afirmativo para a questão anterior, qual o resultado do exame?{isRequiredQ7}</p>
+                                <RadioGroup aria-label="q" name="q7" value={valueQ7} onChange={handleChangeQ7}>
+                                    <FormControlLabel value="positive" control={<Radio />} label="Positivo" />
+                                    <FormControlLabel value="negative" control={<Radio />} label="Negativo" />
+                                </RadioGroup>
+                            </FormControl>
+                        </div>
                     </div>
                 </form>
-                <p>Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.</p>
-                <button onClick={handleNewWarning} className="button" type="submit">Enviar</button>
+                <section>
+                    <p>Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.</p>
+                    <button onClick={handleNewWarning} className="button" type="submit">Enviar</button>
+                </section>
             </div>
         </div>
     );
