@@ -47,11 +47,12 @@
 }
 
 .new-warning-container form {
-    display: flex;
+    display: inline-block;
     flex-direction: column;
     justify-content: space-between;
     background-color: #dcdce6;
     border-radius: 5px;
+    text-align: center;
 }
 
 .new-warning-container form p {
@@ -67,7 +68,6 @@
 }
 
 .email {
-    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -75,27 +75,27 @@
 }
 
 .email input {
-    width: 100%;
     max-height: 30px;
     font-size: 14px;
     font: Roboto;
 }
 
 .date-picker {
-    width: 100% !important;
     max-height: 30px;
     font-size: 14px;
     font: Roboto;
-    bottom: 0;
-    vertical-align: bottom;
+    margin: 0 auto;
 }
 
+.react-datepicker-wrapper{
+    width: 83.33%; flex: 1 0 50%;
+}
 
 .birthdate-container {
-    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    align-items: center;
 }
 
 .select-container {
@@ -129,6 +129,8 @@
     width: 100%;
     max-width: 500px;
     vertical-align: bottom;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .content {
@@ -150,6 +152,17 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-self: center;
+    align-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.questions-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .questions-container fieldset {
@@ -212,23 +225,28 @@ form input {
     filter: brightness(90%);
 }
 
-.col-1 {width: 8.33%;}
-.col-2 {width: 16.66%;}
-.col-3 {width: 25%;}
-.col-4 {width: 33.33%;}
-.col-5 {width: 41.66%;}
-.col-6 {width: 50%;}
-.col-7 {width: 58.33%;}
-.col-8 {width: 66.66%;}
-.col-9 {width: 75%;}
-.col-10 {width: 83.33%;}
-.col-11 {width: 91.66%;}
-.col-12 {width: 100%;}
+.col-1 {width: 8.33%; flex: 1 0 50%;}
+.col-2 {width: 16.66%; flex: 1 0 50%;}
+.col-3 {width: 25%; flex: 1 0 50%;}
+.col-4 {width: 33.33%; flex: 1 0 50%;}
+.col-5 {width: 41.66%; flex: 1 0 50%;}
+.col-6 {width: 50%; flex: 1 0 50%;}
+.col-7 {width: 58.33%; flex: 1 0 50%;}
+.col-8 {width: 66.66%; flex: 1 0 50%;}
+.col-9 {width: 75%; flex: 1 0 50%;}
+.col-10 {width: 83.33%; flex: 1 0 50%;}
+.col-11 {width: 91.66%; flex: 1 0 50%;}
+.col-12 {width: 100%; flex: 1 0 50%;}
+
 
 @media only screen and (max-width: 768px) {
     /* For mobile phones: */
     [class*="col-"] {
       width: 100%;
+      flex: 1 0 50%;
+    }
+    .react-datepicker-wrapper{
+        width: 100%; flex: 1 0 50%;
     }
     .personal-info {
         flex-direction: column;
