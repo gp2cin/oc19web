@@ -19,46 +19,121 @@ export default function WarningCreation() {
     const [email, setEmail] = useState('');
     const [date, setDate] = useState(new Date());
     const [birthdate, setBirthdate] = useState('');
-    const [symptoms, setSymptoms] = useState([]);
-    const [deseases, setDeseases] = useState([]);
     const [latitude, setLatitude] = useState(0);
     const [longitude, setLongitude] = useState(0);
 
     const animatedComponents = makeAnimated();
     const history = useHistory();
 
+    const [symptomsControl, setSymptomsControl] = useState([]);
+
+    //Symptoms object wich goes to the backend
+    const symptoms = {
+        headache: false,
+        runny_nose: false,
+        breathlessness: false,
+        cough: false,
+        dry_cough: false,
+        sore_throat: false,
+        muscle_weakness_or_pain: false,
+        sputum_production: false,
+        sutuffy_nose: false,
+        red_eyes: false,
+        dificulty_swallowing: false,
+        chills: false,
+        body_red_spots: false,
+        diarrhea: false,
+        nausea: false,
+        vomiting: false,
+        lack_of_appetite: false,
+        fever: false
+    };
+
+    //Symptoms options to construct the select options on frontend
     const symptomOptions = [
         { value: 'headache', label: 'Dor de cabeça' },
-        { value: 'runny-nose', label: 'Coriza' },
+        { value: 'runny_nose', label: 'Coriza' },
         { value: 'breathlessness', label: 'Dificuldade para respirar' },
         { value: 'cough', label: 'Tosse' },
-        { value: 'dry-cough', label: 'Tosse seca' },
-        { value: 'sore-throat', label: 'Dor de garganta' },
-        { value: 'muscle-weakness-or-pain', label: 'Fraqueza ou dor muscular' },
-        { value: 'sputum-production', label: 'Produção de escarro' },
-        { value: 'nose-obstruction', label: 'Obstrução do nariz' },
-        { value: 'red-eyes', label: 'Vermelhidão nos olhos' },
-        { value: 'dificulty-swallowing', label: 'Dificuldade para engolir' },
+        { value: 'dry_cough', label: 'Tosse seca' },
+        { value: 'sore_throat', label: 'Dor de garganta' },
+        { value: 'muscle_weakness_or_pain', label: 'Fraqueza ou dor muscular' },
+        { value: 'sputum_production', label: 'Produção de escarro' },
+        { value: 'sutuffy_nose', label: 'Obstrução do nariz' },
+        { value: 'red_eyes', label: 'Vermelhidão nos olhos' },
+        { value: 'dificulty_swallowing', label: 'Dificuldade para engolir' },
         { value: 'chills', label: 'Calafrios' },
-        { value: 'body-red-spots', label: 'Manchas vermelhas no corpo' },
+        { value: 'body_red_spots', label: 'Manchas vermelhas no corpo' },
         { value: 'diarrhea', label: 'Diarreia' },
         { value: 'nausea', label: 'Náusea' },
         { value: 'vomiting', label: 'Vômito' },
-        { value: 'lack-of-appetite', label: 'Falta de apetite' },
+        { value: 'lack_of_appetite', label: 'Falta de apetite' },
         { value: 'fever', label: 'Febre' },
     ];
 
+    // const symptoms = {
+    //     headache: false,
+    //     runny_nose: false,
+    //     breathlessness: false,
+    //     sutuffy_nose: false,
+    //     cough: false,
+    //     sore_throat: false,
+    //     diarrhea: false,
+    //     fever: false,
+    //     body_temperature: 0,
+    //     body_ache: false,
+    //     sore_throat: false,
+    //     bellyache: false,
+    //     malaise: false,
+    //     pain_level: 0,
+    //     took_medicine: false,
+    //     better: false
+    // };
+
+    // //Symptoms options to construct the select options on frontend
+    // const symptomOptions = [
+    //     { value: 'headache', label: 'Dor de cabeça' },
+    //     { value: 'runny_nose', label: 'Coriza' },
+    //     { value: 'breathlessness', label: 'Dificuldade para respirar' },
+    //     { value: 'cough', label: 'Tosse' },
+    //     { value: 'sutuffy_nose', label: 'Nariz entupido' },
+    //     { value: 'sore_throat', label: 'Dor de garganta' },
+    //     { value: 'body_ache', label: 'Dor no corpo' },
+    //     { value: 'bellyache', label: 'Dor de barriga' },
+    //     { value: 'body_red_spots', label: 'Manchas vermelhas no corpo' },
+    //     { value: 'diarrhea', label: 'Diarreia' },
+    //     { value: 'malaise', label: 'Mal estar' },
+    //     { value: 'fever', label: 'Febre' },
+    // ];
+
+    const [diseasesControl, setDiseasesControl] = useState([])
+
+    //Diseases object wich goes to the backend
+    const diseases = {
+        diabetes: false,
+        neurological_disorders: false,
+        HIV_infection: false,
+        neoplasm: false,
+        kidney_disease: false,
+        heart_disease: false,
+        liver_disease: false,
+        immunodeficiency: false,
+        lung_disease: false,
+        neuromuscular_disease: false
+    };
+
+    //Diseases options to construct the select options on frontend
     const deseaseOptions = [
         { value: 'diabetes', label: 'Diabetes' },
-        { value: 'neurological-desease', label: 'Doença Neurológica' },
-        { value: 'hiv-infection', label: 'Infecção pelo HIV' },
-        { value: 'cancer', label: 'Neoplasia (Cancer)' },
-        { value: 'kidney-disease', label: 'Doença renal (doença nos rins)' },
-        { value: 'heart-disease', label: 'Doença cardiovascular (doença no coração), incluindo hipertensão' },
-        { value: 'liver-disease', label: 'Doença Hepática (doença no fígado)' },
-        { value: 'immunodeficiency ', label: 'Imunodeficiência (imunidade baixa)' },
-        { value: 'lung-disease', label: 'Doença pulmonar crônica (doença nos pulmões)' },
-        { value: 'neuromuscular-disease', label: 'Doença neuromuscular (doença muscular)' },
+        { value: 'neurological_disorders', label: 'Doença Neurológica' },
+        { value: 'HIV_infection', label: 'Infecção pelo HIV' },
+        { value: 'neoplasm', label: 'Neoplasia (Cancer)' },
+        { value: 'kidney_disease', label: 'Doença renal (doença nos rins)' },
+        { value: 'heart_disease', label: 'Doença cardiovascular (doença no coração), incluindo hipertensão' },
+        { value: 'liver_disease', label: 'Doença Hepática (doença no fígado)' },
+        { value: 'immunodeficiency', label: 'Imunodeficiência (imunidade baixa)' },
+        { value: 'lung_disease', label: 'Doença pulmonar crônica (doença nos pulmões)' },
+        { value: 'neuromuscular_disease', label: 'Doença neuromuscular (doença muscular)' },
     ];
 
     //Respostas a cada pergunta de sim ou não
@@ -114,20 +189,18 @@ export default function WarningCreation() {
     }
 
     function handleSymptomsChange(symptomsChange) {
-        if (symptomsChange == null) {
-            setSymptoms([]);
-            //setTargetHeight(36);
+        if (symptomsChange != null && symptomsChange.length != 0) {
+            setSymptomsControl(symptomsChange);
         } else {
-            setSymptoms(symptomsChange);
-            //setTargetHeight(symptomsChange.length * 36);
+            setSymptomsControl([]);
         }
     }
 
-    function handleDeseasesChange(deseasesChange) {
-        if (deseasesChange == null) {
-            setDeseases([]);
+    function handleDeseasesChange(diseasesChange) {
+        if (diseasesChange != null && diseasesChange.length != 0) {
+            setDiseasesControl(diseasesChange);
         } else {
-            setDeseases(deseasesChange);
+            setDiseasesControl([]);
         }
     }
 
@@ -157,11 +230,34 @@ export default function WarningCreation() {
                         }
                     };
 
+                    if (diseasesControl.length != 0) {
+                        for (var key in diseases) {
+                            for (const i in diseasesControl) {
+                                if (key == diseasesControl[i].value) {
+                                    diseases[key] = true;
+                                }
+                            }
+                        }
+                    }
+
+                    if (symptomsControl.length != 0) {
+                        for (var key in symptoms) {
+                            for (const i in symptomsControl) {
+                                if (key == symptomsControl[i].value) {
+                                    symptoms[key] = true;
+                                }
+                            }
+                        }
+                    }
+
                     const data = {
                         email,
                         address,
                         birthdate,
+                        diseases,
+                        symptoms,
                     };
+                    console.log(data);
                     postWarning(data);
                 });
             }
