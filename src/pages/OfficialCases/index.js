@@ -42,7 +42,9 @@ export default function OfficialCases() {
         console.log('a')
         if (choice !== null && selectedSatate !== '') {
             console.log(choice.label.toLowerCase())
-            api.get(`api/v1/cases/state?cidade=${choice.label.toLowerCase()}`)
+            const parsedCity = choice.label.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            console.log(parsedCity);
+            api.get(`api/v1/cases/state?cidade=${parsedCity}`)
                 .then(response => {
                     console.log(response)
                     if (response !== null) {
