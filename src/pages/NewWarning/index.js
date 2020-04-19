@@ -137,44 +137,72 @@ export default function WarningCreation() {
     ];
 
     //Respostas a cada pergunta de sim ou não
-    const [valueQ1, setValueQ1] = React.useState('');
+    const [contact_suspect_or_confirmed_case, setContact_suspect_or_confirmed_case] = React.useState();
     const handleChangeQ1 = (event) => {
-        setValueQ1(event.target.value);
+        if (event.target.value == "true") {
+            setContact_suspect_or_confirmed_case(true);
+        } else if (event.target.value == "false") {
+            setContact_suspect_or_confirmed_case(false);
+        }
+
     };
-    const [valueQ2, setValueQ2] = React.useState('');
+    const [household_contact_confirmed_case, setHousehold_contact_confirmed_case] = React.useState();
     const handleChangeQ2 = (event) => {
-        setValueQ2(event.target.value);
+        if (event.target.value == "true") {
+            setHousehold_contact_confirmed_case(true);
+        } else if (event.target.value == "false") {
+            setHousehold_contact_confirmed_case(false);
+        }
     };
-    const [valueQ3, setValueQ3] = React.useState('');
+    const [been_in_health_unit, setBeen_in_health_unit] = React.useState();
     const handleChangeQ3 = (event) => {
-        setValueQ3(event.target.value);
+        if (event.target.value == "true") {
+            setBeen_in_health_unit(true);
+        } else if (event.target.value == "false") {
+            setBeen_in_health_unit(false);
+        }
     };
-    const [valueQ4, setValueQ4] = React.useState('');
+    const [had_evaluation_for_symptoms, setHad_evaluation_for_symptoms] = React.useState();
     const handleChangeQ4 = (event) => {
-        setValueQ4(event.target.value);
-        if (event.target.value == 'yes') {
+        if (event.target.value == "true") {
+            setHad_evaluation_for_symptoms(true);
+        } else if (event.target.value == "false") {
+            setHad_evaluation_for_symptoms(false);
+        }
+        if (event.target.value == "true") {
             setIsRequiredQ5('*');
         } else {
             setIsRequiredQ5('');
         }
     };
-    const [valueQ5, setValueQ5] = React.useState('');
+    const [covid19_was_discarded, setCovid19_was_discarded] = React.useState();
     const handleChangeQ5 = (event) => {
-        setValueQ5(event.target.value);
-        console.log(valueQ4);
+        if (event.target.value == "true") {
+            setCovid19_was_discarded(true);
+        } else if (event.target.value == "false") {
+            setCovid19_was_discarded(false);
+        }
     };
-    const [valueQ6, setValueQ6] = React.useState('');
+    const [covid_tested, setCovid_tested] = React.useState();
     const handleChangeQ6 = (event) => {
-        setValueQ6(event.target.value);
-        if (event.target.value == 'yes') {
+        if (event.target.value == "true") {
+            setCovid_tested(true);
+        } else if (event.target.value == "false") {
+            setCovid_tested(false);
+        }
+        if (event.target.value == "true") {
             setIsRequiredQ7('*');
         } else {
             setIsRequiredQ7('');
         }
     };
-    const [valueQ7, setValueQ7] = React.useState('');
+    const [covid_result, setCovid_result] = React.useState();
     const handleChangeQ7 = (event) => {
-        setValueQ7(event.target.value);
+        if (event.target.value == "true") {
+            setCovid_result(true);
+        } else if (event.target.value == "false") {
+            setCovid_result(false);
+        }
     };
 
     const [isRequiredQ5, setIsRequiredQ5] = useState('');
@@ -256,6 +284,13 @@ export default function WarningCreation() {
                         birthdate,
                         diseases,
                         symptoms,
+                        contact_suspect_or_confirmed_case,
+                        household_contact_confirmed_case,
+                        been_in_health_unit,
+                        had_evaluation_for_symptoms,
+                        covid19_was_discarded,
+                        covid_tested,
+                        covid_result
                     };
                     console.log(data);
                     postWarning(data);
@@ -276,12 +311,12 @@ export default function WarningCreation() {
     }
 
     function isRequiredFilled() {
-        if (email !== '' && birthdate !== '' && valueQ1 !== '' && valueQ2 !== '' && valueQ3 !== '' && valueQ4 !== '' && valueQ6 !== '') {
-            if (valueQ4 == 'yes' && valueQ5 == '') {
+        if (email !== '' && birthdate !== '' && contact_suspect_or_confirmed_case !== {} && household_contact_confirmed_case !== {} && been_in_health_unit !== {} && had_evaluation_for_symptoms !== {} && covid_tested !== {}) {
+            if (had_evaluation_for_symptoms == true && covid19_was_discarded == {}) {
                 alert("Você precisa preencher todos os campos obrigatórios!")
                 return false;
             }
-            if (valueQ6 == 'yes' && valueQ7 == '') {
+            if (covid_tested == true && covid_result == {}) {
                 alert("Você precisa preencher todos os campos obrigatórios!")
                 return false;
             }
@@ -353,51 +388,51 @@ export default function WarningCreation() {
                         <div className="questions-div col-11">
                             <FormControl component="fieldset">
                                 <p>Você manteve contato com caso suspeito ou confirmado para COVID-19 nos últimos 14 dias?*</p>
-                                <RadioGroup aria-label="q" name="q1" value={valueQ1} onChange={handleChangeQ1}>
-                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                <RadioGroup aria-label="q" name="q1" value={contact_suspect_or_confirmed_case} onChange={handleChangeQ1}>
+                                    <FormControlLabel value="true" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="false" control={<Radio />} label="Não" />
                                 </RadioGroup>
                             </FormControl>
                             <FormControl component="fieldset" className="col-9">
                                 <p>Você manteve contato domiciliar com caso confirmado por COVID-19 nos últimos 14 dias?*</p>
-                                <RadioGroup aria-label="q" name="q2" value={valueQ2} onChange={handleChangeQ2}>
-                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                <RadioGroup aria-label="q" name="q2" value={household_contact_confirmed_case} onChange={handleChangeQ2}>
+                                    <FormControlLabel value="true" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="false" control={<Radio />} label="Não" />
                                 </RadioGroup>
                             </FormControl>
                             <FormControl component="fieldset" className="col-9">
                                 <p>Você esteve em alguma unidade de saúde nos 14 dias antes do início dos sintomas?*</p>
-                                <RadioGroup aria-label="q" name="q3" value={valueQ3} onChange={handleChangeQ3}>
-                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                <RadioGroup aria-label="q" name="q3" value={been_in_health_unit} onChange={handleChangeQ3}>
+                                    <FormControlLabel value="true" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="false" control={<Radio />} label="Não" />
                                 </RadioGroup>
                             </FormControl>
                             <FormControl component="fieldset" className="col-9">
                                 <p>Você passou por alguma avaliação médica para tratar dos sintomas que você está apresentando no momento?*</p>
-                                <RadioGroup aria-label="q" name="q4" value={valueQ4} onChange={handleChangeQ4}>
-                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                <RadioGroup aria-label="q" name="q4" value={had_evaluation_for_symptoms} onChange={handleChangeQ4}>
+                                    <FormControlLabel value="true" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="false" control={<Radio />} label="Não" />
                                 </RadioGroup>
                             </FormControl>
                             <FormControl component="fieldset" className="col-9">
                                 <p>Caso afirmativo para a questão anterior, a contaminação por COVID-19 foi descartada?{isRequiredQ5}</p>
-                                <RadioGroup aria-label="q" name="q5" value={valueQ5} onChange={handleChangeQ5}>
-                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                <RadioGroup aria-label="q" name="q5" value={covid19_was_discarded} onChange={handleChangeQ5}>
+                                    <FormControlLabel value="true" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="false" control={<Radio />} label="Não" />
                                 </RadioGroup>
                             </FormControl>
                             <FormControl component="fieldset" className="col-9">
                                 <p>Você fez algum exame para detectar o coronavírus?*</p>
-                                <RadioGroup aria-label="q" name="q6" value={valueQ6} onChange={handleChangeQ6}>
-                                    <FormControlLabel value="yes" control={<Radio />} label="Sim" />
-                                    <FormControlLabel value="no" control={<Radio />} label="Não" />
+                                <RadioGroup aria-label="q" name="q6" value={covid_tested} onChange={handleChangeQ6}>
+                                    <FormControlLabel value="true" control={<Radio />} label="Sim" />
+                                    <FormControlLabel value="false" control={<Radio />} label="Não" />
                                 </RadioGroup>
                             </FormControl>
                             <FormControl component="fieldset" className="col-9">
                                 <p>Caso afirmativo para a questão anterior, qual o resultado do exame?{isRequiredQ7}</p>
-                                <RadioGroup aria-label="q" name="q7" value={valueQ7} onChange={handleChangeQ7}>
-                                    <FormControlLabel value="positive" control={<Radio />} label="Positivo" />
-                                    <FormControlLabel value="negative" control={<Radio />} label="Negativo" />
+                                <RadioGroup aria-label="q" name="q7" value={covid_result} onChange={handleChangeQ7}>
+                                    <FormControlLabel value="true" control={<Radio />} label="Positivo" />
+                                    <FormControlLabel value="false" control={<Radio />} label="Negativo" />
                                 </RadioGroup>
                             </FormControl>
                         </div>
