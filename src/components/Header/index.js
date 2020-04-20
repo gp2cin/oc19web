@@ -7,7 +7,7 @@ export default class Header extends Component {
     return (
       <HeaderMain>
         <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-header">
-          <Link to="#" className={'navbar-brand'}>
+          <Link to="/" className={'navbar-brand'}>
             <img src={Logo} className={'navbar-logo'} alt="OC19 logo" />
           </Link>
 
@@ -25,7 +25,7 @@ export default class Header extends Component {
           <div className="collapse navbar-collapse" id="navbarCollapse">
             <ul className="navbar-nav mr-auto">
               <li className="nav-item active">
-                <Link to="#" className={'navbar-brand'}>
+                <Link to="/" className={'navbar-brand'}>
                   {'Home'}
                 </Link>
               </li>
@@ -42,9 +42,9 @@ export default class Header extends Component {
             </ul>
           </div>
           <div className={'form-inline mt-2 mt-md-0'}>
-            <button class="btn btn btn-outline-light my-2 my-sm-0" type="submit">
-              Informar novo caso
-            </button>
+            <Link to="/warnings/new" className={'btn btn btn-outline-light my-2 my-sm-0'}>
+              {'Informar novo caso'}
+            </Link>
           </div>
         </nav>
       </HeaderMain>

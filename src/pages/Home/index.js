@@ -59,14 +59,12 @@ class Home extends Component {
       const { latitude, longitude } = position.coords;
       const { userAddress } = this.state;
       if (latitude && longitude) {
-        console.log(userAddress);
         this.setState({
           userAddress: {
             position: [latitude, longitude],
             ...userAddress,
           },
         });
-        console.log(userAddress);
         this.getUserAddress();
       }
     });
