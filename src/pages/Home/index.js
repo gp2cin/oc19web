@@ -7,6 +7,7 @@ import Footer from '../../components/Footer';
 import HeatmapLayer from '../../components/HeatmapLayer';
 import { addressPoints } from './mock.js';
 import MarkerClusterGroup from 'react-leaflet-markercluster';
+import api from '../../services/api';
 
 class Home extends Component {
   state = {
@@ -35,6 +36,7 @@ class Home extends Component {
     userAddress: {
       country: 'br',
       state: 'Pernambuco',
+      city: 'Recife',
       position: [-8.05224, -34.928612],
     },
     mapInfo: {
@@ -54,6 +56,53 @@ class Home extends Component {
       updatedAt: new Date(),
     },
   };
+  getMapData = async () => {
+    try {
+      const { userAddress } = this.state;
+      const warnings = await api.get('api/v1/warnings/map', {
+        params: {
+          lat: userAddress.position[0],
+          lng: userAddress.position[1],
+          radius: 200,
+        },
+      });
+      let warrArray = warnings.data.map((item) => [
+        item.address.location.coordinates[0],
+        item.address.location.coordinates[1],
+        '5',
+      ]);
+      this.setState({
+        warnings: warrArray,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+  getInfoByLocation = async () => {
+    try {
+      const { userAddress } = this.state;
+      const officialCases = await api.get('api/v1/cases', {
+        params: {
+          cidade: userAddress.city,
+          estado: userAddress.state,
+        },
+      });
+      console.log(officialCases.data);
+      let offCases = officialCases.data;
+      let newOffCases = {
+        world: offCases.world ? offCases.world.confirmed : undefined,
+        state: offCases.state ? offCases.state.confirmed : undefined,
+        country: offCases.country ? offCases.country.confirmed : undefined,
+        city: offCases.city ? offCases.city.confirmed : undefined,
+        updatedAt: offCases.world ? offCases.world.updatedAt : undefined,
+      };
+      this.setState({
+        officialCases: newOffCases,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
   getUserLocation = () => {
     navigator.geolocation.getCurrentPosition((position) => {
       const { latitude, longitude } = position.coords;
@@ -66,6 +115,7 @@ class Home extends Component {
           },
         });
         this.getUserAddress();
+        this.getInfoByLocation();
       }
     });
   };
@@ -76,7 +126,6 @@ class Home extends Component {
       .then((results) => results.json())
       .then((data) => {
         const { address } = data;
-        console.log(address);
         const { country_code, state, city } = address;
         this.setState({
           userAddress: {
@@ -86,6 +135,7 @@ class Home extends Component {
             city,
           },
         });
+        this.getMapData();
       });
   };
   componentDidMount() {

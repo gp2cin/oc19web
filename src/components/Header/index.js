@@ -30,6 +30,11 @@ export default class Header extends Component {
                 </Link>
               </li>
               <li className="nav-item">
+                <Link to="/official-cases" className={'navbar-brand'}>
+                  {'Dados oficiais'}
+                </Link>
+              </li>
+              <li className="nav-item">
                 <Link to="#" className={'navbar-brand'}>
                   {'Quem somos'}
                 </Link>
