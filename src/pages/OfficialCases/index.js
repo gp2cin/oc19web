@@ -3,6 +3,8 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import './styles.css'
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 import api from '../../services/api';
 
@@ -75,54 +77,57 @@ export default function OfficialCases() {
     }
 
     return (
-        <div className="official-cases-container">
-            <h1>Busque os casos registrados oficialmente por cidade.</h1>
-            <div className="search-container col-10">
-                <div className="state-select col-12">
-                    <p>Escolha um estado:</p>
-                    <Select
-                        className="select"
-                        placeholder="Escolha"
-                        closeMenuOnSelect={true}
-                        components={animatedComponents}
-                        defaultValue={[]}
-                        isClearable
-                        isSearchable
-                        onChange={handleStateChoice}
-                        options={states}
-                    />
+        <div className="external-container">
+            <Header />
+            <div className="official-cases-container row">
+                <h1>Busque os casos registrados oficialmente por cidade.</h1>
+                <div className="search-container col-md-10">
+                    <div className="state-select col-md-6">
+                        <p>Escolha um estado:</p>
+                        <Select
+                            className="select"
+                            placeholder="Escolha"
+                            closeMenuOnSelect={true}
+                            components={animatedComponents}
+                            defaultValue={[]}
+                            isClearable
+                            isSearchable
+                            onChange={handleStateChoice}
+                            options={states}
+                        />
+                    </div>
+                    <div className="city-select  col-md-6">
+                        <p>Escolha uma cidade:</p>
+                        <Select
+                            className="select"
+                            placeholder="Escolha"
+                            closeMenuOnSelect={true}
+                            components={animatedComponents}
+                            defaultValue={[]}
+                            isClearable
+                            isSearchable
+                            onChange={handleCityChoice}
+                            options={cities}
+                        />
+                    </div>
                 </div>
-                <div className="city-select  col-12">
-                    <p>Escolha uma cidade:</p>
-                    <Select
-                        className="select"
-                        placeholder="Escolha"
-                        closeMenuOnSelect={true}
-                        components={animatedComponents}
-                        defaultValue={[]}
-                        isClearable
-                        isSearchable
-                        onChange={handleCityChoice}
-                        options={cities}
-                    />
-                </div>
-            </div>
-            <div className="search-results-container col-10">
-                <div className="result-cases col-7">
-                    <p>Número de casos confirmados:</p>
-                    <p1>{`${confirmedCases}`}</p1>
-                </div>
-                <div className="result-cases col-7">
-                    <p>Número de óbitos:</p>
-                    <p1>{`${deaths}`}</p1>
-                </div>
-                <div className="result-cases col-7">
-                    <p>Número de casos suspeitos:</p>
-                    <p1>{`${suspectCases}`}</p1>
-                </div>
-                <div className="result-cases col-7">
-                    <p>Número de casos recuperados:</p>
-                    <p1>{`${recoveredCases}`}</p1>
+                <div className="search-results-container col-md-10">
+                    <div className="result-cases col-7">
+                        <p>Número de casos confirmados:</p>
+                        <p1>{`${confirmedCases}`}</p1>
+                    </div>
+                    <div className="result-cases col-md-7">
+                        <p>Número de óbitos:</p>
+                        <p1>{`${deaths}`}</p1>
+                    </div>
+                    <div className="result-cases col-md-7">
+                        <p>Número de casos suspeitos:</p>
+                        <p1>{`${suspectCases}`}</p1>
+                    </div>
+                    <div className="result-cases col-md-7">
+                        <p>Número de casos recuperados:</p>
+                        <p1>{`${recoveredCases}`}</p1>
+                    </div>
                 </div>
             </div>
         </div>
