@@ -477,9 +477,9 @@ export default function WarningCreation() {
                 </div>
               </div>
             </form>
-            <section>
+            <section className={'col-md-12'}>
               <p>{'Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.'}</p>
-              <button onClick={handleNewWarning} className={'btn btn-primary col-md-md-12'} type={'submit'}>
+              <button onClick={handleNewWarning} className={'btn btn-primary col-md-12'} type={'submit'}>
                 {'Enviar'}
               </button>
             </section>
