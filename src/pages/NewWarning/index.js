@@ -21,8 +21,6 @@ export default function WarningCreation() {
   const [email, setEmail] = useState('');
   const [date, setDate] = useState(new Date());
   const [birthdate, setBirthdate] = useState('');
-  const [latitude, setLatitude] = useState(0);
-  const [longitude, setLongitude] = useState(0);
 
   const animatedComponents = makeAnimated();
   const history = useHistory();
@@ -239,7 +237,7 @@ export default function WarningCreation() {
         console.log(d);
       });
       //console.log(data);
-      //history.push('/');
+      history.push('/');
     } catch (error) {
       alert(`Erro ao cadastrar caso, tente novamente. ${error}`);
       console.log(data);
