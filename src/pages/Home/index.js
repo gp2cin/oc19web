@@ -18,20 +18,7 @@ class Home extends Component {
     blur: 8,
     max: 0.5,
     limitAddressPoints: true,
-    warnings: [
-      [-8.08927369333, -34.9287452333, '5'],
-      [-8.090585105, -34.9253463833, '5'],
-      [-8.09064188833, -34.9241556833, '5'],
-      [-8.08927369333, -34.92874572333, '5'],
-      [-8.090585105, -34.9253463933, '5'],
-      [-8.09064188833, -34.924153833, '5'],
-      [-8.08927369333, -34.9287451333, '5'],
-      [-8.090585105, -34.9253463843, '5'],
-      [-8.09064188833, -34.9241556833, '5'],
-      [-8.08927369333, -34.9287453333, '5'],
-      [-8.090585105, -34.9253463853, '5'],
-      [-8.09064188833, -34.9241556533, '5'],
-    ],
+    warnings: [],
     // userPosition: [-8.05224, -34.928612],
     userAddress: {
       country: 'br',
@@ -66,11 +53,7 @@ class Home extends Component {
           radius: 200,
         },
       });
-      let warrArray = warnings.data.map((item) => [
-        item.address.location.coordinates[0],
-        item.address.location.coordinates[1],
-        '5',
-      ]);
+      let warrArray = warnings.data;
       this.setState({
         warnings: warrArray,
       });
@@ -87,7 +70,6 @@ class Home extends Component {
           estado: userAddress.state,
         },
       });
-      console.log(officialCases.data);
       let offCases = officialCases.data;
       let newOffCases = {
         world: offCases.world ? offCases.world.confirmed : undefined,
@@ -140,6 +122,8 @@ class Home extends Component {
   };
   componentDidMount() {
     this.getUserLocation();
+    this.getMapData();
+    this.getInfoByLocation();
   }
   render() {
     const { userAddress, mapInfo, warnings, officialCases } = this.state;
