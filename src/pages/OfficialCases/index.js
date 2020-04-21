@@ -4,6 +4,7 @@ import makeAnimated from 'react-select/animated';
 
 import './styles.css'
 import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 import api from '../../services/api';
 
@@ -53,22 +54,22 @@ export default function OfficialCases() {
                         if (response.data.confirmed) {
                             setConfirmedCases(response.data.confirmed);
                         } else {
-                            setConfirmedCases('-');
+                            setConfirmedCases(0);
                         }
                         if (response.data.suspects) {
                             setSuspectCases(response.data.suspects);
                         } else {
-                            setSuspectCases('-');
+                            setSuspectCases(0);
                         }
                         if (response.data.deaths) {
                             setDeaths(response.data.deaths);
                         } else {
-                            setDeaths('-');
+                            setDeaths(0);
                         }
                         if (response.data.recovered) {
                             setrecoveredCases(response.data.recovered);
                         } else {
-                            setrecoveredCases('-');
+                            setrecoveredCases(0);
                         }
                     }
                 })
@@ -79,9 +80,9 @@ export default function OfficialCases() {
         <div className="external-container">
             <Header />
             <div className="official-cases-container row">
-                <h1>Busque os casos registrados oficialmente por cidade.</h1>
+                <h1>Busque os casos registrados oficialmente por municipios de <strong>Pernambuco</strong> .</h1>
                 <div className="search-container col-md-10">
-                    <div className="state-select col-md-6">
+                    {/*<div className="state-select col-md-6">
                         <p>Escolha um estado:</p>
                         <Select
                             className="select"
@@ -94,7 +95,7 @@ export default function OfficialCases() {
                             onChange={handleStateChoice}
                             options={states}
                         />
-                    </div>
+                    </div>*/}
                     <div className="city-select  col-md-6">
                         <p>Escolha uma cidade:</p>
                         <Select
@@ -113,22 +114,23 @@ export default function OfficialCases() {
                 <div className="search-results-container col-md-10">
                     <div className="result-cases col-7">
                         <p>Número de casos confirmados:</p>
-                        <p1>{`${confirmedCases}`}</p1>
+                        <p1>{`${confirmedCases.toLocaleString()}`}</p1>
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Número de óbitos:</p>
-                        <p1>{`${deaths}`}</p1>
+                        <p1>{`${deaths.toLocaleString()}`}</p1>
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Número de casos suspeitos:</p>
-                        <p1>{`${suspectCases}`}</p1>
+                        <p1>{`${suspectCases.toLocaleString()}`}</p1>
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Número de casos recuperados:</p>
-                        <p1>{`${recoveredCases}`}</p1>
+                        <p1>{`${recoveredCases.toLocaleString()}`}</p1>
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 }
