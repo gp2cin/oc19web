@@ -4,7 +4,6 @@ import makeAnimated from 'react-select/animated';
 
 import './styles.css'
 import Header from '../../components/Header';
-import Footer from '../../components/Footer';
 
 import api from '../../services/api';
 
