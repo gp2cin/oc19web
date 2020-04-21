@@ -6,6 +6,7 @@ import './styles.css'
 import Header from '../../components/Header';
 
 import api from '../../services/api';
+import Footer from '../../components/Footer';
 
 export default function OfficialCases() {
 
@@ -76,25 +77,12 @@ export default function OfficialCases() {
     }
 
     return (
+
         <div className="external-container">
             <Header />
             <div className="official-cases-container row">
-                <h1>Busque os casos registrados oficialmente por cidade.</h1>
+                <h1>Busque os casos registrados oficialmente nos municípios de <strong>Pernambuco</strong>.</h1>
                 <div className="search-container col-md-10">
-                    <div className="state-select col-md-6">
-                        <p>Escolha um estado:</p>
-                        <Select
-                            className="select"
-                            placeholder="Escolha"
-                            closeMenuOnSelect={true}
-                            components={animatedComponents}
-                            defaultValue={[]}
-                            isClearable
-                            isSearchable
-                            onChange={handleStateChoice}
-                            options={states}
-                        />
-                    </div>
                     <div className="city-select  col-md-6">
                         <p>Escolha uma cidade:</p>
                         <Select
@@ -129,6 +117,7 @@ export default function OfficialCases() {
                     </div>
                 </div>
             </div>
+            <Footer />
         </div>
     );
 }
