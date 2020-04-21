@@ -122,6 +122,8 @@ class Home extends Component {
   };
   componentDidMount() {
     this.getUserLocation();
+    this.getMapData();
+    this.getInfoByLocation();
   }
   render() {
     const { userAddress, mapInfo, warnings, officialCases } = this.state;
