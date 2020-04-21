@@ -1,0 +1,275 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+    font: Roboto, sans-serif;
+}
+
+.new-warning-container {
+    width: 100%;
+    max-width: 1120px;
+    height: 100vh;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #eeeeee;
+}
+
+.new-warning-container h1 {
+    font-size: 35px;
+}
+
+.new-warning-container p {
+    font-size: 15px;
+    margin-top: 40px;
+}
+
+.new-warning-container section {
+    width: 100%;
+    padding: 40px;
+    max-width: 800px;
+    align-items: center;
+    text-align: center;
+}
+
+.new-warning-container section p {
+    margin-top: 20px;
+    font-size: 15px;
+}
+
+.new-warning-container input {
+    margin-top: 10px;
+}
+
+.new-warning-container form {
+    display: inline-block;
+    flex-direction: column;
+    justify-content: space-between;
+    background-color: #dcdce6;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.new-warning-container form p {
+    margin-top: 16px;
+}
+
+.personal-info {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-self: center;
+    align-items: flex-start;
+}
+
+.email {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.email input {
+    max-height: 30px;
+    font-size: 14px;
+    font: Roboto;
+}
+
+.date-picker {
+    max-height: 30px;
+    font-size: 14px;
+    font: Roboto;
+    margin: 0 auto;
+}
+
+.react-datepicker-wrapper{
+    width: 83.33%; flex: 1 0 50%;
+}
+
+.birthdate-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.select-container {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: bottom;
+    align-content: bottom;
+    align-self: center;
+}
+
+.symptoms-container {
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.deseases-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.select {
+    display: 'flex';
+    margin-top: 10px;
+    width: 100%;
+    max-width: 500px;
+    vertical-align: bottom;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.content {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.content p {
+    font-size: 16px;
+    text-align: center;
+}
+
+.questions-container {
+    margin-top: 10px;
+    display: flex;
+    background-color: #dcdce6;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-self: center;
+    align-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.questions-div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.questions-container fieldset {
+    width: 100%;
+    padding: 16px 35px;
+    margin-top: 20px;
+    background-color: #ffff;
+    display: flex;
+    border-radius: 8px;
+    justify-content: space-between;
+}
+
+.questions-container fieldset p {
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+body {
+    font: 400 14px Roboto, sans-serif;
+    background: #dcdce6;
+    -webkit-font-smoothing: antialiased;
+}
+
+input, button, textarea {
+    font: 400 18px Roboto, sans-serif;
+}
+
+button {
+    cursor: pointer;
+    margin-bottom: 50px;
+}
+
+form input {
+    width: 100%;
+    height: 60px;
+    color: #333;
+    border: 1px solid #dcdce6;
+    border-radius: 3px;
+    padding: 0 24px;
+}
+
+.button {
+    width: 50%;
+    height:60px;
+    background: #5691d4; 
+    border: 0;
+    border-radius: 8px;
+    color: #FFF;
+    font-weight: 700;
+    margin-top: 10px;
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    font-size: 18px;
+    line-height: 60px;
+    transition: filter 0.2s;
+}
+
+.button:hover {
+    filter: brightness(90%);
+}
+
+.col-1 {width: 8.33%; flex: 1 0 50%;}
+.col-2 {width: 16.66%; flex: 1 0 50%;}
+.col-3 {width: 25%; flex: 1 0 50%;}
+.col-4 {width: 33.33%; flex: 1 0 50%;}
+.col-5 {width: 41.66%; flex: 1 0 50%;}
+.col-6 {width: 50%; flex: 1 0 50%;}
+.col-7 {width: 58.33%; flex: 1 0 50%;}
+.col-8 {width: 66.66%; flex: 1 0 50%;}
+.col-9 {width: 75%; flex: 1 0 50%;}
+.col-10 {width: 83.33%; flex: 1 0 50%;}
+.col-11 {width: 91.66%; flex: 1 0 50%;}
+.col-12 {width: 100%; flex: 1 0 50%;}
+
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    [class*="col-"] {
+      width: 100%;
+      flex: 1 0 50%;
+    }
+    .react-datepicker-wrapper{
+        width: 100%; flex: 1 0 50%;
+    }
+    .personal-info {
+        flex-direction: column;
+    }
+    .select-container {
+        flex-direction: column;
+    }
+    .new-warning-container section h1 {
+        font-size: 26px;
+    }  
+    .new-warning-container section p {
+        font-size: 14px;
+    }
+}
+
+@media only screen and (max-width: 413px) {
+    .new-warning-container section h1 {
+        font-size: 20px;
+    }  
+    .new-warning-container section p {
+        font-size: 14px;
+    }
+    .date-picker {
+        width: 100%;
+    }
+}

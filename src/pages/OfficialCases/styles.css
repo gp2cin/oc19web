@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+    font: Roboto, sans-serif;
+}
+
+
+
+.official-cases-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    background-color: #ffff;
+}
+
+.official-cases-container h1 {
+    margin-top: 50px;
+    text-align: center;
+}
+
+.search-container {
+    margin-top: 50px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 50px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid gray;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.state-select {
+    padding-right: 20px;
+}
+
+.city-select {
+    padding-left: 20px;
+}
+
+.search-results-container {
+    padding-left: 60px;
+    padding-right: 60px;
+    padding-bottom: 60px;
+    margin-bottom: 60px;
+    min-height: 400px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 50px;
+    list-style: none;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+    background-color: #f8f9fa;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+}
+
+.result-cases {
+    display: flex;
+    flex-direction: column;
+    align-content: center;
+    text-align: center;
+    align-items: center;
+    align-self: center;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 20px;
+    min-height: 154px;
+}
+
+.result-cases p {
+    font-size: 15px;
+    text-align: center;
+}
+
+.result-cases p1 {
+    margin-top: 30px;
+    font-size: 24px;
+    font-weight: 'regular';
+}
+
+[class*="col-"] {
+    float: left;
+    padding: 15px;
+}
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    [class*="col-"] {
+      width: 100%;
+    }
+    .search-container {
+        margin-top: 0px;
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+    }
+    .search-results-container {
+        width: 80%;
+        grid-gap: 20px;
+    }
+    .result-cases {
+        min-height: 154px;
+        min-width: 135px;
+        width: 100%;
+    }
+    .official-cases-container h1 {
+        margin-top: 30px;
+        text-align: center;
+        padding: 20px;
+        font-size: 26px;
+    }
+}
+
+@media only screen and (max-width: 413px) {
+    .search-results-container {
+        width: 100%;
+    }
+    .search-container {
+        width: 100%;
+    }
+    .official-cases-container h1 {
+        font-size: 20px;
+        margin-top: 70px;
+    }
+}
