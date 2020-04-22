@@ -7,6 +7,7 @@ import Home from '../pages/Home';
 import SignIn from '../pages/SignIn';
 import NewWarning from '../pages/NewWarning';
 import OfficialCases from '../pages/OfficialCases';
+import WhoWeAre from '../pages/WhoWeAre';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -27,6 +28,7 @@ const Routes = () => (
       <Route exact path={'/'} component={Home} />
       <Route exact path={'/warnings/new'} component={NewWarning} />
       <Route path={'/official-cases'} component={OfficialCases} />
+      <Route path={'/who-we-are'} component={WhoWeAre} />
       <Route path={'/signin'} component={SignIn} />
       <PrivateRoute path={'/app'} component={() => <h1>App</h1>} />
       <Route path={'*'} component={() => <h1>Page not found</h1>} />
