@@ -80,7 +80,8 @@ export default function OfficialCases() {
         <div className="external-container">
             <Header />
             <div className="official-cases-container row">
-                <h1>Busque os casos registrados oficialmente por municipios de <strong>Pernambuco</strong> .</h1>
+                <h1>Busque os casos registrados oficialmente nos municipios de <strong>Pernambuco</strong> .</h1>
+                <p> Fonte: IRRD-PE. Atualizado em: </p>
                 <div className="search-container col-md-10">
                     {/*<div className="state-select col-md-6">
                         <p>Escolha um estado:</p>
