@@ -11,7 +11,7 @@ export default function WhoWeAre() {
             <div className="info-container row">
                 <div className="about-continer col-md-10">
                     <h1> Sobre </h1>
-                    <p> Olá mundo!!! </p>
+                    <p> </p>
                 </div>
             </div>
             <Footer />
