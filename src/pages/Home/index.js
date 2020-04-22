@@ -251,7 +251,7 @@ class Home extends Component {
           <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center  overflow-hidden">
             <div className="my-3 py-3">
               <h2 className="display-5">{officialCases.world.toLocaleString()}</h2>
-              <p className="lead">{'Casos no mundo.'}</p>
+              <p className="lead">{'Casos confirmados no mundo.'}</p>
             </div>
 
             <div
@@ -268,7 +268,7 @@ class Home extends Component {
           <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
             <div className="my-3 p-3">
               <h2 className="display-5">{officialCases.country.toLocaleString()}</h2>
-              <p className="lead">{'Casos no seu país.'}</p>
+              <p className="lead">{'Casos confirmados no seu país.'}</p>
             </div>
             <div className=" mx-auto" style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}>
               <img alt={'Country flag'} src={`https://www.countryflags.io/${userAddress.country}/flat/64.png`} />
@@ -279,7 +279,7 @@ class Home extends Component {
           <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
             <div className="my-3 py-3">
               <h2 className="display-5">{officialCases.state.toLocaleString()}</h2>
-              <p className="lead">{`Casos em ${userAddress.state ? userAddress.state : 'seu estado'}.`}</p>
+              <p className="lead">{`Casos confirmados em ${userAddress.state ? userAddress.state : 'seu estado'}.`}</p>
             </div>
             <div className="mx-auto" style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}>
               <span
@@ -292,7 +292,7 @@ class Home extends Component {
           <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
             <div className="my-3 p-3">
               <h2 className="display-5">{officialCases.city.toLocaleString()}</h2>
-              <p className="lead">{`Casos em ${userAddress.city ? userAddress.city : 'sua cidade'}.`}</p>
+              <p className="lead">{`Casos confirmados em ${userAddress.city ? userAddress.city : 'sua cidade'}.`}</p>
             </div>
             <div className=" mx-auto" style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}>
               <span
