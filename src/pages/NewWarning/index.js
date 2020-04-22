@@ -237,6 +237,7 @@ export default function WarningCreation() {
         console.log(d);
       });
       //console.log(data);
+      alert('Caso cadastrado com sucesso')
       history.push('/');
     } catch (error) {
       alert(`Erro ao cadastrar caso, tente novamente. ${error}`);
