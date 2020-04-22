@@ -13,11 +13,11 @@ export default function OfficialCases() {
     //const [state, setState] = useState([{ value: 26, label: 'Pernambuco' }]);
     //setStates([{value: 26, label: 'Pernambuco'}]);
     const [cities, setCities] = useState([]);
-    const [confirmedCases, setConfirmedCases] = useState(0);
-    const [suspectCases, setSuspectCases] = useState(0);
-    const [deaths, setDeaths] = useState(0);
-    const [recoveredCases, setrecoveredCases] = useState(0);
-    const [activeCases, setactiveCases] = useState(0);
+    const [confirmedCases, setConfirmedCases] = useState(1000);
+    const [suspectCases, setSuspectCases] = useState(1000);
+    const [deaths, setDeaths] = useState(1000);
+    const [recoveredCases, setrecoveredCases] = useState(1000);
+    const [activeCases, setactiveCases] = useState(1000);
 
     const animatedComponents = makeAnimated();
 
