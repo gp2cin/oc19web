@@ -8,20 +8,28 @@
     font: Roboto, sans-serif;
 }
 
+h1 {
+    margin-top: 50px;
+    text-align: center;
+}
 
-
-.official-cases-container {
+.state-cases-container {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-content: center;
     align-items: center;
     background-color: #ffff;
+    margin-top: 10px;
 }
 
-.official-cases-container h1 {
-    margin-top: 50px;
-    text-align: center;
+.cities-cases-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    background-color: #ffff;
 }
 
 .search-container {
@@ -36,23 +44,19 @@
     border-top-right-radius: 5px;
 }
 
-.state-select {
-    padding-right: 20px;
-}
-
 .city-select {
     padding-left: 20px;
 }
 
 .search-results-container {
-    padding-left: 60px;
-    padding-right: 60px;
-    padding-bottom: 60px;
-    margin-bottom: 60px;
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
     min-height: 400px;
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    grid-gap: 50px;
+    grid-gap: 10px;
     list-style: none;
     align-content: center;
     align-items: center;
@@ -60,6 +64,24 @@
     background-color: #f8f9fa;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+}
+
+.state-results-container {
+    padding-left: 30px;
+    padding-right: 30px;
+    padding-bottom: 30px;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    min-height: 400px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    list-style: none;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+    background-color: #f8f9fa;
+    border-radius: 5px;
 }
 
 .result-cases {
@@ -111,7 +133,13 @@
         min-width: 135px;
         width: 100%;
     }
-    .official-cases-container h1 {
+    .cities-cases-container h1 {
+        margin-top: 30px;
+        text-align: center;
+        padding: 20px;
+        font-size: 26px;
+    }
+    .state-cases-container h1 {
         margin-top: 30px;
         text-align: center;
         padding: 20px;
@@ -126,7 +154,11 @@
     .search-container {
         width: 100%;
     }
-    .official-cases-container h1 {
+    .cities-cases-container h1 {
+        font-size: 20px;
+        margin-top: 70px;
+    }
+    .state-cases-container h1 {
         font-size: 20px;
         margin-top: 70px;
     }

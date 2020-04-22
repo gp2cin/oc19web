@@ -10,18 +10,18 @@ import api from '../../services/api';
 
 export default function OfficialCases() {
 
-    const [states, setStates] = useState([{ value: 26, label: 'Pernambuco' }]);
+    //const [state, setState] = useState([{ value: 26, label: 'Pernambuco' }]);
     //setStates([{value: 26, label: 'Pernambuco'}]);
     const [cities, setCities] = useState([]);
-    const [confirmedCases, setConfirmedCases] = useState(0);
-    const [suspectCases, setSuspectCases] = useState(0);
-    const [deaths, setDeaths] = useState(0);
-    const [recoveredCases, setrecoveredCases] = useState(0);
-    const [selectedSatate, setSelectedState] = useState('');
+    const [confirmedCases, setConfirmedCases] = useState(1000);
+    const [suspectCases, setSuspectCases] = useState(1000);
+    const [deaths, setDeaths] = useState(1000);
+    const [recoveredCases, setrecoveredCases] = useState(1000);
+    const [activeCases, setactiveCases] = useState(1000);
 
     const animatedComponents = makeAnimated();
 
-    function handleStateChoice(choice) {
+    /*function handleState(choice) {
         if (choice !== null) {
             fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${choice.value}/municipios`)
                 .then(res => res.json())
@@ -33,16 +33,16 @@ export default function OfficialCases() {
                         arr = [...arr, itemToAdd]
                     }
                     setCities(arr);
-                    setSelectedState(choice.label);
                 })
         } else {
             setCities([]);
         }
     }
+    */
 
     function handleCityChoice(choice) {
         console.log('a')
-        if (choice !== null && selectedSatate !== '') {
+        if (choice !== null) {
             console.log(choice.label.toLowerCase())
             const parsedCity = choice.label.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             console.log(parsedCity);
@@ -71,6 +71,11 @@ export default function OfficialCases() {
                         } else {
                             setrecoveredCases(0);
                         }
+                        if (response.data.active) {
+                            setrecoveredCases(response.data.recovered);
+                        } else {
+                            setactiveCases(0);
+                        }
                     }
                 })
         }
@@ -79,24 +84,38 @@ export default function OfficialCases() {
     return (
         <div className="external-container">
             <Header />
-            <div className="official-cases-container row">
-                <h1>Busque os casos registrados oficialmente nos municipios de <strong>Pernambuco</strong> .</h1>
-                <p> Fonte: IRRD-PE. Atualizado em: </p>
+            <div className="state-cases-container row">
+                <h1>Acompanhe os casos oficiais de <strong>Pernambuco</strong></h1>
+                <div className="state-results-container col-md-10">
+                    <div className="result-cases col-7">
+                        <p>Número de casos confirmados:</p>
+                        <p1>{`${confirmedCases.toLocaleString()}`}</p1>
+                    </div>
+                    <div className="result-cases col-md-7">
+                        <p>Número de óbitos:</p>
+                        <p1>{`${deaths.toLocaleString()}`}</p1>
+                    </div>
+                    <div className="result-cases col-md-7">
+                        <p>Número de casos suspeitos:</p>
+                        <p1>{`${suspectCases.toLocaleString()}`}</p1>
+                    </div>
+                    <div className="result-cases col-md-7">
+                        <p>Número de casos recuperados:</p>
+                        <p1>{`${recoveredCases.toLocaleString()}`}</p1>
+                    </div>
+                    <div className="result-cases col-md-7">
+                        <p>Número de casos ativos:</p>
+                        <p1>{`${activeCases.toLocaleString()}`}</p1>
+                    </div>
+                    <div className="result-cases col-md-7">
+                        <p>Letalidade:</p>
+                        <p1>{`${activeCases.toLocaleString()}%`}</p1>
+                    </div>
+                </div>
+            </div>
+            <div className="cities-cases-container row">
+                <h1>Busque os casos registrados oficialmente nos municipios de <strong>Pernambuco</strong></h1>
                 <div className="search-container col-md-10">
-                    {/*<div className="state-select col-md-6">
-                        <p>Escolha um estado:</p>
-                        <Select
-                            className="select"
-                            placeholder="Escolha"
-                            closeMenuOnSelect={true}
-                            components={animatedComponents}
-                            defaultValue={[]}
-                            isClearable
-                            isSearchable
-                            onChange={handleStateChoice}
-                            options={states}
-                        />
-                    </div>*/}
                     <div className="city-select  col-md-6">
                         <p>Escolha uma cidade:</p>
                         <Select
@@ -131,6 +150,7 @@ export default function OfficialCases() {
                     </div>
                 </div>
             </div>
+            <h6> {`Fonte: IRRD-PE. Atualizado em: `} </h6>
             <Footer />
         </div>
     );
