@@ -1,48 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
-import './styles.css'
+import './styles.css';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 
 import api from '../../services/api';
 
 export default function OfficialCases() {
-
-    const [states, setStates] = useState([{ value: 26, label: 'Pernambuco' }]);
-    //setStates([{value: 26, label: 'Pernambuco'}]);
     const [cities, setCities] = useState([]);
-    const [confirmedCases, setConfirmedCases] = useState(0);
-    const [suspectCases, setSuspectCases] = useState(0);
-    const [deaths, setDeaths] = useState(0);
-    const [recoveredCases, setrecoveredCases] = useState(0);
-    const [selectedSatate, setSelectedState] = useState('');
+    const [confirmedCases, setConfirmedCases] = useState('-');
+    const [suspectCases, setSuspectCases] = useState('-');
+    const [deaths, setDeaths] = useState('-');
+    const [recoveredCases, setrecoveredCases] = useState('-');
 
     const animatedComponents = makeAnimated();
 
-    function handleStateChoice(choice) {
-        if (choice !== null) {
-            fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/${choice.value}/municipios`)
-                .then(res => res.json())
-                .then((data) => {
-                    console.log(cities)
-                    let arr = []
-                    for (const i in data) {
-                        const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
-                        arr = [...arr, itemToAdd]
-                    }
-                    setCities(arr);
-                    setSelectedState(choice.label);
-                })
-        } else {
-            setCities([]);
-        }
-    }
+    useEffect(() => {
+        //base de dados do IBGE, código de Pernambuco: 26
+        fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/26/municipios`)
+            .then(res => res.json())
+            .then((data) => {
+                console.log(cities)
+                let arr = []
+                for (const i in data) {
+                    const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
+                    arr = [...arr, itemToAdd]
+                }
+                setCities(arr);
+            })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     function handleCityChoice(choice) {
-        console.log('a')
-        if (choice !== null && selectedSatate !== '') {
+        if (choice !== null) {
             console.log(choice.label.toLowerCase())
             const parsedCity = choice.label.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             console.log(parsedCity);
@@ -81,21 +73,8 @@ export default function OfficialCases() {
             <Header />
             <div className="official-cases-container row">
                 <h1>Busque os casos registrados oficialmente nos municipios de <strong>Pernambuco</strong> .</h1>
+                <h6> Fonte: IRRD-PE.</h6>
                 <div className="search-container col-md-10">
-                    {/*<div className="state-select col-md-6">
-                        <p>Escolha um estado:</p>
-                        <Select
-                            className="select"
-                            placeholder="Escolha"
-                            closeMenuOnSelect={true}
-                            components={animatedComponents}
-                            defaultValue={[]}
-                            isClearable
-                            isSearchable
-                            onChange={handleStateChoice}
-                            options={states}
-                        />
-                    </div>*/}
                     <div className="city-select  col-md-6">
                         <p>Escolha uma cidade:</p>
                         <Select
