@@ -16,23 +16,20 @@
     align-items: left;
     background-color: #ffff;
     font-size: 20px;
+    margin-top: 20px;
 }
 
 .info-container h1 {
-    margin-top: 50px;
     text-align: left;
 }
 
 .about-container {
     margin-top: 50px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
     padding: 50px;
     background-color: #f8f9fa;
-    border-bottom: 1px solid gray;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
+    text-align: justify;
 }
 
 [class*="col-"] {
