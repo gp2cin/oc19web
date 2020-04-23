@@ -9,8 +9,8 @@ export default function WhoWeAre() {
     <div className="external-container">
       <Header />
       <div className="info-container row">
+        <h1> Sobre </h1>
         <div className="about-container col-md-12">
-          <h1> Sobre </h1>
           <span>
             A plataforma OCovid-19 é um aplicativo do projeto Observatório Covid-19 que tem
             como objetivo monitorar a propagação do vírus nos municípios de Pernambuco para
