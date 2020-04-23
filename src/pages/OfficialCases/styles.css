@@ -8,8 +8,6 @@
     font: Roboto, sans-serif;
 }
 
-
-
 .official-cases-container {
     display: flex;
     flex-direction: column;
@@ -34,10 +32,7 @@
     border-bottom: 1px solid gray;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-}
-
-.state-select {
-    padding-right: 20px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .city-select {
@@ -60,6 +55,7 @@
     background-color: #f8f9fa;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .result-cases {

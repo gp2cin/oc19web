@@ -19,17 +19,18 @@
     margin-top: 20px;
 }
 
-.info-container h1 {
+h1 {
     text-align: left;
+    margin-top: 20px;
 }
 
 .about-container {
-    margin-top: 50px;
     padding: 50px;
-    background-color: #f8f9fa;
+    background-color: #f0f0f0;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     text-align: justify;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 [class*="col-"] {
