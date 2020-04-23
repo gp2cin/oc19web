@@ -29,7 +29,7 @@ body, html {
 .homeMap{
   width: 100%;
   height: 400px;
-  margin-top: 85px;
+  margin-top: 120px;
   /* max-width: 700px; */
 };
 .navbar-brand img{

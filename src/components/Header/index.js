@@ -35,7 +35,7 @@ export default class Header extends Component {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link to="/who-we-are" className={'navbar-brand'}>
+                <Link to="/about-us" className={'navbar-brand'}>
                   {'Quem somos'}
                 </Link>
               </li>
