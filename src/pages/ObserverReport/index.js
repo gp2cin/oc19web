@@ -264,21 +264,24 @@ export default function ObserverReport() {
                                             </RadioGroup>
                                         </FormControl>
                                     </div>
-                                    <div className={'deseases-container col-md-9'}>
-                                        <p>{'Quais doenças preexistentes?'}</p>
-                                        <Select
-                                            className={'select'}
-                                            placeholder={'Escolha'}
-                                            closeMenuOnSelect={false}
-                                            components={animatedComponents}
-                                            defaultValue={[]}
-                                            isMulti
-                                            isClearable
-                                            isSearchable
-                                            onChange={handleDeseasesChange}
-                                            options={diseaseOptions}
-                                        />
-                                    </div>
+                                    {
+                                        caseHadPreExistingDiseases == 'yes' &&
+                                        <div className={'deseases-container col-md-9'}>
+                                            <p>{'Quais doenças preexistentes?'}</p>
+                                            <Select
+                                                className={'select'}
+                                                placeholder={'Escolha'}
+                                                closeMenuOnSelect={false}
+                                                components={animatedComponents}
+                                                defaultValue={[]}
+                                                isMulti
+                                                isClearable
+                                                isSearchable
+                                                onChange={handleDeseasesChange}
+                                                options={diseaseOptions}
+                                            />
+                                        </div>
+                                    }
                                     <div className="had-household-contact col-md-9">
                                         <FormControl component={'fieldset'} className="col-md-9">
                                             <p>{'O paciente manteve contato domiciliar com caso confirmado por COVID-19 nos últimos 14 dias?'}</p>
