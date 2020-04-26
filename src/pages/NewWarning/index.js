@@ -301,7 +301,7 @@ export default function WarningCreation() {
   }
 
   function validateEmail(mail) {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
       return true;
     }
     alert('Você preencheu um endereço de e-mail invávido!');

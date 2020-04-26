@@ -291,7 +291,7 @@ class Home extends Component {
           </div>
           <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
             <div className="my-3 p-3">
-              <h2 className="display-5">{officialCases.city.toLocaleString()}</h2>
+              <h2 className="display-5">{officialCases.city}</h2>
               <p className="lead">{`Casos em ${userAddress.city ? userAddress.city : 'sua cidade'}.`}</p>
             </div>
             <div className=" mx-auto" style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}>
