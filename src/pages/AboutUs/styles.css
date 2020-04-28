@@ -8,6 +8,15 @@
     font: Roboto, sans-serif;
 }
 
+h1 {
+    text-align: left;
+}
+
+a {
+    text-decoration:none;
+    color: #000;
+}
+
 .info-container {
     display: flex;
     flex-direction: column;
@@ -19,11 +28,16 @@
     margin-top: 20px;
 }
 
-h1 {
-    text-align: left;
+.about-container {
+    padding: 50px;
+    background-color: #f0f0f0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    text-align: justify;
+    margin-top: 30px;
 }
 
-.about-container {
+.contact-us-container {
     padding: 50px;
     background-color: #f0f0f0;
     border-top-left-radius: 5px;
@@ -49,6 +63,13 @@ h1 {
         flex-direction: column;
     }
 
+    .contact-us-container {
+        margin-top: 0px;
+        width: 80%;
+        display: flex;
+        flex-direction: column;
+    }
+
     .info-container h1 {
         margin-top: 30px;
         text-align: center;
@@ -64,5 +85,9 @@ h1 {
     .info-container h1 {
         font-size: 20px;
         margin-top: 70px;
+    }
+
+    .contact-us-container {
+        width: 100%;
     }
 }

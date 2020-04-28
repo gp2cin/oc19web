@@ -1,4 +1,6 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { FiMail, FiArrowRightCircle, FiInstagram } from 'react-icons/fi';
 
 import './styles.css';
 import Header from '../../components/Header';
@@ -21,6 +23,18 @@ export default function WhoWeAre() {
             observadores, onde observadores cadastrados são responsáveis pelos relatos dos
             casos na região que reside.
           </span>
+        </div>
+        <div className="contact-us-container col-md-12">
+          <h1> Fale Conosco </h1>
+          <div className="contact-container col-md-7">
+            <FiArrowRightCircle size={28} color="#b23137" /> <a href="https://sites.google.com/cin.ufpe.br/observatoriocovid-19/">Site do projeto Observatório Covid-19</a>
+          </div>
+          <div className="contact-container col-md-7">
+            <FiMail size={28} color="#b23137" /> ocovid19@cin.ufpe.br
+          </div>
+          <div className="contact-container col-md-7">
+            <FiInstagram size={28} color="#b23137" /> <a href="https://www.instagram.com/observatorio.covid.19/">Instagram</a>
+          </div>
         </div>
       </div>
       <Footer />
