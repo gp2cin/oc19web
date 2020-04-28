@@ -32,7 +32,6 @@
     border-bottom: 1px solid gray;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .city-select {
@@ -55,7 +54,6 @@
     background-color: #f8f9fa;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .state-cases-container {
@@ -73,7 +71,6 @@
     align-items: center;
     justify-items: center;
     background-color: #f8f9fa;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 .result-cases {
