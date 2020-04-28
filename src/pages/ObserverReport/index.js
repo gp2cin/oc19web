@@ -29,15 +29,24 @@ export default function ObserverReport() {
     const [cities, setCities] = useState([]);
 
     //Case data
-    const [report_type, setReportType] = useState();
+    const [report_type, setReportType] = useState('');
     const [case_type, setCaseType] = useState('');
     const [date, setDate] = useState(new Date());
     const [death_date, setDeathDate] = useState('');
     const [case_name, setCaseName] = useState('');
     const [case_age, setCaseAge] = useState();
     const [case_gender, setCaseGender] = useState('');
-    const [caseHadPreExistingDiseases, setCaseHadPreExistingDiseases] = useState('');
-    const [household_contact_confirmed_case, setCaseHouseholdContact] = useState('');
+    const [caseHadPreExistingDiseases, setCaseHadPreExistingDiseases] = React.useState();
+    const [household_contact_confirmed_case, setCaseHouseholdContact] = React.useState();
+    const handleChangeQ5 = (event) => {
+        if (event.target.value == 'true') {
+            setCaseHouseholdContact(true);
+        } else if (event.target.value == 'false') {
+            setCaseHouseholdContact(false);
+        } else if (event.target.value == 'not-known') {
+            setCaseHouseholdContact('');
+        }
+    };
     const [info_source, setInfoSource] = useState('');
     const [info_source_link, setInfoSourceLink] = useState('');
     const [general_comments, setGeneralComments] = useState('');
@@ -88,7 +97,9 @@ export default function ObserverReport() {
                     arr = [...arr, itemToAdd]
                 }
                 setCities(arr);
-            })
+            }).catch(error => {
+                alert(`Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`);
+            });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -121,9 +132,48 @@ export default function ObserverReport() {
         return false;
     }
 
+    function isRequiredFilled() {
+        if (
+            observer_email !== '' &&
+            observer_name !== '' &&
+            city !== '' &&
+            report_type !== ''
+        ) {
+            if (report_type == 'individual' &&
+                (case_type == '' ||
+                    case_gender == '' ||
+                    caseHadPreExistingDiseases == {} ||
+                    household_contact_confirmed_case == {} ||
+                    info_source == '')
+            ) {
+                console.log(case_type);
+                console.log(caseHadPreExistingDiseases);
+                console.log(household_contact_confirmed_case);
+                console.log(info_source);
+                alert('Você precisa preencher todos os campos obrigatórios!');
+                return false;
+            }
+            if (case_type == 'death' && report_type == 'individual' && death_date == '') {
+                alert('Você precisa preencher todos os campos obrigatórios! Preencha a data de morte.');
+                return false;
+            }
+            if (report_type == 'social' &&
+                (case_type == '' ||
+                    number_of_cases == 0 ||
+                    info_source == '')
+            ) {
+                alert('Você precisa preencher todos os campos obrigatórios!');
+                return false;
+            }
+            return true;
+        }
+        alert('Você precisa preencher todos os campos obrigatórios!');
+        return false;
+    }
+
     function handleNewObserverReport(e) {
         e.preventDefault();
-        if (validateEmail(observer_email)) {
+        if (validateEmail(observer_email) && isRequiredFilled()) {
             if (diseasesControl.length != 0) {
                 for (var key in diseases) {
                     for (const i in diseasesControl) {
@@ -184,7 +234,7 @@ export default function ObserverReport() {
                         <form>
                             <div className="initial-info col-md-12">
                                 <div className="name col-md-9">
-                                    <p>Nome do observador oficial:</p>
+                                    <p>Nome do observador oficial:*</p>
                                     <input
                                         placeholder="Nome"
                                         className="col-md-12 form-control"
@@ -193,7 +243,7 @@ export default function ObserverReport() {
                                     ></input>
                                 </div>
                                 <div className="email col-md-9">
-                                    <p>E-mail do observador oficial:</p>
+                                    <p>E-mail do observador oficial:*</p>
                                     <input
                                         placeholder="E-mail"
                                         className="col-md-12 form-control"
@@ -203,7 +253,7 @@ export default function ObserverReport() {
                                     ></input>
                                 </div>
                                 <div className="city-select col-md-9">
-                                    <p>Cidade:</p>
+                                    <p>Cidade:*</p>
                                     <Select
                                         className="select"
                                         placeholder="Escolha"
@@ -227,7 +277,7 @@ export default function ObserverReport() {
                                 </div>
                                 <div className="report-type col-md-9">
                                     <FormControl component={'fieldset'} className="col-md-9">
-                                        <p>{'Qual tipo de informe você quer fazer?'}</p>
+                                        <p>{'Qual tipo de informe você quer fazer?*'}</p>
                                         <RadioGroup
                                             aria-label={'q'}
                                             name={'q1'}
@@ -245,7 +295,7 @@ export default function ObserverReport() {
                                 <div className="individual-info col-md-12">
                                     <div className="case-type col-md-9">
                                         <FormControl component={'fieldset'} className="col-md-9">
-                                            <p>{'Qual tipo de informe você quer fazer?'}</p>
+                                            <p>{'Tipo de caso:*'}</p>
                                             <RadioGroup
                                                 aria-label={'q'}
                                                 name={'q2'}
@@ -261,7 +311,7 @@ export default function ObserverReport() {
                                     {
                                         case_type == 'death' &&
                                         <div className="death-date col-md-9">
-                                            <p>{'Em caso de óbito, informe a data do óbito:'}</p>
+                                            <p>{'Em caso de óbito, informe a data do óbito:*'}</p>
                                             <DatePicker
                                                 maxDate={new Date()}
                                                 className={'date-picker form-control col-md-9'}
@@ -295,7 +345,7 @@ export default function ObserverReport() {
                                     </div>
                                     <div className="gender col-md-9">
                                         <FormControl component={'fieldset'} className="col-md-9">
-                                            <p>{'Sexo:'}</p>
+                                            <p>{'Sexo:*'}</p>
                                             <RadioGroup
                                                 aria-label={'q'}
                                                 name={'q3'}
@@ -310,10 +360,10 @@ export default function ObserverReport() {
                                     </div>
                                     <div className="had-pre-existing-diseases col-md-9">
                                         <FormControl component={'fieldset'} className="col-md-9">
-                                            <p>{'O paciente tinha alguma doença preexistente?'}</p>
+                                            <p>{'O paciente tinha alguma doença preexistente?*'}</p>
                                             <RadioGroup
                                                 aria-label={'q'}
-                                                name={'q3'}
+                                                name={'q4'}
                                                 value={caseHadPreExistingDiseases}
                                                 onChange={(e) => setCaseHadPreExistingDiseases(e.target.value)}
                                             >
@@ -343,21 +393,21 @@ export default function ObserverReport() {
                                     }
                                     <div className="had-household-contact col-md-9">
                                         <FormControl component={'fieldset'} className="col-md-9">
-                                            <p>{'O paciente manteve contato domiciliar com caso confirmado por COVID-19 nos últimos 14 dias?'}</p>
+                                            <p>{'O paciente manteve contato domiciliar com caso confirmado por COVID-19 nos últimos 14 dias?*'}</p>
                                             <RadioGroup
                                                 aria-label={'q'}
-                                                name={'q4'}
+                                                name={'q5'}
                                                 value={household_contact_confirmed_case}
-                                                onChange={(e) => setCaseHouseholdContact(e.target.value)}
+                                                onChange={handleChangeQ5}
                                             >
-                                                <FormControlLabel value={'yes'} control={<Radio />} label={'Sim'} />
-                                                <FormControlLabel value={'no'} control={<Radio />} label={'Não'} />
+                                                <FormControlLabel value={'true'} control={<Radio />} label={'Sim'} />
+                                                <FormControlLabel value={'false'} control={<Radio />} label={'Não'} />
                                                 <FormControlLabel value={'not-known'} control={<Radio />} label={'Não sei informar'} />
                                             </RadioGroup>
                                         </FormControl>
                                     </div>
                                     <div className="info-source col-md-9">
-                                        <p>Fonte da informação:</p>
+                                        <p>Fonte da informação:*</p>
                                         <input
                                             placeholder="Fonte da informação"
                                             className="col-md-12 form-control"
@@ -390,7 +440,7 @@ export default function ObserverReport() {
                                 <div className="social-info col-md-12">
                                     <div className="case-type col-md-9">
                                         <FormControl component={'fieldset'} className="col-md-9">
-                                            <p>{'Qual tipo de informe você quer fazer?'}</p>
+                                            <p>{'Tipo de caso:*'}</p>
                                             <RadioGroup
                                                 aria-label={'q'}
                                                 name={'q2'}
@@ -404,7 +454,7 @@ export default function ObserverReport() {
                                         </FormControl>
                                     </div>
                                     <div className="number-of-cases col-md-9">
-                                        <p>Quantidade de casos:</p>
+                                        <p>Quantidade de casos:*</p>
                                         <input
                                             placeholder="Ex: 10"
                                             className="col-md-12 form-control"
@@ -416,7 +466,7 @@ export default function ObserverReport() {
                                         ></input>
                                     </div>
                                     <div className="info-source col-md-9">
-                                        <p>Fonte da informação:</p>
+                                        <p>Fonte da informação:*</p>
                                         <input
                                             placeholder="Fonte da informação"
                                             className="col-md-12 form-control"

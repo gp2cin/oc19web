@@ -29,7 +29,9 @@ export default function OfficialCases() {
                     arr = [...arr, itemToAdd]
                 }
                 setCities(arr);
-            })
+            }).catch(error => {
+                alert(`Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`);
+            });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
