@@ -17,6 +17,7 @@ import FormControl from '@material-ui/core/FormControl';
 
 export default function ObserverReport() {
 
+    const [sendDisabled, setSendDisabled] = useState(false);
     const history = useHistory();
 
     //Observer Data
@@ -174,6 +175,7 @@ export default function ObserverReport() {
     function handleNewObserverReport(e) {
         e.preventDefault();
         if (validateEmail(observer_email) && isRequiredFilled()) {
+            setSendDisabled(true);
             if (diseasesControl.length != 0) {
                 for (var key in diseases) {
                     for (const i in diseasesControl) {
@@ -212,9 +214,11 @@ export default function ObserverReport() {
             });
             //console.log(data);
             alert('Cadastrado com sucesso');
+            setSendDisabled(false);
             history.push('/');
         } catch (error) {
             alert(`Erro ao cadastrar, tente novamente. ${error}`);
+            setSendDisabled(false);
             console.log(data);
         }
     }
@@ -496,7 +500,7 @@ export default function ObserverReport() {
                             }
                         </form>
                         <section className={'col-md-12'}>
-                            <button onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'submit'}>
+                            <button disabled={sendDisabled} onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'submit'}>
                                 {'Enviar'}
                             </button>
                         </section>
