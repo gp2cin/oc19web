@@ -58,6 +58,24 @@
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
+.state-cases-container {
+    border-radius: 5px;
+    padding-left: 60px;
+    padding-right: 60px;
+    padding-bottom: 60px;
+    margin-top: 50px;
+    min-height: 400px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 50px;
+    list-style: none;
+    align-content: center;
+    align-items: center;
+    justify-items: center;
+    background-color: #f8f9fa;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
 .result-cases {
     display: flex;
     flex-direction: column;
@@ -102,6 +120,11 @@
         width: 80%;
         grid-gap: 20px;
     }
+
+    .state-cases-container {
+        width: 80%;
+        grid-gap: 20px;
+    }
     .result-cases {
         min-height: 154px;
         min-width: 135px;
@@ -119,6 +142,11 @@
     .search-results-container {
         width: 100%;
     }
+
+    .state-cases-container {
+        width: 100%;
+    }
+    
     .search-container {
         width: 100%;
     }
