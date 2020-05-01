@@ -7,6 +7,7 @@ import Home from '../pages/Home';
 import SignIn from '../pages/SignIn';
 import NewWarning from '../pages/NewWarning';
 import OfficialCases from '../pages/OfficialCases';
+import ObserverReport from '../pages/ObserverReport';
 import AboutUs from '../pages/AboutUs';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -16,8 +17,8 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
       isAuthenticated() ? (
         <Component {...props} />
       ) : (
-        <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-      )
+          <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+        )
     }
   />
 );
@@ -28,6 +29,7 @@ const Routes = () => (
       <Route exact path={'/'} component={Home} />
       <Route exact path={'/warnings/new'} component={NewWarning} />
       <Route path={'/official-cases'} component={OfficialCases} />
+      <Route path={'/observer-report'} component={ObserverReport} />
       <Route path={'/about-us'} component={AboutUs} />
       <Route path={'/signin'} component={SignIn} />
       <PrivateRoute path={'/app'} component={() => <h1>App</h1>} />

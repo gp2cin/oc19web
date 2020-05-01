@@ -18,6 +18,7 @@ import { Container } from './styles';
 import api from '../../services/api';
 
 export default function WarningCreation() {
+  const [sendDisabled, setSendDisabled] = useState(false);
   const [email, setEmail] = useState('');
   const [date, setDate] = useState(new Date());
   const [birthdate, setBirthdate] = useState('');
@@ -238,9 +239,11 @@ export default function WarningCreation() {
       });
       //console.log(data);
       alert('Caso cadastrado com sucesso');
+      setSendDisabled(false);
       history.push('/');
     } catch (error) {
       alert(`Erro ao cadastrar caso, tente novamente. ${error}`);
+      setSendDisabled(false);
       console.log(data);
     }
   }
@@ -249,6 +252,7 @@ export default function WarningCreation() {
     e.preventDefault();
     if (validateEmail(email) && isRequiredFilled()) {
       if (navigator.geolocation) {
+        setSendDisabled(true);
         navigator.geolocation.getCurrentPosition((position) => {
           const address = {
             location: {
@@ -293,15 +297,40 @@ export default function WarningCreation() {
           };
           console.log(data);
           postWarning(data);
-        });
+        }, handleLocationError);
       } else {
         alert('Geolocation is not supported by this browser.');
+        setSendDisabled(false);
       }
     }
   }
 
+  function handleLocationError(error) {
+    switch (error.code) {
+      case error.PERMISSION_DENIED:
+        alert("User denied the request for Geolocation.");
+        setSendDisabled(false);
+        break;
+      case error.POSITION_UNAVAILABLE:
+        alert("Location information is unavailable.");
+        setSendDisabled(false);
+        break;
+      case error.TIMEOUT:
+        alert("The request to get user location timed out.");
+        setSendDisabled(false);
+        break;
+      case error.UNKNOWN_ERROR:
+        alert("An unknown error occurred.");
+        setSendDisabled(false);
+        break;
+      default:
+        alert("An unknown error occurred.");
+        setSendDisabled(false);
+    }
+  }
+
   function validateEmail(mail) {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)) {
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
       return true;
     }
     alert('Você preencheu um endereço de e-mail invávido!');
@@ -478,7 +507,7 @@ export default function WarningCreation() {
             </form>
             <section className={'col-md-12'}>
               <p>{'Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.'}</p>
-              <button onClick={handleNewWarning} className={'btn btn-primary col-md-12'} type={'submit'}>
+              <button disabled={sendDisabled} onClick={handleNewWarning} className={'btn btn-primary col-md-12'} type={'submit'}>
                 {'Enviar'}
               </button>
             </section>

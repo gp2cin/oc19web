@@ -19,19 +19,6 @@ export default function OfficialCases() {
 
     const animatedComponents = makeAnimated();
 
-    //Pegar os dados de casos oficiais de Pernambuco
-    useEffect(() => {
-        try {
-            api.get('api/v1/cases/state')
-                .then(response => {
-                    console.log(response)
-                    setState(response.data)
-                })
-        } catch (error) {
-            console.log(error)
-        }
-    }, [])
-
     //Pegar os municípios do estado de Pernambuco
     useEffect(() => {
         try {
@@ -50,6 +37,20 @@ export default function OfficialCases() {
         } catch (error) {
             console.log(error)
         }
+        //base de dados do IBGE, código de Pernambuco: 26
+        fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/26/municipios`)
+            .then(res => res.json())
+            .then((data) => {
+                console.log(cities)
+                let arr = []
+                for (const i in data) {
+                    const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
+                    arr = [...arr, itemToAdd]
+                }
+                setCities(arr);
+            }).catch(error => {
+                alert(`Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`);
+            });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
