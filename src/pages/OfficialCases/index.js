@@ -22,7 +22,7 @@ export default function OfficialCases() {
     //Pegar os dados de casos oficiais de Pernambuco
     useEffect(() => {
         try {
-            api.get('api/v1/cases/state')
+            api.get('api/v1/cases/official/state')
                 .then(response => {
                     console.log(response)
                     setState(response.data)
@@ -58,7 +58,7 @@ export default function OfficialCases() {
             console.log(choice.label.toLowerCase())
             const parsedCity = choice.label.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
             console.log(parsedCity);
-            api.get(`api/v1/cases/state?cidade=${parsedCity}`)
+            api.get(`api/v1/cases/official/state?cidade=${parsedCity}`)
                 .then(response => {
                     console.log(response)
                     if (response !== null) {
@@ -116,7 +116,7 @@ export default function OfficialCases() {
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Letalidade:</p>
-                        <p1>{state.lethality_percentage ? state.lethality_percentage : '-'}</p1>
+                        <p1>{state.lethality_percentage ? ((state.lethality_percentage * 100).toPrecision(3)) + '%' : '-'}</p1>
                     </div>
                 </div>
                 <h1>Busque os casos registrados oficialmente nos municipios de <strong>Pernambuco</strong> .</h1>
@@ -154,7 +154,7 @@ export default function OfficialCases() {
                         <p1>{`${recoveredCases.toLocaleString()}`}</p1>
                     </div>
                 </div>
-                <h6> {state.updatedAt ? `Fonte: IRRD-PE. Atualizado em: ${moment(state.updatedAt).format('DD/MM/YYYY')}` : 'Fonte: IRRD-PE.'}</h6>
+                <h6> {state.updated_at ? `Fonte: IRRD-PE. Atualizado em: ${moment(state.updated_at).format('DD/MM/YYYY')}` : 'Fonte: IRRD-PE.'}</h6>
             </div>
             <Footer />
         </div>
