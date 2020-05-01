@@ -110,23 +110,23 @@ export default function OfficialCases() {
                 <div className="state-cases-container col-md-10">
                     <div className="result-cases col-7">
                         <p>Número de casos confirmados:</p>
-                        <p1>{state.confirmed ? state.confirmed : '-'}</p1>
+                        <p1>{state.confirmed ? state.confirmed.toLocaleString() : '-'}</p1>
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Número de óbitos:</p>
-                        <p1>{state.deaths ? state.deaths : '-'}</p1>
+                        <p1>{state.deaths ? state.deaths.toLocaleString() : '-'}</p1>
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Número de casos suspeitos:</p>
-                        <p1>{state.suspects ? state.suspects : '-'}</p1>
+                        <p1>{state.suspects ? state.suspects.toLocaleString() : '-'}</p1>
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Número de casos recuperados:</p>
-                        <p1>{state.recovered ? state.recovered : '-'}</p1>
+                        <p1>{state.recovered ? state.recovered.toLocaleString() : '-'}</p1>
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Número de casos ativos:</p>
-                        <p1>{state.active ? state.active : '-'}</p1>
+                        <p1>{state.active ? state.active.toLocaleString() : '-'}</p1>
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Letalidade:</p>
