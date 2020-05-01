@@ -227,7 +227,7 @@ export default function ObserverReport() {
         <div style={{ overflow: 'auto' }}>
             <Header />
             <Container>
-                <div className="observer-report-container row">
+                <div className="observer-report-container">
                     <section>
                         <h1 className={'text-center'}>{'Protocolo de Observações do OCOVID19'}</h1>
                         <p className={'text-center'}>
@@ -237,47 +237,51 @@ export default function ObserverReport() {
                     <div className="content col-md-12 row">
                         <form>
                             <div className="initial-info col-md-12">
-                                <div className="name col-md-9">
-                                    <p>Nome do observador oficial:*</p>
-                                    <input
-                                        placeholder="Nome"
-                                        className="col-md-12 form-control"
-                                        value={observer_name}
-                                        onChange={(e) => setObserverName(e.target.value)}
-                                    ></input>
+                                <div className="first-inputs col-md-12">
+                                    <div className="name col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
+                                        <p>Nome do observador oficial:*</p>
+                                        <input
+                                            placeholder="Nome"
+                                            className="col-md-12 form-control"
+                                            value={observer_name}
+                                            onChange={(e) => setObserverName(e.target.value)}
+                                        ></input>
+                                    </div>
+                                    <div className="email col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
+                                        <p>E-mail do observador oficial:*</p>
+                                        <input
+                                            placeholder="E-mail"
+                                            className="col-md-12 form-control"
+                                            value={observer_email}
+                                            type="e-mail"
+                                            onChange={(e) => setObserverEmail(e.target.value)}
+                                        ></input>
+                                    </div>
                                 </div>
-                                <div className="email col-md-9">
-                                    <p>E-mail do observador oficial:*</p>
-                                    <input
-                                        placeholder="E-mail"
-                                        className="col-md-12 form-control"
-                                        value={observer_email}
-                                        type="e-mail"
-                                        onChange={(e) => setObserverEmail(e.target.value)}
-                                    ></input>
-                                </div>
-                                <div className="city-select col-md-9">
-                                    <p>Cidade:*</p>
-                                    <Select
-                                        className="select"
-                                        placeholder="Escolha"
-                                        closeMenuOnSelect={true}
-                                        components={animatedComponents}
-                                        defaultValue={[]}
-                                        isClearable
-                                        isSearchable
-                                        onChange={handleCityChoice}
-                                        options={cities}
-                                    />
-                                </div>
-                                <div className="neighborhood col-md-9">
-                                    <p>Bairro:</p>
-                                    <input
-                                        placeholder="Bairro"
-                                        className="col-md-12 form-control"
-                                        value={neighborhood}
-                                        onChange={(e) => setNeighborhood(e.target.value)}
-                                    ></input>
+                                <div className="seccond-inputs col-md-12">
+                                    <div className="city-select col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
+                                        <p>Cidade:*</p>
+                                        <Select
+                                            className="select"
+                                            placeholder="Escolha"
+                                            closeMenuOnSelect={true}
+                                            components={animatedComponents}
+                                            defaultValue={[]}
+                                            isClearable
+                                            isSearchable
+                                            onChange={handleCityChoice}
+                                            options={cities}
+                                        />
+                                    </div>
+                                    <div className="neighborhood col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
+                                        <p>Bairro:</p>
+                                        <input
+                                            placeholder="Bairro"
+                                            className="col-md-12 form-control"
+                                            value={neighborhood}
+                                            onChange={(e) => setNeighborhood(e.target.value)}
+                                        ></input>
+                                    </div>
                                 </div>
                                 <div className="report-type col-md-9">
                                     <FormControl component={'fieldset'} className="col-md-9">
@@ -326,26 +330,28 @@ export default function ObserverReport() {
                                             />
                                         </div>
                                     }
-                                    <div className="name col-md-9">
-                                        <p>Nome:</p>
-                                        <input
-                                            placeholder="Nome"
-                                            className="col-md-12 form-control"
-                                            value={case_name}
-                                            onChange={(e) => setCaseName(e.target.value)}
-                                        ></input>
-                                    </div>
-                                    <div className="age col-md-9">
-                                        <p>Idade:</p>
-                                        <input
-                                            placeholder="Ex: 60"
-                                            className="col-md-12 form-control"
-                                            type="number"
-                                            min="0"
-                                            step="1"
-                                            value={case_age}
-                                            onChange={(e) => setCaseAge(e.target.value)}
-                                        ></input>
+                                    <div className="third-inputs col-md-12">
+                                        <div className="name col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
+                                            <p>Nome:</p>
+                                            <input
+                                                placeholder="Nome"
+                                                className="col-md-12 form-control"
+                                                value={case_name}
+                                                onChange={(e) => setCaseName(e.target.value)}
+                                            ></input>
+                                        </div>
+                                        <div className="age col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
+                                            <p>Idade:</p>
+                                            <input
+                                                placeholder="Ex: 60"
+                                                className="col-md-12 form-control"
+                                                type="number"
+                                                min="0"
+                                                step="1"
+                                                value={case_age}
+                                                onChange={(e) => setCaseAge(e.target.value)}
+                                            ></input>
+                                        </div>
                                     </div>
                                     <div className="gender col-md-9">
                                         <FormControl component={'fieldset'} className="col-md-9">
@@ -410,32 +416,36 @@ export default function ObserverReport() {
                                             </RadioGroup>
                                         </FormControl>
                                     </div>
-                                    <div className="info-source col-md-9">
-                                        <p>Fonte da informação:*</p>
-                                        <input
-                                            placeholder="Fonte da informação"
-                                            className="col-md-12 form-control"
-                                            value={info_source}
-                                            onChange={(e) => setInfoSource(e.target.value)}
-                                        ></input>
+                                    <div className="fourth-inputs col-md-12">
+                                        <div className="info-source col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
+                                            <p>Fonte da informação:*</p>
+                                            <input
+                                                placeholder="Fonte da informação"
+                                                className="col-md-12 form-control"
+                                                value={info_source}
+                                                onChange={(e) => setInfoSource(e.target.value)}
+                                            ></input>
+                                        </div>
+                                        <div className="info-source-link col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
+                                            <p>Link da fonte da informação (Fotos, Vídeos e etc):</p>
+                                            <input
+                                                placeholder="Ex: https://google.com"
+                                                className="col-md-12 form-control"
+                                                value={info_source_link}
+                                                onChange={(e) => setInfoSourceLink(e.target.value)}
+                                            ></input>
+                                        </div>
                                     </div>
-                                    <div className="info-source-link col-md-9">
-                                        <p>Link da fonte da informação (Fotos, Vídeos e etc):</p>
-                                        <input
-                                            placeholder="Ex: https://google.com"
-                                            className="col-md-12 form-control"
-                                            value={info_source_link}
-                                            onChange={(e) => setInfoSourceLink(e.target.value)}
-                                        ></input>
-                                    </div>
-                                    <div className="comments col-md-9">
-                                        <p>Comentários gerais:</p>
-                                        <input
-                                            placeholder="Comentários gerais"
-                                            className="col-md-12 form-control"
-                                            value={general_comments}
-                                            onChange={(e) => setGeneralComments(e.target.value)}
-                                        ></input>
+                                    <div className="col-md-12">
+                                        <div className="comments col-md-12" style={{ padding: 0 }}>
+                                            <p>Comentários gerais:</p>
+                                            <input
+                                                placeholder="Comentários gerais"
+                                                className="col-md-12 form-control"
+                                                value={general_comments}
+                                                onChange={(e) => setGeneralComments(e.target.value)}
+                                            ></input>
+                                        </div>
                                     </div>
                                 </div>
                             }
@@ -457,44 +467,48 @@ export default function ObserverReport() {
                                             </RadioGroup>
                                         </FormControl>
                                     </div>
-                                    <div className="number-of-cases col-md-9">
-                                        <p>Quantidade de casos:*</p>
-                                        <input
-                                            placeholder="Ex: 10"
-                                            className="col-md-12 form-control"
-                                            type="number"
-                                            min="0"
-                                            step="1"
-                                            value={number_of_cases}
-                                            onChange={(e) => setNumberOfCases(e.target.value)}
-                                        ></input>
+                                    <div className="col-md-12">
+                                        <div className="number-of-cases col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
+                                            <p>Quantidade de casos:*</p>
+                                            <input
+                                                placeholder="Ex: 10"
+                                                className="col-md-12 form-control"
+                                                type="number"
+                                                min="0"
+                                                step="1"
+                                                value={number_of_cases}
+                                                onChange={(e) => setNumberOfCases(e.target.value)}
+                                            ></input>
+                                        </div>
+                                        <div className="info-source col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
+                                            <p>Fonte da informação:*</p>
+                                            <input
+                                                placeholder="Fonte da informação"
+                                                className="col-md-12 form-control"
+                                                value={info_source}
+                                                onChange={(e) => setInfoSource(e.target.value)}
+                                            ></input>
+                                        </div>
                                     </div>
-                                    <div className="info-source col-md-9">
-                                        <p>Fonte da informação:*</p>
-                                        <input
-                                            placeholder="Fonte da informação"
-                                            className="col-md-12 form-control"
-                                            value={info_source}
-                                            onChange={(e) => setInfoSource(e.target.value)}
-                                        ></input>
-                                    </div>
-                                    <div className="info-source-link col-md-9">
-                                        <p>Link da fonte da informação (Fotos, Vídeos e etc):</p>
-                                        <input
-                                            placeholder="Ex: https://google.com"
-                                            className="col-md-12 form-control"
-                                            value={info_source_link}
-                                            onChange={(e) => setInfoSourceLink(e.target.value)}
-                                        ></input>
-                                    </div>
-                                    <div className="comments col-md-9">
-                                        <p>Comentários gerais:</p>
-                                        <input
-                                            placeholder="Comentários gerais"
-                                            className="col-md-12 form-control"
-                                            value={general_comments}
-                                            onChange={(e) => setGeneralComments(e.target.value)}
-                                        ></input>
+                                    <div className="col-md-12">
+                                        <div className="info-source-link col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
+                                            <p>Link da fonte da informação (Fotos, Vídeos e etc):</p>
+                                            <input
+                                                placeholder="Ex: https://google.com"
+                                                className="col-md-12 form-control"
+                                                value={info_source_link}
+                                                onChange={(e) => setInfoSourceLink(e.target.value)}
+                                            ></input>
+                                        </div>
+                                        <div className="comments col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
+                                            <p>Comentários gerais:</p>
+                                            <input
+                                                placeholder="Comentários gerais"
+                                                className="col-md-12 form-control"
+                                                value={general_comments}
+                                                onChange={(e) => setGeneralComments(e.target.value)}
+                                            ></input>
+                                        </div>
                                     </div>
                                 </div>
                             }
@@ -507,6 +521,6 @@ export default function ObserverReport() {
                     </div>
                 </div>
             </Container>
-        </div>
+        </div >
     );
 }
