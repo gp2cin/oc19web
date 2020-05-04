@@ -47,23 +47,12 @@ export default function OfficialCases() {
                     }
                     setCities(arr);
                 })
+                .catch(error => {
+                    alert(`Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`);
+                });
         } catch (error) {
             console.log(error)
         }
-        //base de dados do IBGE, código de Pernambuco: 26
-        fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/26/municipios`)
-            .then(res => res.json())
-            .then((data) => {
-                console.log(cities)
-                let arr = []
-                for (const i in data) {
-                    const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
-                    arr = [...arr, itemToAdd]
-                }
-                setCities(arr);
-            }).catch(error => {
-                alert(`Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`);
-            });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
@@ -168,7 +157,7 @@ export default function OfficialCases() {
                         <p1>{`${recoveredCases.toLocaleString()}`}</p1>
                     </div>
                 </div>
-                <h6> {state.updated_at ? `Fonte: IRRD-PE. Atualizado em: ${moment(state.updated_at).format('DD/MM/YYYY')}` : 'Fonte: IRRD-PE.'}</h6>
+                <h6> {state.updatedAt ? `Fonte: IRRD-PE. Atualizado em: ${moment(state.updatedAt).format('DD/MM/YYYY')}` : 'Fonte: IRRD-PE.'}</h6>
             </div>
             <Footer />
         </div>
