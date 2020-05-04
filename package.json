@@ -29,7 +29,7 @@
   "scripts": {
     "secure": "HTTPS=true react-scripts start",
     "presecure": "rm ./node_modules/webpack-dev-server/ssl/server.pem && cp -f ./cert/server.pem ./node_modules/webpack-dev-server/ssl",
-    "start": "REACT_APP_API_URL=localhost:3000 react-scripts start",
+    "start": "REACT_APP_API_URL=http://localhost:3000 react-scripts start",
     "build": "REACT_APP_API_URL='https://api.ocovid19.info' react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
