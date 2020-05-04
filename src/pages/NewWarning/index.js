@@ -20,7 +20,7 @@ import api from '../../services/api';
 export default function WarningCreation() {
   const [sendDisabled, setSendDisabled] = useState(false);
   const [email, setEmail] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(null);
   const [birthdate, setBirthdate] = useState('');
 
   const animatedComponents = makeAnimated();
@@ -121,6 +121,7 @@ export default function WarningCreation() {
     immunodeficiency: false,
     lung_disease: false,
     neuromuscular_disease: false,
+    obesity: false,
   };
 
   //Diseases options to construct the select options on frontend
@@ -135,6 +136,7 @@ export default function WarningCreation() {
     { value: 'immunodeficiency', label: 'Imunodeficiência (imunidade baixa)' },
     { value: 'lung_disease', label: 'Doença pulmonar crônica (doença nos pulmões)' },
     { value: 'neuromuscular_disease', label: 'Doença neuromuscular (doença muscular)' },
+    { value: 'obesity', label: 'Obesidade' },
   ];
 
   //Respostas a cada pergunta de sim ou não
