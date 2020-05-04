@@ -40,7 +40,7 @@ class Home extends Component {
       state: 0,
       country: 0,
       city: 0,
-      updated_at: new Date(),
+      updatedAt: new Date(),
     },
   };
   getMapData = async () => {
@@ -77,7 +77,7 @@ class Home extends Component {
         state: offCases.state ? offCases.state.confirmed : undefined,
         country: offCases.country ? offCases.country.confirmed : undefined,
         city: offCases.city ? offCases.city.confirmed : undefined,
-        updated_at: offCases.world ? offCases.world.updated_at : undefined,
+        updatedAt: offCases.world ? offCases.world.updatedAt : undefined,
       };
       this.setState({
         officialCases: newOffCases,
