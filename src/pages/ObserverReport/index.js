@@ -24,10 +24,16 @@ export default function ObserverReport() {
     const [observer_name, setObserverName] = useState('');
     const [observer_email, setObserverEmail] = useState('');
     const [city, setSelectedCity] = useState('');
-    const [neighborhood, setNeighborhood] = useState('');
+    const [neighborhood, setSelectedNeighborhood] = useState('');
+    const [neighborhood_name, setNeighborhood_name] = useState('');
+
+    //List of Recife's neighborhoods from backend
+    const [neighborhooods, setNeighborhoods] = useState([]);
 
     //List of cities from IBGE API
     const [cities, setCities] = useState([]);
+
+    const [isRecifeSelected, setIsRecifeSelected] = useState(false);
 
     //Case data
     const [report_type, setReportType] = useState('');
@@ -107,6 +113,42 @@ export default function ObserverReport() {
     function handleCityChoice(choice) {
         if (choice != null) {
             setSelectedCity(choice.label);
+
+            //Get Recife's neighborhoods form backend
+            if (choice.label == 'Recife') {
+                console.log('Recife!!')
+                api.get('api/v1/cases/crowd?cidade=recife')
+                    .then(response => {
+                        if (response !== null) {
+                            console.log('Resposta Recife!!')
+                            console.log(response);
+                            if (response.data !== null) {
+                                console.log('Resposta Data!!')
+                                console.log(response.data);
+                                if (response.data.neighborhood !== null) {
+                                    console.log('Resposta Bairros!!')
+                                    console.log(response.data.neighborhood);
+                                    let arr = [];
+                                    for (const i in response.data.neighborhood) {
+                                        const itemToAdd = { value: `${response.data.neighborhood[i]._id}`, label: `${response.data.neighborhood[i].name}` };
+                                        arr = [...arr, itemToAdd];
+                                    }
+                                    setNeighborhoods(arr);
+                                    setIsRecifeSelected(true);
+                                }
+                            }
+                        }
+                    });
+            } else {
+                setNeighborhoods([]);
+            }
+        }
+    }
+
+    function handleNeighborhoodChoice(choice) {
+        if (choice != null) {
+            setSelectedNeighborhood(choice.value);
+            setNeighborhood_name(choice.label);
         }
     }
 
@@ -137,6 +179,7 @@ export default function ObserverReport() {
         if (
             observer_email !== '' &&
             observer_name !== '' &&
+            neighborhood_name !== '' &&
             city !== '' &&
             report_type !== ''
         ) {
@@ -190,6 +233,7 @@ export default function ObserverReport() {
                 observer_email,
                 city,
                 neighborhood,
+                neighborhood_name,
                 report_type,
                 case_type,
                 death_date,
@@ -274,13 +318,34 @@ export default function ObserverReport() {
                                         />
                                     </div>
                                     <div className="neighborhood col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
-                                        <p>Bairro:</p>
-                                        <input
-                                            placeholder="Bairro"
-                                            className="col-md-12 form-control"
-                                            value={neighborhood}
-                                            onChange={(e) => setNeighborhood(e.target.value)}
-                                        ></input>
+                                        <p>Bairro:*</p>
+                                        {
+                                            !isRecifeSelected &&
+                                            <input
+                                                placeholder="Bairro"
+                                                className="col-md-12 form-control"
+                                                value={neighborhood_name}
+                                                onChange={(e) => {
+                                                    setSelectedNeighborhood('');
+                                                    setNeighborhood_name(e.target.value);
+                                                }}
+                                            ></input>
+
+                                        }
+                                        {
+                                            isRecifeSelected &&
+                                            <Select
+                                                className="select"
+                                                placeholder="Escolha"
+                                                closeMenuOnSelect={true}
+                                                components={animatedComponents}
+                                                defaultValue={[]}
+                                                isClearable
+                                                isSearchable
+                                                onChange={handleNeighborhoodChoice}
+                                                options={neighborhooods}
+                                            />
+                                        }
                                     </div>
                                 </div>
                                 <div className="report-type col-md-9">
