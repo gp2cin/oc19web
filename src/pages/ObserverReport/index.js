@@ -138,6 +138,8 @@ export default function ObserverReport() {
                                 }
                             }
                         }
+                    }).catch(error => {
+                        alert(`Erro ao buscar os bairros de Recife. Favor verifique sua conexão. ${error}`);
                     });
             } else {
                 setNeighborhoods([]);
