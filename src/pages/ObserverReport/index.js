@@ -143,6 +143,7 @@ export default function ObserverReport() {
                     });
             } else {
                 setNeighborhoods([]);
+                setIsRecifeSelected(false);
             }
         }
     }
