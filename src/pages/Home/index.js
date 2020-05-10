@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import moment from 'moment';
 import { Container } from './styles';
-import { Map, TileLayer, Marker, Popup } from 'react-leaflet';
+
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
-import HeatmapLayer from '../../components/HeatmapLayer';
+// import HeatmapLayer from '../../components/HeatmapLayer';
 import { addressPoints } from './mock.js';
-import MarkerClusterGroup from 'react-leaflet-markercluster';
+// import MarkerClusterGroup from 'react-leaflet-markercluster';
 import api from '../../services/api';
+import TabsMaps from './components/TabsMaps';
 
 class Home extends Component {
   state = {
@@ -61,6 +62,7 @@ class Home extends Component {
       console.log(e);
     }
   };
+
   getInfoByLocation = async () => {
     try {
       const { userAddress } = this.state;
@@ -132,7 +134,9 @@ class Home extends Component {
     return (
       <Container className={'row'}>
         <Header />
-        <Map center={userAddress.position} maxZoom={18} zoom={mapInfo.zoom} className={'homeMap'}>
+        <div style={{ marginTop: 40 }}>
+          <TabsMaps userAddress={userAddress} />
+          {/* <Map center={userAddress.position} maxZoom={18} zoom={mapInfo.zoom} className={'homeMap'}>
           <HeatmapLayer
             fitBoundsOnLoad
             fitBoundsOnUpdate
@@ -159,153 +163,155 @@ class Home extends Component {
               <span>Você está aqui.</span>
             </Popup>
           </Marker>
-        </Map>
+        </Map> */}
 
-        <div className="col-md-12 row justify-content-center align-items-center report-home">
-          <div className="col-lg-4 report-item">
-            <div className={'text-center row justify-content-center align-items-center'}>
-              <div
-                className={'rounded-circle row justify-content-center align-items-center'}
-                style={{
-                  width: '140px',
-                  height: '140px',
-                  backgroundColor: '#b23137',
-                }}
-              >
-                <span
-                  style={{ width: '100%', color: '#fff', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
-                  className="fa fa-bullhorn fa-6"
-                  aria-hidden="true"
-                ></span>
+          <div className="col-md-12 row justify-content-center align-items-center report-home">
+            <div className="col-lg-4 report-item">
+              <div className={'text-center row justify-content-center align-items-center'}>
+                <div
+                  className={'rounded-circle row justify-content-center align-items-center'}
+                  style={{
+                    width: '140px',
+                    height: '140px',
+                    backgroundColor: '#b23137',
+                  }}
+                >
+                  <span
+                    style={{ width: '100%', color: '#fff', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
+                    className="fa fa-bullhorn fa-6"
+                    aria-hidden="true"
+                  ></span>
+                </div>
               </div>
-            </div>
 
-            <h2 className={'text-center report-title'}>{'Informe'}</h2>
-            <p className={'text-center'}>{'Seus sintomas'}</p>
-            {/* <p className={'text-center'}>
+              <h2 className={'text-center report-title'}>{'Informe'}</h2>
+              <p className={'text-center'}>{'Seus sintomas'}</p>
+              {/* <p className={'text-center'}>
               <a className="btn btn-secondary" href="#" role="button">
                 {'Informar'}
               </a>
             </p> */}
-          </div>
-          <div className="col-lg-4 report-item">
-            <div className={'text-center row justify-content-center align-items-center'}>
-              <div
-                className={'rounded-circle row justify-content-center align-items-center'}
-                style={{
-                  width: '140px',
-                  height: '140px',
-                  backgroundColor: '#b23137',
-                }}
-              >
-                <span
-                  style={{ width: '100%', color: '#fff', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
-                  className="fa fa-line-chart fa-6"
-                  aria-hidden="true"
-                ></span>
-              </div>
             </div>
+            <div className="col-lg-4 report-item">
+              <div className={'text-center row justify-content-center align-items-center'}>
+                <div
+                  className={'rounded-circle row justify-content-center align-items-center'}
+                  style={{
+                    width: '140px',
+                    height: '140px',
+                    backgroundColor: '#b23137',
+                  }}
+                >
+                  <span
+                    style={{ width: '100%', color: '#fff', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
+                    className="fa fa-line-chart fa-6"
+                    aria-hidden="true"
+                  ></span>
+                </div>
+              </div>
 
-            <h2 className={'text-center report-title'}>{'Acompanhe'}</h2>
-            <p className={'text-center'}>{'o Covid-19 na sua região.'}</p>
-            {/* <p className={'text-center'}>
+              <h2 className={'text-center report-title'}>{'Acompanhe'}</h2>
+              <p className={'text-center'}>{'o Covid-19 na sua região.'}</p>
+              {/* <p className={'text-center'}>
               <a className="btn btn-secondary" href="#" role="button">
                 {'Ver mais'}
               </a>
             </p> */}
-          </div>
-          <div className="col-lg-4 report-item">
-            <div className={'text-center row justify-content-center align-items-center'}>
-              <div
-                className={'rounded-circle row justify-content-center align-items-center'}
-                style={{
-                  width: '140px',
-                  height: '140px',
-                  backgroundColor: '#b23137',
-                }}
-              >
-                <span
-                  style={{ width: '100%', color: '#fff', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
-                  className="fa fa-user-o fa-6"
-                  aria-hidden="true"
-                ></span>
-              </div>
             </div>
-            <h2 className={'text-center report-title'}>{'Participe'}</h2>
-            <p className={'text-center'}>{officialCases.state}</p>
-            {/* <p className={'text-center'}>
+            <div className="col-lg-4 report-item">
+              <div className={'text-center row justify-content-center align-items-center'}>
+                <div
+                  className={'rounded-circle row justify-content-center align-items-center'}
+                  style={{
+                    width: '140px',
+                    height: '140px',
+                    backgroundColor: '#b23137',
+                  }}
+                >
+                  <span
+                    style={{ width: '100%', color: '#fff', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
+                    className="fa fa-user-o fa-6"
+                    aria-hidden="true"
+                  ></span>
+                </div>
+              </div>
+              <h2 className={'text-center report-title'}>{'Participe'}</h2>
+              <p className={'text-center'}>{officialCases.state}</p>
+              {/* <p className={'text-center'}>
               <a className="btn btn-secondary" href="#" role="button">
                 {'Ver mais'}
               </a>
             </p> */}
+            </div>
+          </div>
+
+          <div className="col-md-12 box-official">
+            <h1 className="col-lg-12 text-center">{'Números oficiais'}</h1>
+            <h6 className="col-lg-12 text-center">
+              {`Fonte: IRRD-PE `}
+              <span>{`Atualizado em: ${moment(officialCases.updatedAt).format('DD/MM/YYYY')}`}</span>{' '}
+            </h6>
+          </div>
+          <div className="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+            <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center  overflow-hidden">
+              <div className="my-3 py-3">
+                <h2 className="display-5">{officialCases.world.toLocaleString()}</h2>
+                <p className="lead">{'Casos no mundo.'}</p>
+              </div>
+
+              <div
+                className="mx-auto"
+                // style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}
+              >
+                <span
+                  style={{ width: '80%', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
+                  className="fa fa-globe fa-6"
+                  aria-hidden="true"
+                ></span>
+              </div>
+            </div>
+            <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+              <div className="my-3 p-3">
+                <h2 className="display-5">{officialCases.country.toLocaleString()}</h2>
+                <p className="lead">{'Casos no seu país.'}</p>
+              </div>
+              <div className=" mx-auto" style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}>
+                <img alt={'Country flag'} src={`https://www.countryflags.io/${userAddress.country}/flat/64.png`} />
+              </div>
+            </div>
+          </div>
+          <div className="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
+            <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+              <div className="my-3 py-3">
+                <h2 className="display-5">{officialCases.state.toLocaleString()}</h2>
+                <p className="lead">{`Casos em ${userAddress.state ? userAddress.state : 'seu estado'}.`}</p>
+              </div>
+              <div className="mx-auto" style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}>
+                <span
+                  style={{ width: '80%', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
+                  className="fa fa-map fa-6"
+                  aria-hidden="true"
+                ></span>
+              </div>
+            </div>
+            <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
+              <div className="my-3 p-3">
+                <h2 className="display-5">{officialCases.city.toLocaleString()}</h2>
+                <p className="lead">{`Casos em ${userAddress.city ? userAddress.city : 'sua cidade'}.`}</p>
+              </div>
+              <div className=" mx-auto" style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}>
+                <span
+                  style={{ width: '80%', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
+                  className="fa fa-map-marker fa-6"
+                  aria-hidden="true"
+                ></span>
+              </div>
+            </div>
           </div>
         </div>
 
-        <div className="col-md-12 box-official">
-          <h1 className="col-lg-12 text-center">{'Números oficiais'}</h1>
-          <h6 className="col-lg-12 text-center">
-            {`Fonte: IRRD-PE `}
-            <span>{`Atualizado em: ${moment(officialCases.updatedAt).format('DD/MM/YYYY')}`}</span>{' '}
-          </h6>
-        </div>
-        <div className="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
-          <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center  overflow-hidden">
-            <div className="my-3 py-3">
-              <h2 className="display-5">{officialCases.world.toLocaleString()}</h2>
-              <p className="lead">{'Casos no mundo.'}</p>
-            </div>
-
-            <div
-              className="mx-auto"
-            // style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}
-            >
-              <span
-                style={{ width: '80%', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
-                className="fa fa-globe fa-6"
-                aria-hidden="true"
-              ></span>
-            </div>
-          </div>
-          <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-            <div className="my-3 p-3">
-              <h2 className="display-5">{officialCases.country.toLocaleString()}</h2>
-              <p className="lead">{'Casos no seu país.'}</p>
-            </div>
-            <div className=" mx-auto" style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}>
-              <img alt={'Country flag'} src={`https://www.countryflags.io/${userAddress.country}/flat/64.png`} />
-            </div>
-          </div>
-        </div>
-        <div className="d-md-flex flex-md-equal w-100 my-md-3 pl-md-3">
-          <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-            <div className="my-3 py-3">
-              <h2 className="display-5">{officialCases.state.toLocaleString()}</h2>
-              <p className="lead">{`Casos em ${userAddress.state ? userAddress.state : 'seu estado'}.`}</p>
-            </div>
-            <div className="mx-auto" style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}>
-              <span
-                style={{ width: '80%', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
-                className="fa fa-map fa-6"
-                aria-hidden="true"
-              ></span>
-            </div>
-          </div>
-          <div className="col-md-6 bg-light mr-md-3 pt-3 px-3 pt-md-5 px-md-5 text-center overflow-hidden">
-            <div className="my-3 p-3">
-              <h2 className="display-5">{officialCases.city.toLocaleString()}</h2>
-              <p className="lead">{`Casos em ${userAddress.city ? userAddress.city : 'sua cidade'}.`}</p>
-            </div>
-            <div className=" mx-auto" style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}>
-              <span
-                style={{ width: '80%', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
-                className="fa fa-map-marker fa-6"
-                aria-hidden="true"
-              ></span>
-            </div>
-          </div>
-        </div>
         <Footer />
-      </Container >
+      </Container>
     );
   }
 }

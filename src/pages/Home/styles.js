@@ -19,7 +19,7 @@ export const Container = styled.div`
 `;
 
 export const Map = styled.form`
-  width: 400px;
+  width: 600px;
   background: #fff;
   /* padding: 20px; */
   display: flex;
