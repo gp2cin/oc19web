@@ -19,7 +19,7 @@ build:
   tags:
     - docker
   only:
-    - master
+    - develop
 
 production:
   type: deploy
@@ -32,4 +32,4 @@ production:
     - cd dist
     - dpl --provider=heroku --app=ocovid19-web --api-key=9ddd53fa-5e83-44aa-96d9-8d73f99a4435
   only:
-    - master
+    - develop
