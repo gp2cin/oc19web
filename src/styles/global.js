@@ -47,7 +47,7 @@ body, html {
   padding: 5px;
   margin-left: 0px !important;
   margin-top: 0px !important;
-
+  /* white-space: nowrap; */
   width: auto !important;
   height: auto !important;
   min-width: 50px;

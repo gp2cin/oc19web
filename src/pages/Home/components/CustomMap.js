@@ -29,13 +29,13 @@ export default function CustomMap({ userLocation, plotType = 'byCity' }) {
       className: 'my-div-icon',
       style: 'background-color: yellow',
       html: `
-        <div style='display: flex'>
-          <div>
+        <div style='display: flex; flex-direction: column'>
+          <div style='display: flex'>
             ${locationName}
-          <div/>
-          <div style='font-size: 10px; margin-top: 5; border-top: 1px solid rgba(217, 217, 217, 0.8)'>
+          </div>
+          <div style='display: flex;font-size: 10px; margin-top: 5; border-top: 1px solid rgba(217, 217, 217, 0.8); justify-content: center'>
             ${caseAmount}
-          <div/>
+          </div>
         </div>
       `,
     });
@@ -61,7 +61,7 @@ export default function CustomMap({ userLocation, plotType = 'byCity' }) {
   function renderCityCases() {
     return RecifeJson.features.map(({ geometry: { coordinates }, properties: { name } }) => {
       const { lat, lng } = polygon(coordinates).getBounds().getCenter();
-      const cases = 1000;
+      const cases = Math.floor(Math.random() * 100);
 
       return (
         <Marker position={[lng, lat]} icon={getCaseOnPoint(cases, name)}>
@@ -79,7 +79,7 @@ export default function CustomMap({ userLocation, plotType = 'byCity' }) {
   function renderNeighborhoodCases() {
     return bairrosRecife.features.map(({ geometry: { coordinates }, properties: { bairro_nome } }) => {
       const { lat, lng } = polygon(coordinates).getBounds().getCenter();
-      const cases = 1000;
+      const cases = Math.floor(Math.random() * 100);
 
       return (
         <Marker position={[lng, lat]} icon={getCaseOnPoint(cases, bairro_nome)}>
@@ -103,11 +103,7 @@ export default function CustomMap({ userLocation, plotType = 'byCity' }) {
     }
   }
 
-  let zoomData = {
-    zoom: 11,
-    maxZoom: 13,
-    minZoom: 10,
-  };
+  let zoomData = {};
 
   const { byCity, byNeighborhood } = PlotTypleOptions;
   if (plotType === byCity) {
@@ -124,14 +120,13 @@ export default function CustomMap({ userLocation, plotType = 'byCity' }) {
     };
   }
 
-  // TODO desativar sobreposição
   return (
     <Map
       center={userLocation}
       zoom={zoomData.zoom}
       className={'homeMap'}
-      maxZoom={zoomData.maxZoom}
-      minZoom={zoomData.minZoom}
+      // maxZoom={zoomData.maxZoom}
+      // minZoom={zoomData.minZoom}
     >
       <TileLayer
         attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
