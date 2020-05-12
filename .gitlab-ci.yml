@@ -6,7 +6,7 @@ cache:
 
 stages:
   - build
-  - production
+#   - production
 
 build:
   stage: build
@@ -16,20 +16,18 @@ build:
   script:
     - npm install
     - npm run build
-  tags:
-    - docker
   only:
     - develop
 
-production:
-  type: deploy
-  stage: production
-  image: ruby:latest
-  script:
-    - apt-get update -qy
-    - apt-get install -y ruby-dev
-    - gem install dpl
-    - cd dist
-    - dpl --provider=heroku --app=ocovid19-web --api-key=9ddd53fa-5e83-44aa-96d9-8d73f99a4435
-  only:
-    - develop
+# production:
+#   type: deploy
+#   stage: production
+#   image: ruby:latest
+#   script:
+#     - apt-get update -qy
+#     - apt-get install -y ruby-dev
+#     - gem install dpl
+#     - cd dist
+#     - dpl --provider=heroku --app=ocovid19-web --api-key=9ddd53fa-5e83-44aa-96d9-8d73f99a4435
+#   only:
+#     - develop
