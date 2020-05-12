@@ -1,0 +1,35 @@
+image: node:12.16.0-alpine
+cache:
+  key: "alpine"
+  paths:
+    - node_modules/
+
+stages:
+  - build
+  - production
+
+build:
+  stage: build
+  artifacts:
+    paths:
+      - dist/
+  script:
+    - npm install
+    - npm run build
+  tags:
+    - docker
+  only:
+    - master
+
+production:
+  type: deploy
+  stage: production
+  image: ruby:latest
+  script:
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - cd dist
+    - dpl --provider=heroku --app=ocovid19-web --api-key=9ddd53fa-5e83-44aa-96d9-8d73f99a4435
+  only:
+    - master
