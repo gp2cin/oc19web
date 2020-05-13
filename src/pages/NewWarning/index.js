@@ -13,7 +13,7 @@ import makeAnimated from 'react-select/animated';
 import 'react-datepicker/dist/react-datepicker.css';
 // import './styles.css';
 import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+// import Footer from '../../components/Footer';
 import { Container } from './styles';
 import api from '../../services/api';
 
@@ -142,36 +142,36 @@ export default function WarningCreation() {
   //Respostas a cada pergunta de sim ou não
   const [contact_suspect_or_confirmed_case, setContact_suspect_or_confirmed_case] = React.useState();
   const handleChangeQ1 = (event) => {
-    if (event.target.value == 'true') {
+    if (event.target.value === 'true') {
       setContact_suspect_or_confirmed_case(true);
-    } else if (event.target.value == 'false') {
+    } else if (event.target.value === 'false') {
       setContact_suspect_or_confirmed_case(false);
     }
   };
   const [household_contact_confirmed_case, setHousehold_contact_confirmed_case] = React.useState();
   const handleChangeQ2 = (event) => {
-    if (event.target.value == 'true') {
+    if (event.target.value === 'true') {
       setHousehold_contact_confirmed_case(true);
-    } else if (event.target.value == 'false') {
+    } else if (event.target.value === 'false') {
       setHousehold_contact_confirmed_case(false);
     }
   };
   const [been_in_health_unit, setBeen_in_health_unit] = React.useState();
   const handleChangeQ3 = (event) => {
-    if (event.target.value == 'true') {
+    if (event.target.value === 'true') {
       setBeen_in_health_unit(true);
-    } else if (event.target.value == 'false') {
+    } else if (event.target.value === 'false') {
       setBeen_in_health_unit(false);
     }
   };
   const [had_evaluation_for_symptoms, setHad_evaluation_for_symptoms] = React.useState();
   const handleChangeQ4 = (event) => {
-    if (event.target.value == 'true') {
+    if (event.target.value === 'true') {
       setHad_evaluation_for_symptoms(true);
-    } else if (event.target.value == 'false') {
+    } else if (event.target.value === 'false') {
       setHad_evaluation_for_symptoms(false);
     }
-    if (event.target.value == 'true') {
+    if (event.target.value === 'true') {
       setIsRequiredQ5('*');
     } else {
       setIsRequiredQ5('');
@@ -179,20 +179,20 @@ export default function WarningCreation() {
   };
   const [covid19_was_discarded, setCovid19_was_discarded] = React.useState();
   const handleChangeQ5 = (event) => {
-    if (event.target.value == 'true') {
+    if (event.target.value === 'true') {
       setCovid19_was_discarded(true);
-    } else if (event.target.value == 'false') {
+    } else if (event.target.value === 'false') {
       setCovid19_was_discarded(false);
     }
   };
   const [covid_tested, setCovid_tested] = React.useState();
   const handleChangeQ6 = (event) => {
-    if (event.target.value == 'true') {
+    if (event.target.value === 'true') {
       setCovid_tested(true);
-    } else if (event.target.value == 'false') {
+    } else if (event.target.value === 'false') {
       setCovid_tested(false);
     }
-    if (event.target.value == 'true') {
+    if (event.target.value === 'true') {
       setIsRequiredQ7('*');
     } else {
       setIsRequiredQ7('');
@@ -200,9 +200,9 @@ export default function WarningCreation() {
   };
   const [covid_result, setCovid_result] = React.useState();
   const handleChangeQ7 = (event) => {
-    if (event.target.value == 'true') {
+    if (event.target.value === 'true') {
       setCovid_result(true);
-    } else if (event.target.value == 'false') {
+    } else if (event.target.value === 'false') {
       setCovid_result(false);
     }
   };
@@ -211,7 +211,7 @@ export default function WarningCreation() {
   const [isRequiredQ7, setIsRequiredQ7] = useState('');
 
   function handleBirthdate(d) {
-    if (d !== null) {
+    if (d === null) {
       const s = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
       setDate(d);
       setBirthdate(s);
@@ -219,7 +219,7 @@ export default function WarningCreation() {
   }
 
   function handleSymptomsChange(symptomsChange) {
-    if (symptomsChange != null && symptomsChange.length != 0) {
+    if (symptomsChange !== null && symptomsChange.length !== 0) {
       setSymptomsControl(symptomsChange);
     } else {
       setSymptomsControl([]);
@@ -227,7 +227,7 @@ export default function WarningCreation() {
   }
 
   function handleDeseasesChange(diseasesChange) {
-    if (diseasesChange != null && diseasesChange.length != 0) {
+    if (diseasesChange !== null && diseasesChange.length !== 0) {
       setDiseasesControl(diseasesChange);
     } else {
       setDiseasesControl([]);
@@ -263,21 +263,21 @@ export default function WarningCreation() {
             },
           };
 
-          if (diseasesControl.length != 0) {
+          if (diseasesControl.length !== 0) {
             for (var key in diseases) {
               for (const i in diseasesControl) {
-                if (key == diseasesControl[i].value) {
+                if (key === diseasesControl[i].value) {
                   diseases[key] = true;
                 }
               }
             }
           }
 
-          if (symptomsControl.length != 0) {
-            for (var key in symptoms) {
+          if (symptomsControl.length !== 0) {
+            for (var simpKey in symptoms) {
               for (const i in symptomsControl) {
-                if (key == symptomsControl[i].value) {
-                  symptoms[key] = true;
+                if (simpKey === symptomsControl[i].value) {
+                  symptoms[simpKey] = true;
                 }
               }
             }
@@ -332,7 +332,7 @@ export default function WarningCreation() {
   }
 
   function validateEmail(mail) {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+    if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
       return true;
     }
     alert('Você preencheu um endereço de e-mail invávido!');
@@ -349,11 +349,11 @@ export default function WarningCreation() {
       had_evaluation_for_symptoms !== {} &&
       covid_tested !== {}
     ) {
-      if (had_evaluation_for_symptoms == true && covid19_was_discarded == {}) {
+      if (had_evaluation_for_symptoms === true && covid19_was_discarded === {}) {
         alert('Você precisa preencher todos os campos obrigatórios!');
         return false;
       }
-      if (covid_tested == true && covid_result == {}) {
+      if (covid_tested === true && covid_result === {}) {
         alert('Você precisa preencher todos os campos obrigatórios!');
         return false;
       }

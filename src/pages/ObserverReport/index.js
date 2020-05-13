@@ -6,7 +6,7 @@ import api from '../../services/api';
 import { useHistory } from 'react-router-dom';
 
 import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+// import Footer from '../../components/Footer';
 import { Container } from './styles';
 import './styles.css'
 
@@ -46,11 +46,11 @@ export default function ObserverReport() {
     const [caseHadPreExistingDiseases, setCaseHadPreExistingDiseases] = React.useState();
     const [household_contact_confirmed_case, setCaseHouseholdContact] = React.useState();
     const handleChangeQ5 = (event) => {
-        if (event.target.value == 'true') {
+        if (event.target.value === 'true') {
             setCaseHouseholdContact(true);
-        } else if (event.target.value == 'false') {
+        } else if (event.target.value === 'false') {
             setCaseHouseholdContact(false);
-        } else if (event.target.value == 'not-known') {
+        } else if (event.target.value === 'not-known') {
             setCaseHouseholdContact('');
         }
     };
@@ -111,11 +111,11 @@ export default function ObserverReport() {
     }, [])
 
     function handleCityChoice(choice) {
-        if (choice != null) {
+        if (choice !== null) {
             setSelectedCity(choice.label);
 
             //Get Recife's neighborhoods form backend
-            if (choice.label == 'Recife') {
+            if (choice.label === 'Recife') {
                 console.log('Recife!!')
                 api.get('api/v1/cases/crowd?cidade=recife')
                     .then(response => {
@@ -149,7 +149,7 @@ export default function ObserverReport() {
     }
 
     function handleNeighborhoodChoice(choice) {
-        if (choice != null) {
+        if (choice !== null) {
             setSelectedNeighborhood(choice.value);
             setNeighborhood_name(choice.label);
         }
@@ -164,14 +164,14 @@ export default function ObserverReport() {
     }
 
     function handleDeseasesChange(diseasesChange) {
-        if (diseasesChange != null && diseasesChange.length != 0) {
+        if (diseasesChange !== null && diseasesChange.length !== 0) {
             setDiseasesControl(diseasesChange);
         } else {
             setDiseasesControl([]);
         }
     }
     function validateEmail(mail) {
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+        if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
             return true;
         }
         alert('Você preencheu um endereço de e-mail invávido!');
@@ -186,12 +186,12 @@ export default function ObserverReport() {
             city !== '' &&
             report_type !== ''
         ) {
-            if (report_type == 'individual' &&
-                (case_type == '' ||
-                    case_gender == '' ||
-                    caseHadPreExistingDiseases == {} ||
-                    household_contact_confirmed_case == {} ||
-                    info_source == '')
+            if (report_type === 'individual' &&
+                (case_type === '' ||
+                    case_gender === '' ||
+                    caseHadPreExistingDiseases === {} ||
+                    household_contact_confirmed_case === {} ||
+                    info_source === '')
             ) {
                 console.log(case_type);
                 console.log(caseHadPreExistingDiseases);
@@ -200,14 +200,14 @@ export default function ObserverReport() {
                 alert('Você precisa preencher todos os campos obrigatórios!');
                 return false;
             }
-            if (case_type == 'death' && report_type == 'individual' && death_date == '') {
+            if (case_type === 'death' && report_type === 'individual' && death_date === '') {
                 alert('Você precisa preencher todos os campos obrigatórios! Preencha a data de morte.');
                 return false;
             }
-            if (report_type == 'social' &&
-                (case_type == '' ||
-                    number_of_cases == 0 ||
-                    info_source == '')
+            if (report_type === 'social' &&
+                (case_type === '' ||
+                    number_of_cases === 0 ||
+                    info_source === '')
             ) {
                 alert('Você precisa preencher todos os campos obrigatórios!');
                 return false;
@@ -222,10 +222,10 @@ export default function ObserverReport() {
         e.preventDefault();
         if (validateEmail(observer_email) && isRequiredFilled()) {
             setSendDisabled(true);
-            if (diseasesControl.length != 0) {
+            if (diseasesControl.length !== 0) {
                 for (var key in diseases) {
                     for (const i in diseasesControl) {
-                        if (key == diseasesControl[i].value) {
+                        if (key === diseasesControl[i].value) {
                             diseases[key] = true;
                         }
                     }
@@ -367,7 +367,7 @@ export default function ObserverReport() {
                                 </div>
                             </div>
                             {
-                                report_type == 'individual' &&
+                                report_type === 'individual' &&
                                 <div className="individual-info col-md-12">
                                     <div className="case-type col-md-9">
                                         <FormControl component={'fieldset'} className="col-md-9">
@@ -385,7 +385,7 @@ export default function ObserverReport() {
                                         </FormControl>
                                     </div>
                                     {
-                                        case_type == 'death' &&
+                                        case_type === 'death' &&
                                         <div className="death-date col-md-9">
                                             <p>{'Em caso de óbito, informe a data do óbito:*'}</p>
                                             <DatePicker
@@ -452,7 +452,7 @@ export default function ObserverReport() {
                                         </FormControl>
                                     </div>
                                     {
-                                        caseHadPreExistingDiseases == 'yes' &&
+                                        caseHadPreExistingDiseases === 'yes' &&
                                         <div className={'deseases-container col-md-9'}>
                                             <p>{'Quais doenças preexistentes?'}</p>
                                             <Select
@@ -518,7 +518,7 @@ export default function ObserverReport() {
                                 </div>
                             }
                             {
-                                report_type == 'social' &&
+                                report_type === 'social' &&
                                 <div className="social-info col-md-12">
                                     <div className="case-type col-md-9">
                                         <FormControl component={'fieldset'} className="col-md-9">

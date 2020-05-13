@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Map, Popup, TileLayer, Marker, GeoJSON } from 'react-leaflet';
 import { polygon, divIcon } from 'leaflet';
 

@@ -129,7 +129,8 @@ class Home extends Component {
     this.getInfoByLocation();
   }
   render() {
-    const { userAddress, mapInfo, warnings, officialCases } = this.state;
+    // const { userAddress, mapInfo, warnings, officialCases } = this.state;
+    const { userAddress, officialCases } = this.state;
 
     return (
       <Container className={'row'}>
