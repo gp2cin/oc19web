@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import api from '../../services/api';
+import { login, logout } from '../../services/auth';
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -32,6 +33,14 @@ export default function SignUp() {
         }
     }
 
+    function validateEmail(mail) {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
+            return true;
+        }
+        alert('Você preencheu um endereço de e-mail invávido!');
+        return false;
+    }
+
     const handleSignUp = async (e) => {
         e.preventDefault();
         if (email == '' ||
@@ -43,8 +52,9 @@ export default function SignUp() {
             setError('Preencha todos os dados para entrar');
         } else {
             try {
-                await api.post("api/v1/signup", { email, password, first_name, last_name, gender, birthdate });
-                history.push("/");
+                const response = await api.post("api/v1/signup", { email, password, first_name, last_name, gender, birthdate });
+                login(response.data.token);
+                history.push('/app');
             } catch (error) {
                 console.log(error);
                 setError("Ocorreu um erro ao registrar sua conta.");

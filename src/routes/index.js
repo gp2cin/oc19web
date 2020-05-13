@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
-import { isAuthenticated } from '../services/auth';
+import { isAuthenticated, isAuthenticatedObserver } from '../services/auth';
 
 import Home from '../pages/Home';
 import SignIn from '../pages/SignIn';
@@ -24,13 +24,26 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
   />
 );
 
+const PrivateRouteObserver = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) =>
+      isAuthenticatedObserver() ? (
+        <Component {...props} />
+      ) : (
+          <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+        )
+    }
+  />
+);
+
 const Routes = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path={'/'} component={Home} />
       <Route exact path={'/warnings/new'} component={NewWarning} />
       <Route path={'/official-cases'} component={OfficialCases} />
-      <Route path={'/observer-report'} component={ObserverReport} />
+      <PrivateRouteObserver path={'/observer-report'} component={ObserverReport} />
       <Route path={'/about-us'} component={AboutUs} />
       <Route path={'/signin'} component={SignIn} />
       <Route path={'/signup'} component={SignUp} />

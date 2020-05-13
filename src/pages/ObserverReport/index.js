@@ -21,8 +21,6 @@ export default function ObserverReport() {
     const history = useHistory();
 
     //Observer Data
-    const [observer_name, setObserverName] = useState('');
-    const [observer_email, setObserverEmail] = useState('');
     const [city, setSelectedCity] = useState('');
     const [neighborhood, setSelectedNeighborhood] = useState('');
     const [neighborhood_name, setNeighborhood_name] = useState('');
@@ -170,18 +168,9 @@ export default function ObserverReport() {
             setDiseasesControl([]);
         }
     }
-    function validateEmail(mail) {
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
-            return true;
-        }
-        alert('Você preencheu um endereço de e-mail invávido!');
-        return false;
-    }
 
     function isRequiredFilled() {
         if (
-            observer_email !== '' &&
-            observer_name !== '' &&
             neighborhood_name !== '' &&
             city !== '' &&
             report_type !== ''
@@ -220,7 +209,7 @@ export default function ObserverReport() {
 
     function handleNewObserverReport(e) {
         e.preventDefault();
-        if (validateEmail(observer_email) && isRequiredFilled()) {
+        if (isRequiredFilled()) {
             setSendDisabled(true);
             if (diseasesControl.length != 0) {
                 for (var key in diseases) {
@@ -232,8 +221,6 @@ export default function ObserverReport() {
                 }
             }
             const data = {
-                observer_name,
-                observer_email,
                 city,
                 neighborhood,
                 neighborhood_name,
@@ -281,17 +268,15 @@ export default function ObserverReport() {
                             {'Ao registrar informações aqui, você se responsabiliza legalmente pela veracidade delas.'}
                         </p>
                     </section>
-                    <div className="content col-md-12 row">
-                        <form>
+                    <div className="content row d-flex p-2">
+                        <form className="col-md-12">
                             <div className="initial-info col-md-12">
-                                <div className="first-inputs col-md-12">
+                                {/* <div className="first-inputs col-md-12">
                                     <div className="name col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
                                         <p>Nome do observador oficial:*</p>
                                         <input
                                             placeholder="Nome"
                                             className="col-md-12 form-control"
-                                            value={observer_name}
-                                            onChange={(e) => setObserverName(e.target.value)}
                                         ></input>
                                     </div>
                                     <div className="email col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
@@ -299,12 +284,10 @@ export default function ObserverReport() {
                                         <input
                                             placeholder="E-mail"
                                             className="col-md-12 form-control"
-                                            value={observer_email}
                                             type="e-mail"
-                                            onChange={(e) => setObserverEmail(e.target.value)}
                                         ></input>
                                     </div>
-                                </div>
+                                </div> */}
                                 <div className="seccond-inputs col-md-12">
                                     <div className="city-select col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
                                         <p>Cidade:*</p>
@@ -320,7 +303,7 @@ export default function ObserverReport() {
                                             options={cities}
                                         />
                                     </div>
-                                    <div className="neighborhood col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
+                                    <div className="neighborhood col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
                                         <p>Bairro:*</p>
                                         {
                                             !isRecifeSelected &&
