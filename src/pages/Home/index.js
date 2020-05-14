@@ -66,7 +66,7 @@ class Home extends Component {
   getInfoByLocation = async () => {
     try {
       const { userAddress } = this.state;
-      const officialCases = await api.get('api/v1/cases/official', {
+      const officialCases = await api.get('api/v1/cases', {
         params: {
           cidade: userAddress.city,
           estado: userAddress.state,
@@ -262,7 +262,7 @@ class Home extends Component {
 
               <div
                 className="mx-auto"
-                // style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}
+              // style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}
               >
                 <span
                   style={{ width: '80%', fontSize: '5em', borderRadius: '21px 21px 0 0' }}
