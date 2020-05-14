@@ -339,6 +339,7 @@ export default function WarningCreation() {
     return false;
   }
 
+
   function isRequiredFilled() {
     if (
       email !== '' &&
