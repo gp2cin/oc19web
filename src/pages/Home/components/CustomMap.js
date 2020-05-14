@@ -2,12 +2,14 @@ import React from 'react';
 import { Map, Popup, TileLayer, Marker, GeoJSON } from 'react-leaflet';
 import { polygon, divIcon } from 'leaflet';
 
-import RecifeJson from './cidades.json';
-import bairrosRecife from './bairrosRecife.json';
+// import RecifeJson from './cidades.json';
+// import bairrosRecife from './bairrosRecife.json';
+
+import { CircularProgress, Grid } from '@material-ui/core';
 
 const PlotTypleOptions = { byCity: 'byCity', byNeighborhood: 'byNeighborhood' };
 
-export default function CustomMap({ userLocation, plotType = 'byCity' }) {
+export default function CustomMap({ userLocation, geoJson, loading, plotType = 'byCity' }) {
   function onEachFeature(feature, layer) {
     const cases = 1000;
     if (feature.properties && feature.properties.name) {
@@ -41,27 +43,20 @@ export default function CustomMap({ userLocation, plotType = 'byCity' }) {
     });
   }
 
-  // function getCaseOnPoint(caseAmount, locationName) {
-  //   return new divIcon({
-  //     className: 'amountIcon',
-  //     style: 'background-color: yellow',
-  //     html: `
-  //       <div style='display: flex'>
-  //         <!-- <div>
-  //           ${locationName}
-  //         <div/> -->
-  //         <div style='font-size: 11px; margin-top: 5;'>
-  //           ${caseAmount}
-  //         <div/>
-  //       </div>
-  //     `,
-  //   });
-  // }
+  function renderCases() {
+    return geoJson.features.map((geoLocation) => {
+      const {
+        geometry: { coordinates },
+        properties: { name: name },
+      } = geoLocation;
 
-  function renderCityCases() {
-    return RecifeJson.features.map(({ geometry: { coordinates }, properties: { name } }) => {
+      let cases;
+      if (plotType === PlotTypleOptions.byCity) {
+        cases = geoLocation.properties.official_cases.confirmed;
+      } else {
+        cases = geoLocation.properties.observer_reports;
+      }
       const { lat, lng } = polygon(coordinates).getBounds().getCenter();
-      const cases = Math.floor(Math.random() * 100);
 
       return (
         <Marker position={[lng, lat]} icon={getCaseOnPoint(cases, name)}>
@@ -74,33 +69,6 @@ export default function CustomMap({ userLocation, plotType = 'byCity' }) {
         </Marker>
       );
     });
-  }
-
-  function renderNeighborhoodCases() {
-    return bairrosRecife.features.map(({ geometry: { coordinates }, properties: { bairro_nome } }) => {
-      const { lat, lng } = polygon(coordinates).getBounds().getCenter();
-      const cases = Math.floor(Math.random() * 100);
-
-      return (
-        <Marker position={[lng, lat]} icon={getCaseOnPoint(cases, bairro_nome)}>
-          <Popup>
-            <div>{bairro_nome}</div>
-            <div style={{ fontSize: '10px', marginTop: 5, borderTop: '1px solid rgba(217, 217, 217, 0.8)' }}>
-              Casos: {cases}
-            </div>
-          </Popup>
-        </Marker>
-      );
-    });
-  }
-
-  function renderAmountCases() {
-    const { byCity, byNeighborhood } = PlotTypleOptions;
-    if (plotType === byCity) {
-      return renderCityCases();
-    } else if (plotType === byNeighborhood) {
-      return renderNeighborhoodCases();
-    }
   }
 
   let zoomData = {};
@@ -120,29 +88,40 @@ export default function CustomMap({ userLocation, plotType = 'byCity' }) {
     };
   }
 
-  return (
-    <Map
-      center={userLocation}
-      zoom={zoomData.zoom}
-      className={'homeMap'}
-      // maxZoom={zoomData.maxZoom}
-      // minZoom={zoomData.minZoom}
-    >
-      <TileLayer
-        attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      />
-      <Marker position={userLocation}>
-        <Popup>
-          <span>Você está aqui.</span>
-        </Popup>
-      </Marker>
-      {renderAmountCases()}
-      {plotType === PlotTypleOptions.byCity ? (
-        <GeoJSON key={'pernambuco-geoJson'} data={RecifeJson} onEachFeature={onEachFeature} />
-      ) : (
-        <GeoJSON key={'recife-geoJson'} data={bairrosRecife} onEachFeature={onEachFeature} />
-      )}
-    </Map>
-  );
+  if (!loading) {
+    return (
+      <Map
+        center={userLocation}
+        zoom={zoomData.zoom}
+        className={'homeMap'}
+        maxZoom={zoomData.maxZoom}
+        minZoom={zoomData.minZoom}
+      >
+        <TileLayer
+          attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <Marker position={userLocation}>
+          <Popup>
+            <span>Você está aqui.</span>
+          </Popup>
+        </Marker>
+        
+        {renderCases()}
+        {plotType === PlotTypleOptions.byCity ? (
+          <GeoJSON key={'pernambuco-geoJson'} data={geoJson} onEachFeature={onEachFeature} />
+        ) : (
+          <GeoJSON key={'recife-geoJson'} data={geoJson} onEachFeature={onEachFeature} />
+        )}
+      </Map>
+    );
+  } else {
+    return (
+      <Grid container justify="center" alignItems="center" className={'homeMap'}>
+        <Grid item >
+          <CircularProgress />
+        </Grid>
+      </Grid>
+    );
+  }
 }
