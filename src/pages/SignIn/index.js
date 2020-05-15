@@ -43,13 +43,8 @@ export default function SignIn() {
     }
   };
 
-  function handleLogout() {
-    logout();
-  }
-
   return (
     <Container>
-      <button onClick={handleLogout}>Sair</button>
       <Form onSubmit={handleSignIn}>
         <img src={Logo} alt="OC19 logo" />
         {error && <p>{error}</p>}

@@ -72,6 +72,14 @@ export default class Header extends Component {
                 </Link>
               </li>
               {
+                this.state.isAuth ?
+                  <li className="nav-item">
+                    <Link to="/observer-report" className={'navbar-brand'}>
+                      {'Cadastrar Observação'}
+                    </Link>
+                  </li> : <div></div>
+              }
+              {
                 !this.state.isAuth ?
                   <div>
                     <li className="nav-item">
