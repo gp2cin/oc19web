@@ -29,13 +29,16 @@ export default function SignIn() {
     if (email == '' || password == '') {
       setError('Preencha todos os dados para entrar');
     } else {
-      try {
-        const response = await api.post("api/v1/signin", { email, password });
-        login(response.data.token);
-        history.push('/app');
-      } catch (err) {
-        console.log(err);
-        setError('Ocorreu um erro ao registrar sua conta.');
+      if (validateEmail(email)) {
+        try {
+          const response = await api.post("api/v1/signin", { email, password });
+          login(response.data.token);
+          alert('Login efetuado com sucesso.');
+          history.push('/');
+        } catch (err) {
+          console.log(err);
+          setError('Ocorreu um erro ao registrar sua conta.');
+        }
       }
     }
   };

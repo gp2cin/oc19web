@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import { isAuthenticated, isAuthenticatedObserver } from '../services/auth';
@@ -27,14 +27,72 @@ const PrivateRoute = ({ component: Component, ...rest }) => (
 const PrivateRouteObserver = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
-    render={(props) =>
-      isAuthenticatedObserver() ? (
-        <Component {...props} />
-      ) : (
-          <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-        )
+    render={(props) => {
+      // function Comp() {
+      //   const [isObs, setIsObs] = useState(false);
+      //   useEffect(async () => {
+      //     const temp = await isAuthenticatedObserver();
+      //     setIsObs(temp);
+      //   })
+      //   return (
+      //     <div>
+      //       {
+      //         isObs ??
+      //         <Component {...props} />
+      //       }
+      //       {
+      //         !isObs ??
+      //         <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+      //       }
+      //     </div>
+      //   );
+      // }
+      // return <Comp />;
+      class Comp extends React.Component {
+        _isMounted = false;
+
+        constructor(props) {
+          super(props);
+
+          this.state = {
+            isObs: true,
+          };
+        }
+
+        componentDidMount() {
+          this._isMounted = true;
+          isAuthenticatedObserver()
+            .then(is => this.setState({ isObs: is }));
+        }
+
+        componentWillUnmount() {
+          this._isMounted = false;
+        }
+
+        handleCheck = async () => {
+          const temp = await isAuthenticatedObserver();
+          this.setState({ isObs: temp });
+        }
+        handleRedirect = () => {
+          if (this.state.isObs === false) {
+            return <Redirect to='/' />
+          }
+        }
+        render() {
+          return (
+            <div>
+              {this.handleCheck}
+              <div>{this.handleRedirect()}</div>
+              <Component {...props} />
+            </div>
+          );
+        }
+      }
+      return <Comp />;
+    }
     }
   />
+
 );
 
 const Routes = () => (
