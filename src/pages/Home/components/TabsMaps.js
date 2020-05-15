@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -6,6 +6,8 @@ import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
 
 import CustomMap from './CustomMap';
+
+import api from '../../../services/api';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -54,17 +56,40 @@ const useStyles = makeStyles((theme) => ({
 export default function TabsMaps({ userAddress }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+  const [loadingCity, setLoadingCity] = React.useState(true);
+  const [loadingNeigh, setLoadingNeigh] = React.useState(true);
+  const [geoJsonNeighborhood, setGeoJsonNeighborhood] = useState({});
+  const [geoJsonCity, setGeoJsonCity] = useState({});
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    getMapDataCity();
+    getMapDataNeigh();
+  }, []);
+
+  async function getMapDataCity() {
+    const city = await api.get('api/v1/cases/map?mapa=cidade');
+    setGeoJsonCity(city.data);
+    
+    setLoadingCity(false);
+  }
+
+  async function getMapDataNeigh() {
+    const neighborhood = await api.get('api/v1/cases/map?mapa=bairro');
+    setGeoJsonNeighborhood(neighborhood.data);
+    console.log(neighborhood);
+    setLoadingNeigh(false);
+  }
 
   return (
     <div className={classes.root}>
       {/* <AppBar position="static"> */}
       <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" className={classes.tabs}>
         <Tab
-          label="Cidade"
+          label="Dados oficiais por cidade"
           {...a11yProps(0)}
           style={{
             outline: 0,
@@ -72,7 +97,7 @@ export default function TabsMaps({ userAddress }) {
           className={classes.tab}
         />
         <Tab
-          label="Bairro"
+          label="Observações por bairro"
           {...a11yProps(1)}
           style={{
             outline: 0,
@@ -82,10 +107,15 @@ export default function TabsMaps({ userAddress }) {
       </Tabs>
       {/* </AppBar> */}
       <TabPanel value={value} index={0}>
-        <CustomMap userLocation={userAddress.position} />
+        <CustomMap userLocation={userAddress.position} geoJson={geoJsonCity} loading={loadingCity} />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        <CustomMap userLocation={userAddress.position} plotType="byNeighborhood" />
+        <CustomMap
+          userLocation={userAddress.position}
+          plotType="byNeighborhood"
+          geoJson={geoJsonNeighborhood}
+          loading={loadingNeigh}
+        />
       </TabPanel>
     </div>
   );
