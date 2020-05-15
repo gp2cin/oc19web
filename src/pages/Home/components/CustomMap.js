@@ -5,7 +5,7 @@ import { polygon, divIcon } from 'leaflet';
 // import RecifeJson from './cidades.json';
 // import bairrosRecife from './bairrosRecife.json';
 
-import { CircularProgress, Grid } from '@material-ui/core';
+import { CircularProgress, Grid, Backdrop } from '@material-ui/core';
 
 const PlotTypleOptions = { byCity: 'byCity', byNeighborhood: 'byNeighborhood' };
 
@@ -88,14 +88,38 @@ export default function CustomMap({ userLocation, geoJson, loading, plotType = '
     };
   }
 
-  if (!loading) {
-    return (
+  return (
+    <div className={'homeMap'} style={{ position: 'relative' }}>
+      {loading && (
+        <>
+          <div
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              zIndex: 499,
+              backgroundColor: 'rgba(219, 219, 219, 0.4)',
+            }}
+          />
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '50%',
+              zIndex: 501,
+            }}
+          >
+            <CircularProgress style={{ color: '#B23137' }} />
+          </div>
+        </>
+      )}
+
       <Map
         center={userLocation}
         zoom={zoomData.zoom}
-        className={'homeMap'}
         maxZoom={zoomData.maxZoom}
         minZoom={zoomData.minZoom}
+        style={{ width: '100%', height: '100%' }}
       >
         <TileLayer
           attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -106,22 +130,17 @@ export default function CustomMap({ userLocation, geoJson, loading, plotType = '
             <span>Você está aqui.</span>
           </Popup>
         </Marker>
-        
-        {renderCases()}
-        {plotType === PlotTypleOptions.byCity ? (
-          <GeoJSON key={'pernambuco-geoJson'} data={geoJson} onEachFeature={onEachFeature} />
-        ) : (
-          <GeoJSON key={'recife-geoJson'} data={geoJson} onEachFeature={onEachFeature} />
+        {!loading && (
+          <>
+            {renderCases()}
+            {plotType === PlotTypleOptions.byCity ? (
+              <GeoJSON key={'pernambuco-geoJson'} data={geoJson} onEachFeature={onEachFeature} />
+            ) : (
+              <GeoJSON key={'recife-geoJson'} data={geoJson} onEachFeature={onEachFeature} />
+            )}
+          </>
         )}
       </Map>
-    );
-  } else {
-    return (
-      <Grid container justify="center" alignItems="center" className={'homeMap'}>
-        <Grid item >
-          <CircularProgress />
-        </Grid>
-      </Grid>
-    );
-  }
+    </div>
+  );
 }

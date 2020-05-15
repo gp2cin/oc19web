@@ -74,14 +74,14 @@ export default function TabsMaps({ userAddress }) {
     const city = await api.get('api/v1/cases/map?mapa=cidade');
     setGeoJsonCity(city.data);
     
-    // setLoadingCity(false);
+    setLoadingCity(false);
   }
 
   async function getMapDataNeigh() {
     const neighborhood = await api.get('api/v1/cases/map?mapa=bairro');
     setGeoJsonNeighborhood(neighborhood.data);
     console.log(neighborhood);
-    // setLoadingNeigh(false);
+    setLoadingNeigh(false);
   }
 
   return (
