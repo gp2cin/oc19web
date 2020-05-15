@@ -11,18 +11,37 @@ const PlotTypleOptions = { byCity: 'byCity', byNeighborhood: 'byNeighborhood' };
 
 export default function CustomMap({ userLocation, geoJson, loading, plotType = 'byCity' }) {
   function onEachFeature(feature, layer) {
-    const cases = 1000;
-    if (feature.properties && feature.properties.name) {
+    if (plotType === PlotTypleOptions.byCity) {
+      // const { confirmed, active, deaths, recovered } = feature.properties.official_cases;
+      const { confirmed, recovered } = feature.properties.official_cases;
+
       layer.bindPopup(`
-        <div style='display: flex'> 
-          <div>
-            ${feature.properties.name}
-          <div/>
-          <div style='font-size: 10px; margin-top: 5; border-top: 1px solid rgba(217, 217, 217, 0.8)'>
-            Casos:  ${cases} 
-          <div/>
-        </div>
-      `);
+      <div style='display: flex'> 
+        <div>
+          ${feature.properties.name}
+        <div/>
+        <div style='font-size: 10px; margin-top: 5px; padding-top: 5px;border-top: 1px solid rgba(217, 217, 217, 0.8)'/>
+        <div style='font-size: 10px'>
+          Confirmados: ${confirmed} 
+        <div/>
+        <div style='font-size: 10px'>
+          Recuperados: ${recovered} 
+        <div/>
+      </div>
+    `);
+    } else {
+      const { observer_reports } = feature.properties;
+      layer.bindPopup(`
+      <div style='display: flex'> 
+        <div>
+          ${feature.properties.name}
+        <div/>
+        <div style='font-size: 10px; margin-top: 5px; padding-top: 5px;border-top: 1px solid rgba(217, 217, 217, 0.8)'/>
+        <div style='font-size: 10px'>
+          Casos observados:  ${observer_reports} 
+        <div/>
+      </div>
+    `);
     }
   }
 

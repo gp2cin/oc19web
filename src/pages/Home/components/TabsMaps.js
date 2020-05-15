@@ -89,7 +89,7 @@ export default function TabsMaps({ userAddress }) {
       {/* <AppBar position="static"> */}
       <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" className={classes.tabs}>
         <Tab
-          label="Cidade"
+          label="Dados oficiais por cidade"
           {...a11yProps(0)}
           style={{
             outline: 0,
@@ -97,7 +97,7 @@ export default function TabsMaps({ userAddress }) {
           className={classes.tab}
         />
         <Tab
-          label="Bairro"
+          label="Observações por bairro"
           {...a11yProps(1)}
           style={{
             outline: 0,
