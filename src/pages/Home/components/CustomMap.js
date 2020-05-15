@@ -5,7 +5,7 @@ import { polygon, divIcon } from 'leaflet';
 // import RecifeJson from './cidades.json';
 // import bairrosRecife from './bairrosRecife.json';
 
-import { CircularProgress, Grid, Backdrop } from '@material-ui/core';
+import { CircularProgress } from '@material-ui/core';
 
 const PlotTypleOptions = { byCity: 'byCity', byNeighborhood: 'byNeighborhood' };
 
@@ -47,7 +47,7 @@ export default function CustomMap({ userLocation, geoJson, loading, plotType = '
     return geoJson.features.map((geoLocation) => {
       const {
         geometry: { coordinates },
-        properties: { name: name },
+        properties: { name },
       } = geoLocation;
 
       let cases;
