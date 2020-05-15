@@ -117,7 +117,7 @@ export default function ObserverReport() {
             //Get Recife's neighborhoods form backend
             if (choice.label === 'Recife') {
                 console.log('Recife!!')
-                api.get('api/v1/cases/crowd?cidade=recife')
+                api.get('api/v1/neighborhoods?cidade=recife')
                     .then(response => {
                         if (response !== null) {
                             console.log('Resposta Recife!!')
@@ -125,12 +125,12 @@ export default function ObserverReport() {
                             if (response.data !== null) {
                                 console.log('Resposta Data!!')
                                 console.log(response.data);
-                                if (response.data.neighborhood !== null) {
+                                if (response.data !== null) {
                                     console.log('Resposta Bairros!!')
-                                    console.log(response.data.neighborhood);
+                                    console.log(response.data);
                                     let arr = [];
-                                    for (const i in response.data.neighborhood) {
-                                        const itemToAdd = { value: `${response.data.neighborhood[i]._id}`, label: `${response.data.neighborhood[i].name}` };
+                                    for (const i in response.data) {
+                                        const itemToAdd = { value: `${response.data[i]._id}`, label: `${response.data[i].name}` };
                                         arr = [...arr, itemToAdd];
                                     }
                                     setNeighborhoods(arr);
@@ -174,7 +174,7 @@ export default function ObserverReport() {
         if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
             return true;
         }
-        alert('Você preencheu um endereço de e-mail invávido!');
+        alert('Você preencheu um endereço de e-mail inválido!');
         return false;
     }
 
