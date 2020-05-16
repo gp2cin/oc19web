@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 import './styles.css';
+import useStyles from './styles';
 
 import Logo from '../../assets/ocovid19-logo.png';
 import api from '../../services/api';
@@ -9,8 +10,6 @@ import { login } from '../../services/auth';
 import Header from '../../components/Header';
 import { FiUser } from 'react-icons/fi';
 
-import useStyles from './styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
@@ -63,8 +62,7 @@ export default function SignIn() {
   };
 
   return (
-    <Container component="main" maxwidth="xs">
-      <CssBaseline />
+    <Container>
       <Header />
       <div className={classes.paper}>
         <img src={Logo} alt="OC19 logo" width="150px" />
