@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useHistory } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import './styles.css';
 import useStyles from './styles';
 
@@ -62,7 +61,7 @@ export default function SignIn() {
   };
 
   return (
-    <Container>
+    <Container component="main" maxWidth="xs">
       <Header />
       <div className={classes.paper}>
         <img src={Logo} alt="OC19 logo" width="150px" />
