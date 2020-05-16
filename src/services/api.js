@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { getToken } from './auth';
-const { REACT_APP_API_URL } = process.env;
 const api = axios.create({
-  baseURL: REACT_APP_API_URL,
+  baseURL: 'http://localhost:3000',
 });
+
 
 api.interceptors.request.use(async (config) => {
   const token = getToken();
