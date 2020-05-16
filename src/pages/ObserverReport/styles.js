@@ -10,14 +10,17 @@ export const Container = styled.div`
     /* overflow: auto !important; */
     background-color: #f8f9fa !important;
     padding: 30px;
+    width: 100%;
+    align-items: center;
   }
   .first-inputs {
-    dislplay: flex;
+    display: flex;
     justify-content: space-between;
   }
   .seccond-inputs {
-    dislplay: flex;
+    display: flex;
     justify-content: space-between;
+    align-items: center;
   }
   .content {
     justify-content: center;
@@ -31,6 +34,9 @@ export const Container = styled.div`
       margin: 0 auto;
     }
     [class*="col-"] {
+      width: 100%;
+    }
+    .city-select {
       width: 100%;
     }
     .info-source, .info-source-link, .name, .email, .city-select, .neighborhood, .age, .number-of-cases, .comments {
