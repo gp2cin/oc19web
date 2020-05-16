@@ -54,7 +54,7 @@ export default function SignIn() {
           history.push('/');
         } catch (err) {
           console.log(err);
-          setError('Erro efetuar o signin ao.');
+          setError('Erro ao efetuar o signin.');
         }
       }
     }

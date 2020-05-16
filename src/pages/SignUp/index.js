@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
+import { FiUserPlus } from 'react-icons/fi';
 import api from '../../services/api';
 import { login } from '../../services/auth';
 import Header from '../../components/Header';
@@ -88,7 +89,7 @@ export default function SignUp() {
             <div className={classes.paper}>
                 <img src={Logo} alt="OC19 logo" width="150px" />
                 <Typography component="h1" variant="h5">
-                    Sign up
+                    <FiUserPlus size={25} /> Sign up
                 </Typography>
                 {error && <p id="error">{error}</p>}
                 <form onSubmit={handleSignUp}>
