@@ -14,14 +14,16 @@ export const Form = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
+  border: 1px solid #cdcdcd;
   img {
     width: 100px;
     margin: 10px 0 40px;
   }
   p {
-    color: #ff3333;
+    color: #ff4040;
     margin-bottom: 15px;
-    border: 1px solid #ff3333;
+    border: 1px solid #ff4040;
+    border-radius: 5px;
     padding: 10px;
     width: 100%;
     text-align: center;
@@ -40,12 +42,8 @@ export const Form = styled.form`
     }
   }
   button {
-    color: #fff;
     font-size: 16px;
-    background: #fc6963;
     height: 56px;
-    border: 0;
-    border-radius: 5px;
     width: 100%;
   }
   hr {
