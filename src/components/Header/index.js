@@ -39,11 +39,7 @@ export default class Header extends Component {
     return (
       < HeaderMain >
         <div>{this.renderRedirect()}</div>
-        <nav className="navbar navbar-expand-md navbar-dark fixed-top bg-header">
-          <Link to="/" className={'navbar-brand'}>
-            <img src={Logo} className={'navbar-logo'} alt="OC19 logo" />
-          </Link>
-
+        <nav className="navbar navbar-expand-sm navbar-dark fixed-top bg-header">
           <button
             type="button"
             aria-expanded="false"
@@ -55,7 +51,9 @@ export default class Header extends Component {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-
+          <Link to="/" className={'navbar-brand'}>
+            <img src={Logo} className={'navbar-logo'} alt="OC19 logo" />
+          </Link>
           {
             !this.state.isAuth ?
               <div className="collapse navbar-collapse" id="navbarCollapse">
