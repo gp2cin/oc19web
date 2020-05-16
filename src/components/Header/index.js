@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { HeaderMain } from './styles';
 import Logo from '../../assets/ocovid19-logo-white.png';
 import { Link } from 'react-router-dom';
+import { FiUserPlus, FiLogIn, FiLogOut, FiHome, FiInfo, FiDatabase } from 'react-icons/fi';
 import { logout, isAuthenticated } from '../../services/auth';
 export default class Header extends Component {
 
@@ -54,62 +55,82 @@ export default class Header extends Component {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="collapse navbar-collapse" id="navbarCollapse">
-            <ul className="navbar-nav mr-auto">
-              <li className="nav-item active">
-                <Link to="/" className={'navbar-brand'}>
-                  {'Home'}
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/official-cases" className={'navbar-brand'}>
-                  {'Dados oficiais'}
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link to="/about-us" className={'navbar-brand'}>
-                  {'Quem somos'}
-                </Link>
-              </li>
-              {
-                this.state.isAuth ?
-                  <li className="nav-item">
-                    <Link to="/observer-report" className={'navbar-brand'}>
-                      {'Cadastrar Observação'}
+
+          {
+            !this.state.isAuth ?
+              <div className="collapse navbar-collapse" id="navbarCollapse">
+                <ul className="navbar-nav mr-auto">
+                  <li className="nav-item active">
+                    <Link to="/" className={'navbar-brand'}>
+                      <FiHome size={22} /> {'Home'}
                     </Link>
-                  </li> : <div></div>
-              }
-              {
-                !this.state.isAuth ?
-                  <div>
-                    <li className="nav-item">
-                      <Link to="/signin" className={'navbar-brand'}>
-                        {'SignIn'}
-                      </Link>
-                    </li>
-                    <li className="nav-item">
-                      <Link to="/signup" className={'navbar-brand'}>
-                        {'SignUn'}
-                      </Link>
-                    </li>
-                  </div> : <div></div>
-              }
-              {/* <li className="nav-item">
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/official-cases" className={'navbar-brand'}>
+                      <FiDatabase size={22} /> {'Dados oficiais'}
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/about-us" className={'navbar-brand'}>
+                      <FiInfo size={22} /> {'Quem somos'}
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/signin" className={'navbar-brand'}>
+                      <FiLogIn size={22} /> {'Sign In'}
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/signup" className={'navbar-brand'}>
+                      <FiUserPlus size={22} /> {'Sign Up'}
+                    </Link>
+                  </li>
+                </ul>
+              </div> : <div className="collapse navbar-collapse" id="navbarCollapse">
+                <ul className="navbar-nav mr-auto">
+                  <li className="nav-item active">
+                    <Link to="/" className={'navbar-brand'}>
+                      <FiHome size={22} /> {'Home'}
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/official-cases" className={'navbar-brand'}>
+                      <FiDatabase size={22} /> {'Dados oficiais'}
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link to="/about-us" className={'navbar-brand'}>
+                      <FiInfo size={22} /> {'Quem somos'}
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link onClick={this.handleLogout} className={'navbar-brand'}>
+                      <FiLogOut size={20} /> {'Sign Out'}
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+          }
+
+          {
+            this.state.isAuth ?
+              <div className={'form-inline mt-2 mt-md-0'}>
+                <Link to="/observer-report" className={'btn btn btn-outline-light my-2 my-sm-0'}>
+                  {'Cadastrar Observação'}
+                </Link>
+              </div> :
+              <div className={'form-inline mt-2 mt-md-0'}>
+                <Link to="/warnings/new" className={'btn btn btn-outline-light my-2 my-sm-0'}>
+                  {'Informar novo caso'}
+                </Link>
+              </div>
+          }
+
+          {/* <li className="nav-item">
                 <Link to="#" className={'navbar-brand'}>
                   {'Disabled'}
                 </Link>
               </li> */}
-            </ul>
-          </div>
-          {
-            this.state.isAuth ?
-              <button onClick={this.handleLogout}>Sair</button> : <div></div>
-          }
-          <div className={'form-inline mt-2 mt-md-0'}>
-            <Link to="/warnings/new" className={'btn btn btn-outline-light my-2 my-sm-0'}>
-              {'Informar novo caso'}
-            </Link>
-          </div>
         </nav>
       </HeaderMain >
     );
