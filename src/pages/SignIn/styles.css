@@ -12,7 +12,7 @@ input {
     font-size: 15px;
 }
 
-p {
+#error {
     color: #ff4040;
     margin-top: 5px;
   }

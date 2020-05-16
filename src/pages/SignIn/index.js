@@ -71,7 +71,7 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           <FiUser size={25} /> Sign in
         </Typography>
-        {error && <p className={classes.paragraph}>{error}</p>}
+        {error && <p id="error">{error}</p>}
         <form onSubmit={handleSignIn}>
           <div className={'form-group'}>
             <label className={'form-label'}>{'E-mail*'}</label>
@@ -103,8 +103,8 @@ export default function SignIn() {
               </Link>
             </Grid>
             <Grid item>
-              <Link to="/" variant="body2">
-                {"Não tem um conta? Crie agora."}
+              <Link to="/signup" variant="body2">
+                Não tem um conta? Crie agora.
               </Link>
             </Grid>
           </Grid>
