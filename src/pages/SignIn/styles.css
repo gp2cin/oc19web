@@ -1,0 +1,18 @@
+form {
+    margin-bottom: 10px;
+    width: 100%;
+    align-self: center;
+}
+button {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+input {
+    font-size: 15px;
+}
+
+p {
+    color: #ff4040;
+    margin-top: 5px;
+  }

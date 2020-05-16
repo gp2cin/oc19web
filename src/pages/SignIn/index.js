@@ -1,15 +1,34 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
+import './styles.css';
 
 import Logo from '../../assets/ocovid19-logo.png';
 import api from '../../services/api';
 import { login } from '../../services/auth';
-import { Form, Container } from './styles';
 import Header from '../../components/Header';
+import { FiUser } from 'react-icons/fi';
 
+import useStyles from './styles';
+import CssBaseline from '@material-ui/core/CssBaseline';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Container from '@material-ui/core/Container';
+
+function Copyright() {
+  return (
+    <Typography variant="body2" color="textSecondary" align="center">
+      {'Copyright © '}
+      <Link to="/" color="inherit">
+        OCovid-19
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
 export default function SignIn() {
-
+  const classes = useStyles();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -37,33 +56,61 @@ export default function SignIn() {
           history.push('/');
         } catch (err) {
           console.log(err);
-          setError('Ocorreu um erro ao registrar sua conta.');
+          setError('Erro efetuar o signin ao.');
         }
       }
     }
   };
 
   return (
-    <Container>
-      <Form onSubmit={handleSignIn}>
-        <img src={Logo} alt="OC19 logo" />
-        {error && <p>{error}</p>}
-        <input
-          type={'email'}
-          placeholder={'Endereço de e-mail'}
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <input
-          type={'password'}
-          placeholder={'Senha'}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <button type={'submit'}>Entrar</button>
-        <hr />
-        <Link to="/">Esqueci a senha</Link>
-      </Form>
+    <Container component="main" maxwidth="xs">
+      <CssBaseline />
+      <Header />
+      <div className={classes.paper}>
+        <img src={Logo} alt="OC19 logo" width="150px" />
+        <Typography component="h1" variant="h5">
+          <FiUser size={25} /> Sign in
+        </Typography>
+        {error && <p className={classes.paragraph}>{error}</p>}
+        <form onSubmit={handleSignIn}>
+          <div className={'form-group'}>
+            <label className={'form-label'}>{'E-mail*'}</label>
+            <input
+              placeholder={'example@email.com'}
+              className={'form-control'}
+              value={email}
+              type={'e-mail'}
+              onChange={(e) => setEmail(e.target.value)}
+            ></input>
+          </div>
+          <div className={'form-group'}>
+            <label className={'form-label'}>{'Senha*'}</label>
+            <input
+              placeholder={'Senha'}
+              className={'form-control'}
+              type={'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            ></input>
+          </div>
+          <button className={'btn btn-success col-md-12'} type={'submit'}>
+            {'Entrar'}
+          </button>
+          <Grid container>
+            <Grid item xs>
+              <Link to="/" variant="body2">
+                Esqueci a senha
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link to="/" variant="body2">
+                {"Não tem um conta? Crie agora."}
+              </Link>
+            </Grid>
+          </Grid>
+        </form>
+      </div>
+      <Copyright />
     </Container>
   );
 }
