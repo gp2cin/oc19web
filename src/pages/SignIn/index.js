@@ -99,11 +99,6 @@ export default function SignIn() {
                 Esqueci a senha
               </Link>
             </Grid>
-            <Grid item>
-              <Link to="/signup" variant="body2">
-                Não tem um conta? Crie agora.
-              </Link>
-            </Grid>
           </Grid>
         </form>
       </div>
