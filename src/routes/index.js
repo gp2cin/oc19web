@@ -5,7 +5,7 @@ import { isAuthenticated, isAuthenticatedObserver } from '../services/auth';
 
 import Home from '../pages/Home';
 import SignIn from '../pages/SignIn';
-// import SignUp from '../pages/SignUp';
+import SignUp from '../pages/SignUp';
 import NewWarning from '../pages/NewWarning';
 import OfficialCases from '../pages/OfficialCases';
 import ObserverReport from '../pages/ObserverReport';
@@ -73,30 +73,30 @@ const PrivateRouteObserver = ({ component: Component, ...rest }) => (
           this._isMounted = false;
         }
 
-        handleCheck = async () => {
-          const temp = await isAuthenticatedObserver();
-          console.log('IS AUTHOBS')
-          console.log(temp)
-          this.setState({ isObs: temp });
-        }
-        handleRedirect = () => {
-          if (this.state.isObs === false) {
-            console.log('BCSKHSJCANBJADSNCJK');
-            return <Redirect to='/' />
-          }
-        }
+        // handleCheck = async () => {
+        //   const temp = await isAuthenticatedObserver();
+        //   console.log('IS AUTHOBS')
+        //   console.log(temp)
+        //   this.setState({ isObs: temp });
+        // }
+        // handleRedirect = () => {
+        //   if (this.state.isObs === false) {
+        //     console.log('BCSKHSJCANBJADSNCJK');
+        //     return <Redirect to='/' />
+        //   }
+        // }
         render() {
           return (
+            // <div>
+            //   {this.handleCheck}
             <div>
-              {this.handleCheck}
-              <div>
-                {
-                  !this.state.isObs ?
-                    <Redirect to='/' /> :
-                    <Component {...props} />
-                }
-              </div>
+              {
+                !this.state.isObs ?
+                  <Redirect to='/' /> :
+                  <Component {...props} />
+              }
             </div>
+            // </div>
           );
         }
       }
@@ -116,7 +116,7 @@ const Routes = () => (
       <PrivateRouteObserver path={'/observer-report'} component={ObserverReport} />
       <Route path={'/about-us'} component={AboutUs} />
       <Route path={'/signin'} component={SignIn} />
-      {/* <Route path={'/signup'} component={SignUp} /> */}
+      <Route path={'/signup'} component={SignUp} />
       <PrivateRoute path={'/app'} component={() => <h1>App</h1>} />
       <Route path={'*'} component={() => <h1>Page not found</h1>} />
     </Switch>
