@@ -95,7 +95,7 @@ export default function SignIn() {
           </button>
           <Grid container>
             <Grid item xs>
-              <Link to="/" variant="body2">
+              <Link to="#" variant="body2" className={'btn disabled'} >
                 Esqueci a senha
               </Link>
             </Grid>
