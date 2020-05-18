@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { HeaderMain } from './styles';
 import Logo from '../../assets/ocovid19-logo-white.png';
 import { Link } from 'react-router-dom';
-import { FiUserPlus, FiLogIn, FiLogOut, FiHome, FiInfo, FiDatabase } from 'react-icons/fi';
+import { FiLogIn, FiLogOut, FiHome, FiInfo, FiDatabase } from 'react-icons/fi';
 import { logout, isAuthenticated } from '../../services/auth';
 export default class Header extends Component {
 
@@ -73,16 +73,11 @@ export default class Header extends Component {
                       <FiInfo size={22} /> {'Quem somos'}
                     </Link>
                   </li>
-                  <li className="nav-item">
-                    <Link to="/signin" className={'navbar-brand'}>
-                      <FiLogIn size={22} /> {'Sign In'}
-                    </Link>
-                  </li>
-                  <li className="nav-item">
+                  {/* <li className="nav-item">
                     <Link to="/signup" className={'navbar-brand'}>
                       <FiUserPlus size={22} /> {'Sign Up'}
                     </Link>
-                  </li>
+                  </li> */}
                 </ul>
               </div> : <div className="collapse navbar-collapse" id="navbarCollapse">
                 <ul className="navbar-nav mr-auto">
@@ -101,26 +96,28 @@ export default class Header extends Component {
                       <FiInfo size={22} /> {'Quem somos'}
                     </Link>
                   </li>
-                  <li className="nav-item">
-                    <Link onClick={this.handleLogout} className={'navbar-brand'}>
-                      <FiLogOut size={20} /> {'Sign Out'}
-                    </Link>
-                  </li>
                 </ul>
               </div>
           }
 
           {
             this.state.isAuth ?
-              <div className={'form-inline mt-2 mt-md-0'}>
+              <div className={'form-inline mt-2 mt-md-0 mr-10'}>
+                <Link onClick={this.handleLogout} className={'btn text-light'}>
+                  <FiLogOut size={20} /> {'Sign Out'}
+                </Link>
                 <Link to="/observer-report" className={'btn btn btn-outline-light my-2 my-sm-0'}>
                   {'Cadastrar Observação'}
                 </Link>
               </div> :
-              <div className={'form-inline mt-2 mt-md-0'}>
+              <div className={'form-inline mt-2 mt-md-0 mr-10'}>
+                <Link to="/signin" className={'btn text-light'}>
+                  <FiLogIn size={20} /> {'Sign In'}
+                </Link>
                 <Link to="/warnings/new" className={'btn btn btn-outline-light my-2 my-sm-0'}>
                   {'Informar novo caso'}
                 </Link>
+                <div></div>
               </div>
           }
 
