@@ -61,24 +61,19 @@ const PrivateRouteObserver = ({ component: Component, ...rest }) => (
 
         componentDidMount() {
           this._isMounted = true;
-          isAuthenticatedObserver()
-            .then(is => {
-              console.log('IS AUTHOBS1')
-              console.log(is)
-              this.setState({ isObs: is })
-            });
+          this.handleCheck();
         }
 
         componentWillUnmount() {
           this._isMounted = false;
         }
 
-        // handleCheck = async () => {
-        //   const temp = await isAuthenticatedObserver();
-        //   console.log('IS AUTHOBS')
-        //   console.log(temp)
-        //   this.setState({ isObs: temp });
-        // }
+        handleCheck = async () => {
+          const temp = await isAuthenticatedObserver();
+          console.log('IS AUTHOBS')
+          console.log(temp)
+          this.setState({ isObs: temp });
+        }
         // handleRedirect = () => {
         //   if (this.state.isObs === false) {
         //     console.log('BCSKHSJCANBJADSNCJK');
