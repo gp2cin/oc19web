@@ -10,7 +10,7 @@ export const logout = () => {
   localStorage.removeItem(TOKEN_KEY);
 };
 export const isAuthenticatedObserver = async () => {
-  console.log('AQUI');
+  console.log('AQUI0');
   if (localStorage.getItem(TOKEN_KEY) !== null) {
     console.log('AQUI1');
     const response = await api.get('api/v1/me')
