@@ -16,6 +16,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 
+import CircularProgress from '@material-ui/core/CircularProgress';
+
 export default function ObserverReport() {
 
     const [sendDisabled, setSendDisabled] = useState(false);
@@ -57,6 +59,8 @@ export default function ObserverReport() {
     const [info_source_link, setInfoSourceLink] = useState('');
     const [general_comments, setGeneralComments] = useState('');
     const [number_of_cases, setNumberOfCases] = useState(0);
+
+    const [loading, setLoading] = useState(false);
 
     const animatedComponents = makeAnimated();
 
@@ -116,6 +120,8 @@ export default function ObserverReport() {
             //Get Recife's neighborhoods form backend
             if (choice.label === 'Recife') {
                 console.log('Recife!!')
+                setLoading(true);
+                setIsRecifeSelected(true);
                 try {
                     const response = await api.get('api/v1/neighborhoods?cidade=recife')
                     console.log(response);
@@ -134,19 +140,31 @@ export default function ObserverReport() {
                                     arr = [...arr, itemToAdd];
                                 }
                                 setNeighborhoods(arr);
-                                setIsRecifeSelected(true);
+                                setLoading(false);
+                            } else {
+                                setLoading(false);
                             }
+                        } else {
+                            setLoading(false);
                         }
+                    } else {
+                        setLoading(false);
+                        console.log('BAIRROS NULOS')
                     }
-                    console.log('BAIRROS NULOS')
                 } catch (error) {
                     console.log(`Erro ao buscar bairros ${error}`)
+                    setLoading(false);
                 }
 
             } else {
                 setNeighborhoods([]);
                 setIsRecifeSelected(false);
+                setLoading(false);
             }
+        } else {
+            setNeighborhoods([]);
+            setIsRecifeSelected(false);
+            setLoading(false);
         }
     }
 
@@ -310,7 +328,7 @@ export default function ObserverReport() {
                                     <div className="neighborhood col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
                                         <p>Bairro:*</p>
                                         {
-                                            !isRecifeSelected &&
+                                            (!isRecifeSelected) &&
                                             <input
                                                 placeholder="Bairro"
                                                 className="col-md-12 form-control"
@@ -323,7 +341,7 @@ export default function ObserverReport() {
 
                                         }
                                         {
-                                            isRecifeSelected &&
+                                            (isRecifeSelected && !loading) &&
                                             <Select
                                                 className="select"
                                                 placeholder="Escolha"
@@ -335,6 +353,10 @@ export default function ObserverReport() {
                                                 onChange={handleNeighborhoodChoice}
                                                 options={neighborhooods}
                                             />
+                                        }
+                                        {
+                                            (isRecifeSelected && loading) &&
+                                            <CircularProgress />
                                         }
                                     </div>
                                 </div>
