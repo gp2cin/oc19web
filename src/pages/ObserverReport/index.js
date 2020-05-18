@@ -109,37 +109,40 @@ export default function ObserverReport() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    function handleCityChoice(choice) {
+    async function handleCityChoice(choice) {
         if (choice !== null) {
             setSelectedCity(choice.label);
 
             //Get Recife's neighborhoods form backend
             if (choice.label === 'Recife') {
                 console.log('Recife!!')
-                api.get('api/v1/neighborhoods?cidade=recife')
-                    .then(response => {
-                        if (response !== null) {
-                            console.log('Resposta Recife!!')
-                            console.log(response);
+                try {
+                    const response = await api.get('api/v1/neighborhoods?cidade=recife')
+                    console.log(response);
+                    if (response !== null) {
+                        console.log('Resposta Recife!!')
+                        console.log(response);
+                        if (response.data !== null) {
+                            console.log('Resposta Data!!')
+                            console.log(response.data);
                             if (response.data !== null) {
-                                console.log('Resposta Data!!')
+                                console.log('Resposta Bairros!!')
                                 console.log(response.data);
-                                if (response.data !== null) {
-                                    console.log('Resposta Bairros!!')
-                                    console.log(response.data);
-                                    let arr = [];
-                                    for (const i in response.data) {
-                                        const itemToAdd = { value: `${response.data[i]._id}`, label: `${response.data[i].name}` };
-                                        arr = [...arr, itemToAdd];
-                                    }
-                                    setNeighborhoods(arr);
-                                    setIsRecifeSelected(true);
+                                let arr = [];
+                                for (const i in response.data) {
+                                    const itemToAdd = { value: `${response.data[i]._id}`, label: `${response.data[i].name}` };
+                                    arr = [...arr, itemToAdd];
                                 }
+                                setNeighborhoods(arr);
+                                setIsRecifeSelected(true);
                             }
                         }
-                    }).catch(error => {
-                        alert(`Erro ao buscar os bairros de Recife. Favor verifique sua conexão. ${error}`);
-                    });
+                    }
+                    console.log('BAIRROS NULOS')
+                } catch (error) {
+                    console.log(`Erro ao buscar bairros ${error}`)
+                }
+
             } else {
                 setNeighborhoods([]);
                 setIsRecifeSelected(false);
