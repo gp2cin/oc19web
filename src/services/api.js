@@ -3,7 +3,7 @@ import { getToken } from './auth';
 const { REACT_APP_API_URL } = process.env;
 
 const api = axios.create({
-  baseURL: 'http://localhost:3000',
+  baseURL: REACT_APP_API_URL,
 });
 
 
