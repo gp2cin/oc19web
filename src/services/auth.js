@@ -19,14 +19,14 @@ export const isAuthenticatedObserver = async () => {
       console.log('AQUI3');
       console.log(response.data.role.name);
       if (response.data.role.name === 'OBSERVER') {
-        console.log('AQUIX');
+        console.log('AQUI4');
         return true;
       }
       return false;
     }
     return false;
   } else {
-    console.log('AQUI4');
+    console.log('AQUI5');
     return false;
   }
 }
