@@ -37,6 +37,7 @@ export default class Footer extends Component {
             <div className={'col-md-4'}>
               <a href={'https://irrd.org'} target={'_blank'} rel={'noopener noreferrer'}>
                 <img src={IRRDLogo} className={'logo-footer'} alt={'IRRD brand'} />
+      v1
               </a>
             </div>
           </div>
