@@ -107,7 +107,7 @@ export default class Header extends Component {
                   <FiLogOut size={20} /> {'Sign Out'}
                 </Link>
                 <Link to="/observer-report" className={'btn btn btn-outline-light my-2 my-sm-0'}>
-                  {'Cadastrar Observação/'}
+                  {'Cadastrar Observação'}
                 </Link>
               </div> :
               <div className={'form-inline mt-2 mt-md-0 mr-10'}>
