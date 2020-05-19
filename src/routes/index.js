@@ -61,7 +61,12 @@ const PrivateRouteObserver = ({ component: Component, ...rest }) => (
 
         componentDidMount() {
           this._isMounted = true;
-          this.handleCheck();
+          isAuthenticatedObserver()
+            .then(is => {
+              console.log('IS AUTHOBS1')
+              console.log(is)
+              this.setState({ isObs: is })
+            });
         }
 
         componentWillUnmount() {
@@ -74,24 +79,24 @@ const PrivateRouteObserver = ({ component: Component, ...rest }) => (
           console.log(temp)
           this.setState({ isObs: temp });
         }
-        // handleRedirect = () => {
-        //   if (this.state.isObs === false) {
-        //     console.log('BCSKHSJCANBJADSNCJK');
-        //     return <Redirect to='/' />
-        //   }
-        // }
+        handleRedirect = () => {
+          if (this.state.isObs === false) {
+            console.log('BCSKHSJCANBJADSNCJK');
+            return <Redirect to='/' />
+          }
+        }
         render() {
           return (
-            // <div>
-            //   {this.handleCheck}
             <div>
-              {
-                !this.state.isObs ?
-                  <Redirect to='/' /> :
-                  <Component {...props} />
-              }
+              {this.handleCheck}
+              <div>
+                {
+                  !this.state.isObs ?
+                    <Redirect to='/' /> :
+                    <Component {...props} />
+                }
+              </div>
             </div>
-            // </div>
           );
         }
       }
