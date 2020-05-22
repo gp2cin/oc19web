@@ -9,6 +9,7 @@ import SignUp from '../pages/SignUp';
 import NewWarning from '../pages/NewWarning';
 import OfficialCases from '../pages/OfficialCases';
 import ObserverReport from '../pages/ObserverReport';
+import MyAccount from '../pages/MyAccount';
 import AboutUs from '../pages/AboutUs';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
@@ -117,6 +118,7 @@ const Routes = () => (
       <Route path={'/about-us'} component={AboutUs} />
       <Route path={'/signin'} component={SignIn} />
       <Route path={'/signup'} component={SignUp} />
+      <Route path={'/my-account'} component={MyAccount} />
       <PrivateRoute path={'/app'} component={() => <h1>App</h1>} />
       <Route path={'*'} component={() => <h1>Page not found</h1>} />
     </Switch>
