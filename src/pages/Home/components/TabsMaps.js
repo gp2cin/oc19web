@@ -9,6 +9,9 @@ import CustomMap from './CustomMap';
 
 import api from '../../../services/api';
 
+import Typography from '@material-ui/core/Typography';
+import { AppBar } from '@material-ui/core';
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -16,11 +19,15 @@ function TabPanel(props) {
     <div
       role="tabpanel"
       hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
+      id={`scrollable-auto-tabpanel-${index}`}
+      aria-labelledby={`scrollable-auto-tab-${index}`}
       {...other}
     >
-      {value === index && <Box p={1}>{children}</Box>}
+      {value === index && (
+        <Box p={3}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
     </div>
   );
 }
@@ -33,14 +40,15 @@ TabPanel.propTypes = {
 
 function a11yProps(index) {
   return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    id: `scrollable-auto-tab-${index}`,
+    'aria-controls': `scrollable-auto-tabpanel-${index}`,
   };
 }
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    width: '100%',
     backgroundColor: theme.palette.background.paper,
   },
   tabs: {
@@ -49,21 +57,22 @@ const useStyles = makeStyles((theme) => ({
   },
   tab: {
     minHeight: 36,
+    color: 'black',
     height: 36,
+    '&:focus': {
+      outline: 0,
+    },
   },
 }));
 
-export default function TabsMaps({ userAddress }) {
+export default function ScrollableTabsButtonAuto({userAddress}) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
+
   const [loadingCity, setLoadingCity] = React.useState(true);
   const [loadingNeigh, setLoadingNeigh] = React.useState(true);
   const [geoJsonNeighborhood, setGeoJsonNeighborhood] = useState({});
   const [geoJsonCity, setGeoJsonCity] = useState({});
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   useEffect(() => {
     getMapDataCity();
@@ -73,7 +82,7 @@ export default function TabsMaps({ userAddress }) {
   async function getMapDataCity() {
     const city = await api.get('api/v1/cases/map?mapa=cidade');
     setGeoJsonCity(city.data);
-    
+
     setLoadingCity(false);
   }
 
@@ -84,32 +93,34 @@ export default function TabsMaps({ userAddress }) {
     setLoadingNeigh(false);
   }
 
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <div className={classes.root}>
-      {/* <AppBar position="static"> */}
-      <Tabs value={value} onChange={handleChange} aria-label="simple tabs example" className={classes.tabs}>
-        <Tab
-          label="Dados oficiais por cidade"
-          {...a11yProps(0)}
-          style={{
-            outline: 0,
-          }}
-          className={classes.tab}
-        />
-        <Tab
-          label="Observações por bairro"
-          {...a11yProps(1)}
-          style={{
-            outline: 0,
-          }}
-          className={classes.tab}
-        />
+      <AppBar position="static" style={{backgroundColor: 'white'}}>
+      <Tabs
+        className={classes.tabs}
+        value={value}
+        onChange={handleChange}
+        indicatorColor="secondary"
+        variant="scrollable"
+        scrollButtons="auto"
+        aria-label="scrollable auto tabs example"
+      >
+        <Tab label="Dados oficiais por município" {...a11yProps(0)} className={classes.tab} />
+        <Tab label="Observações por município" {...a11yProps(1)} className={classes.tab} />
+        <Tab label="Observações por bairro" {...a11yProps(2)} className={classes.tab} />
       </Tabs>
-      {/* </AppBar> */}
+      </AppBar>
       <TabPanel value={value} index={0}>
         <CustomMap userLocation={userAddress.position} geoJson={geoJsonCity} loading={loadingCity} />
       </TabPanel>
       <TabPanel value={value} index={1}>
+        <CustomMap userLocation={userAddress.position} geoJson={geoJsonCity} loading={loadingCity} isObserverCity />
+      </TabPanel>
+      <TabPanel value={value} index={2}>
         <CustomMap
           userLocation={userAddress.position}
           plotType="byNeighborhood"
@@ -117,6 +128,7 @@ export default function TabsMaps({ userAddress }) {
           loading={loadingNeigh}
         />
       </TabPanel>
+      
     </div>
   );
 }

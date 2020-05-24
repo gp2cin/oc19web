@@ -35,6 +35,18 @@ body, html {
   margin-top: 10px
   /* max-width: 700px; */
 };
+
+
+.marginContainer{
+ margin-top:  40px
+};
+
+@media (max-width: 425px) 
+  {
+  .marginContainer{
+  margin-top:  102px
+  };
+}
 .my-div-icon{
   background-color: white; 
   justify-content: center;
