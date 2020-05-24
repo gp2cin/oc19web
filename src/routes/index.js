@@ -10,6 +10,9 @@ import NewWarning from '../pages/NewWarning';
 import OfficialCases from '../pages/OfficialCases';
 import ObserverReport from '../pages/ObserverReport';
 import AboutUs from '../pages/AboutUs';
+import GeneralObservation from '../pages/GeneralObservation';
+import Header from '../components/Header';
+import { Container } from '../pages/ObserverReport/styles';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -28,26 +31,6 @@ const PrivateRouteObserver = ({ component: Component, ...rest }) => (
   <Route
     {...rest}
     render={(props) => {
-      // function Comp() {
-      //   const [isObs, setIsObs] = useState(false);
-      //   useEffect(async () => {
-      //     const temp = await isAuthenticatedObserver();
-      //     setIsObs(temp);
-      //   })
-      //   return (
-      //     <div>
-      //       {
-      //         isObs ??
-      //         <Component {...props} />
-      //       }
-      //       {
-      //         !isObs ??
-      //         <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-      //       }
-      //     </div>
-      //   );
-      // }
-      // return <Comp />;
       class Comp extends React.Component {
         _isMounted = false;
 
@@ -107,6 +90,32 @@ const PrivateRouteObserver = ({ component: Component, ...rest }) => (
 
 );
 
+const GeneralObservationRoute = ({ component: Component, ...rest }) => (
+  <Route
+    {...rest}
+    render={(props) => {
+      function CompG() {
+        return (
+          <div style={{ overflow: 'auto' }}>
+            <Header />
+            <Container>
+              <div className="observer-report-container">
+                <div className="content row d-flex p-2">
+                  <form className="col-md-12">
+                    <Component {...props} />
+                  </form>
+                </div>
+              </div>
+            </Container>
+          </div>
+        );
+      }
+      return <CompG />;
+    }
+    }
+  />
+);
+
 const Routes = () => (
   <BrowserRouter>
     <Switch>
@@ -115,6 +124,7 @@ const Routes = () => (
       <Route path={'/official-cases'} component={OfficialCases} />
       <PrivateRouteObserver path={'/observer-report'} component={ObserverReport} />
       <Route path={'/about-us'} component={AboutUs} />
+      <GeneralObservationRoute path={'/general-observation'} component={GeneralObservation} />
       <Route path={'/signin'} component={SignIn} />
       <Route path={'/signup'} component={SignUp} />
       <PrivateRoute path={'/app'} component={() => <h1>App</h1>} />
