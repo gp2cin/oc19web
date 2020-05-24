@@ -135,7 +135,7 @@ class Home extends Component {
     return (
       <Container className={'row'}>
         <Header />
-        <div style={{ marginTop: 40 }}>
+        <div className='marginContainer'>
           <TabsMaps userAddress={userAddress} />
           {/* <Map center={userAddress.position} maxZoom={18} zoom={mapInfo.zoom} className={'homeMap'}>
           <HeatmapLayer

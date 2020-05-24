@@ -9,7 +9,7 @@ import { CircularProgress } from '@material-ui/core';
 
 const PlotTypleOptions = { byCity: 'byCity', byNeighborhood: 'byNeighborhood' };
 
-export default function CustomMap({ userLocation, geoJson, loading, plotType = 'byCity' }) {
+export default function CustomMap({ userLocation, geoJson, loading, plotType = 'byCity', isObserverCity }) {
   function onEachFeature(feature, layer) {
     if (plotType === PlotTypleOptions.byCity) {
       // const { confirmed, active, deaths, recovered } = feature.properties.official_cases;
@@ -71,7 +71,12 @@ export default function CustomMap({ userLocation, geoJson, loading, plotType = '
 
       let cases;
       if (plotType === PlotTypleOptions.byCity) {
-        cases = geoLocation.properties.official_cases.confirmed;
+        if(isObserverCity){
+          cases = geoLocation.properties.observer_reports;
+        } else {
+          cases = geoLocation.properties.official_cases.confirmed;
+        }
+        
       } else {
         cases = geoLocation.properties.observer_reports;
       }
