@@ -104,10 +104,7 @@ export default class Header extends Component {
             this.state.isAuth ?
               <div className={'form-inline mt-2 mt-md-0 mr-10'}>
                 <Link to="/my-account" className={'btn text-light'}>
-                  <FiUser size={20} />
-                </Link>
-                <Link onClick={this.handleLogout} className={'btn text-light'}>
-                  <FiLogOut size={20} /> {'Sign Out'}
+                  <FiUser size={20} /> Minha conta
                 </Link>
                 <Link to="/observer-report" className={'btn btn btn-outline-light my-2 my-sm-0'}>
                   {'Cadastrar Observação'}

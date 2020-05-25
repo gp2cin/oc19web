@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -73,6 +74,9 @@ export default function MyAccount() {
                     >
                         <Tab label="Minha Conta" {...a11yProps(0)} />
                         <Tab label="Trocar Senha" {...a11yProps(1)} />
+                        <Link to="/">
+                            <Tab label="Sair" {...a11yProps(2)} />
+                        </Link>
                     </Tabs>
                     <TabPanel value={value} index={0}>
                         <p> Nome: Pedro Sena</p>
@@ -98,6 +102,9 @@ export default function MyAccount() {
                                 {'Trocar Senha'}
                             </button>
                         </form>
+                    </TabPanel>
+                    <TabPanel value={value} index={0}>
+
                     </TabPanel>
                 </div>
 
