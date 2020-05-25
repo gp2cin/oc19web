@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { HeaderMain } from './styles';
 import Logo from '../../assets/ocovid19-logo-white.png';
 import { Link } from 'react-router-dom';
-import { FiLogIn, FiLogOut, FiHome, FiInfo, FiDatabase } from 'react-icons/fi';
+import { FiLogIn, FiLogOut, FiHome, FiInfo, FiDatabase, FiUser } from 'react-icons/fi';
 import { logout, isAuthenticated } from '../../services/auth';
 export default class Header extends Component {
 
@@ -103,8 +103,8 @@ export default class Header extends Component {
           {
             this.state.isAuth ?
               <div className={'form-inline mt-2 mt-md-0 mr-10'}>
-                <Link onClick={this.handleLogout} className={'btn text-light'}>
-                  <FiLogOut size={20} /> {'Sign Out'}
+                <Link to="/my-account" className={'btn text-light'}>
+                  <FiUser size={20} /> Minha conta
                 </Link>
                 <Link to="/observer-report" className={'btn btn btn-outline-light my-2 my-sm-0'}>
                   {'Cadastrar Observação'}
@@ -120,12 +120,6 @@ export default class Header extends Component {
                 <div></div>
               </div>
           }
-
-          {/* <li className="nav-item">
-                <Link to="#" className={'navbar-brand'}>
-                  {'Disabled'}
-                </Link>
-              </li> */}
         </nav>
       </HeaderMain >
     );
