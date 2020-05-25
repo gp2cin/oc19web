@@ -12,7 +12,7 @@ export default class Footer extends Component {
         <div className={'row col-md-12 footer-group'}>
           <div className="col-12 col-md-3">
             <img src={Logo} alt="Obervatory brand" className={'logo-footer'} />
-            <small className="d-block mb-3 text-muted">{'© 2020'}</small>
+            <small className="d-block mb-3 text-muted">{'Version 0.1.0 © 2020'}</small>
           </div>
           <div className={'col-3 col-md-3 row'}>
             <h6 className={'col-md-12'}>{'Desenvolvimento'}</h6>
@@ -37,7 +37,7 @@ export default class Footer extends Component {
             <div className={'col-md-4'}>
               <a href={'https://irrd.org'} target={'_blank'} rel={'noopener noreferrer'}>
                 <img src={IRRDLogo} className={'logo-footer'} alt={'IRRD brand'} />
-      v1
+      
               </a>
             </div>
           </div>
