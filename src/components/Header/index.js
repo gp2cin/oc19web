@@ -3,7 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { HeaderMain } from './styles';
 import Logo from '../../assets/ocovid19-logo-white.png';
 import { Link } from 'react-router-dom';
-import { FiLogIn, FiLogOut, FiHome, FiInfo, FiDatabase, FiUser } from 'react-icons/fi';
+import { FiLogIn, FiHome, FiInfo, FiDatabase, FiUser } from 'react-icons/fi';
 import { logout, isAuthenticated } from '../../services/auth';
 export default class Header extends Component {
 
