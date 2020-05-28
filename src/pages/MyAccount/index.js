@@ -103,15 +103,10 @@ export default function MyAccount() {
                             </button>
                         </form>
                     </TabPanel>
-                    <TabPanel value={value} index={0}>
-
-                    </TabPanel>
                 </div>
-
-
             </div>
             <Footer />
-        </Container>
+        </Container >
 
     );
 }
