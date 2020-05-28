@@ -33,6 +33,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:staging": "env-cmd -f .env.staging react-scripts build",
+    "build:homolog": "env-cmd -f .env.homolog react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
