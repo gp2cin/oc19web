@@ -27,7 +27,8 @@ export default function WarningCreation() {
   const history = useHistory();
 
   const [symptomsControl, setSymptomsControl] = useState([]);
-
+  console.log(date);
+  
   //Symptoms object wich goes to the backend
   const symptoms = {
     headache: false,
@@ -211,7 +212,9 @@ export default function WarningCreation() {
   const [isRequiredQ7, setIsRequiredQ7] = useState('');
 
   function handleBirthdate(d) {
-    if (d === null) {
+    
+    
+    if (d !== null) {
       const s = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
       setDate(d);
       setBirthdate(s);
@@ -256,6 +259,8 @@ export default function WarningCreation() {
       if (navigator.geolocation) {
         setSendDisabled(true);
         navigator.geolocation.getCurrentPosition((position) => {
+          console.log(position);
+          
           const address = {
             location: {
               type: 'Point',

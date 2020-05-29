@@ -111,11 +111,15 @@ export default function ScrollableTabsButtonAuto({userAddress}) {
       >
         <Tab label="Dados oficiais por município" {...a11yProps(0)} className={classes.tab} />
         <Tab label="Observações por município" {...a11yProps(1)} className={classes.tab} />
+        <Tab label="Auto casos por município" {...a11yProps(1)} className={classes.tab} />
         <Tab label="Observações por bairro" {...a11yProps(2)} className={classes.tab} />
       </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
         <CustomMap userLocation={userAddress.position} geoJson={geoJsonCity} loading={loadingCity} />
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        <CustomMap userLocation={userAddress.position} geoJson={geoJsonCity} loading={loadingCity} isObserverCity />
       </TabPanel>
       <TabPanel value={value} index={1}>
         <CustomMap userLocation={userAddress.position} geoJson={geoJsonCity} loading={loadingCity} isObserverCity />
