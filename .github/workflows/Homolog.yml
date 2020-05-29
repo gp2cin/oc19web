@@ -1,4 +1,4 @@
-name: Development Build
+name: Homolog Build
 on:
   push:
     branches:
@@ -23,7 +23,7 @@ jobs:
       run: |
         yarn install
 
-    - name: Development Build
+    - name: homolog Build
       run: |
         yarn build:homolog
 
