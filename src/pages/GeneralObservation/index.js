@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import DatePicker from 'react-datepicker';
 import api from '../../services/api';
 
-import Header from '../../components/Header';
-import { Container } from './styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
@@ -165,7 +162,7 @@ export default function GeneralObservation() {
                 <div className="comments col-md-12">
                     <p>Observação:</p>
                     <input
-                        placeholder="Observação"
+                        placeholder="Observação*"
                         className="col-md-12 form-control"
                         value={observation}
                         onChange={(e) => setObservation(e.target.value)}
@@ -173,7 +170,7 @@ export default function GeneralObservation() {
                 </div>
 
                 <section className={'col-md-12'}>
-                    <button disabled={sendDisabled} onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'submit'}>
+                    <button disabled={sendDisabled} onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'button'}>
                         {'Enviar'}
                     </button>
                 </section>

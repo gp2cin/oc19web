@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import makeAnimated from 'react-select/animated';
 
 import IndividualObservation from '../IndividualObservation';
 import BulkObservation from '../BulkObservation';
@@ -20,8 +19,6 @@ export default function ObserverReport() {
 
     //Case data
     const [report_type, setReportType] = useState('');
-
-    const animatedComponents = makeAnimated();
 
     return (
         <div style={{ overflow: 'auto' }}>

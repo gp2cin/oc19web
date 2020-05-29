@@ -2,15 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import DatePicker from 'react-datepicker';
 import api from '../../services/api';
 
-import Header from '../../components/Header';
-import { Container } from './styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 export default function GeneralObservation() {
+    const [observer_name, set_observer_name] = useState('');
+    const [observer_email, set_observer_email] = useState('');
     const [city, setCity] = useState('');
     const [neighborhood, setNeighborhood] = useState('');
     const [observation, setObservation] = useState('');
@@ -103,14 +102,77 @@ export default function GeneralObservation() {
         }
     }
 
-    function handleNewObserverReport() {
+    function isRequiredFilled() {
+        if (observer_name !== '' &&
+            observer_email !== '' &&
+            city !== '' &&
+            neighborhood_name !== '' &&
+            observation !== ''
+        ) {
+            return true;
+        } else {
+            alert('Você precisa preencher todos os campos obrigatórios!');
+            return false;
+        }
+    }
 
+    function handleNewObserverReport() {
+        if (isRequiredFilled()) {
+            setSendDisabled(true);
+            const data = {
+                observer_name,
+                observer_email,
+                city,
+                neighborhood,
+                neighborhood_name,
+                report_type,
+                observation
+            }
+            postObservation(data);
+        }
+    }
+
+    async function postObservation(data) {
+        try {
+            await api.post('api/v1/general-observation', data).then((d) => {
+                console.log(d);
+            });
+            //console.log(data);
+            alert('Cadastrado com sucesso');
+            setSendDisabled(false);
+            history.push('/');
+        } catch (error) {
+            alert(`Erro ao cadastrar, tente novamente. ${error}`);
+            setSendDisabled(false);
+            console.log(data);
+        }
     }
 
     return (
         <div>
 
             <div className="general-observation-container">
+
+                <div className="first-inputs col-md-12">
+                    <div className="name col-md-6">
+                        <p>Seu nome:*</p>
+                        <input
+                            placeholder="Nome Sobrenome"
+                            className="col-md-12 form-control"
+                            value={observer_name}
+                            onChange={(e) => set_observer_name(e.target.value)}
+                        />
+                    </div>
+                    <div className="name col-md-6">
+                        <p>Seu e-mail:*</p>
+                        <input
+                            placeholder="E-mail"
+                            className="col-md-12 form-control"
+                            value={observer_email}
+                            onChange={(e) => set_observer_email(e.target.value)}
+                        />
+                    </div>
+                </div>
 
                 <div className="seccond-inputs col-md-12">
                     <div className="city-select col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
@@ -165,7 +227,7 @@ export default function GeneralObservation() {
                 <div className="comments col-md-12">
                     <p>Observação:</p>
                     <input
-                        placeholder="Observação"
+                        placeholder="Observação*"
                         className="col-md-12 form-control"
                         value={observation}
                         onChange={(e) => setObservation(e.target.value)}
@@ -173,7 +235,7 @@ export default function GeneralObservation() {
                 </div>
 
                 <section className={'col-md-12'}>
-                    <button disabled={sendDisabled} onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'submit'}>
+                    <button disabled={sendDisabled} onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'button'}>
                         {'Enviar'}
                     </button>
                 </section>

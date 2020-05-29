@@ -10,7 +10,7 @@ import NewWarning from '../pages/NewWarning';
 import OfficialCases from '../pages/OfficialCases';
 import ObserverReport from '../pages/ObserverReport';
 import AboutUs from '../pages/AboutUs';
-import GeneralObservation from '../pages/GeneralObservation';
+import GeneralObservationNotLogged from '../pages/GeneralObservationNotLogged';
 import Header from '../components/Header';
 import { Container } from '../pages/ObserverReport/styles';
 
@@ -75,7 +75,7 @@ const PrivateRouteObserver = ({ component: Component, ...rest }) => (
               <div>
                 {
                   !this.state.isObs ?
-                    <Redirect to='/' /> :
+                    <Redirect to='/general-observation' /> :
                     <Component {...props} />
                 }
               </div>
@@ -124,7 +124,7 @@ const Routes = () => (
       <Route path={'/official-cases'} component={OfficialCases} />
       <PrivateRouteObserver path={'/observer-report'} component={ObserverReport} />
       <Route path={'/about-us'} component={AboutUs} />
-      <GeneralObservationRoute path={'/general-observation'} component={GeneralObservation} />
+      <GeneralObservationRoute path={'/general-observation'} component={GeneralObservationNotLogged} />
       <Route path={'/signin'} component={SignIn} />
       <Route path={'/signup'} component={SignUp} />
       <PrivateRoute path={'/app'} component={() => <h1>App</h1>} />

@@ -5,8 +5,6 @@ import makeAnimated from 'react-select/animated';
 import DatePicker from 'react-datepicker';
 import api from '../../services/api';
 
-import Header from '../../components/Header';
-import { Container } from './styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Radio from '@material-ui/core/Radio';
@@ -17,7 +15,6 @@ import FormControl from '@material-ui/core/FormControl';
 export default function IndividualObservation() {
     const [city, setCity] = useState('');
     const [neighborhood, setNeighborhood] = useState('');
-    const [observation, setObservation] = useState('');
     const [neighborhood_name, setNeighborhood_name] = useState('');
     //List of Recife's neighborhoods from backend
     const [neighborhooods, setNeighborhoods] = useState([]);
@@ -49,7 +46,6 @@ export default function IndividualObservation() {
     const [info_source, setInfoSource] = useState('');
     const [info_source_link, setInfoSourceLink] = useState('');
     const [general_comments, setGeneralComments] = useState('');
-    const [number_of_cases, setNumberOfCases] = useState(0);
     const report_type = 'individual'
         ;
     const history = useHistory();
@@ -193,14 +189,6 @@ export default function IndividualObservation() {
                 alert('Você precisa preencher todos os campos obrigatórios! Preencha a data de morte.');
                 return false;
             }
-            if (report_type === 'social' &&
-                (case_type === '' ||
-                    number_of_cases === 0 ||
-                    info_source === '')
-            ) {
-                alert('Você precisa preencher todos os campos obrigatórios!');
-                return false;
-            }
             return true;
         }
         alert('Você precisa preencher todos os campos obrigatórios!');
@@ -242,7 +230,6 @@ export default function IndividualObservation() {
                 info_source,
                 info_source_link,
                 general_comments,
-                number_of_cases,
             }
             postObserverReport(data);
         }

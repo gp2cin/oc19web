@@ -2,11 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import DatePicker from 'react-datepicker';
 import api from '../../services/api';
 
-import Header from '../../components/Header';
-import { Container } from './styles';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 import Radio from '@material-ui/core/Radio';
@@ -17,7 +14,6 @@ import FormControl from '@material-ui/core/FormControl';
 export default function BulkObservation() {
     const [city, setCity] = useState('');
     const [neighborhood, setNeighborhood] = useState('');
-    const [observation, setObservation] = useState('');
     const [neighborhood_name, setNeighborhood_name] = useState('');
     //List of Recife's neighborhoods from backend
     const [neighborhooods, setNeighborhoods] = useState([]);
@@ -35,17 +31,7 @@ export default function BulkObservation() {
     const [case_name, setCaseName] = useState('');
     const [case_age, setCaseAge] = useState();
     const [case_gender, setCaseGender] = useState('');
-    const [caseHadPreExistingDiseases, setCaseHadPreExistingDiseases] = React.useState();
-    const [household_contact_confirmed_case, setCaseHouseholdContact] = React.useState();
-    const handleChangeQ5 = (event) => {
-        if (event.target.value === 'true') {
-            setCaseHouseholdContact(true);
-        } else if (event.target.value === 'false') {
-            setCaseHouseholdContact(false);
-        } else if (event.target.value === 'not-known') {
-            setCaseHouseholdContact('');
-        }
-    };
+
     const [info_source, setInfoSource] = useState('');
     const [info_source_link, setInfoSourceLink] = useState('');
     const [general_comments, setGeneralComments] = useState('');
@@ -157,7 +143,6 @@ export default function BulkObservation() {
                 case_name,
                 case_age,
                 case_gender,
-                household_contact_confirmed_case,
                 info_source,
                 info_source_link,
                 general_comments,
