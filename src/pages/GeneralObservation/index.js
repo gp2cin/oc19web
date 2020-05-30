@@ -8,6 +8,8 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 export default function GeneralObservation() {
+    const observer_name = '';
+    const observer_email = '';
     const [city, setCity] = useState('');
     const [neighborhood, setNeighborhood] = useState('');
     const [observation, setObservation] = useState('');
@@ -100,8 +102,48 @@ export default function GeneralObservation() {
         }
     }
 
-    function handleNewObserverReport() {
+    function isRequiredFilled() {
+        if (city !== '' &&
+            neighborhood_name !== '' &&
+            observation !== ''
+        ) {
+            return true;
+        } else {
+            alert('Você precisa preencher todos os campos obrigatórios!');
+            return false;
+        }
+    }
 
+    function handleNewObserverReport() {
+        if (isRequiredFilled()) {
+            setSendDisabled(true);
+            const data = {
+                observer_name,
+                observer_email,
+                city,
+                neighborhood,
+                neighborhood_name,
+                report_type,
+                observation
+            }
+            postObservation(data);
+        }
+    }
+
+    async function postObservation(data) {
+        try {
+            await api.post('api/v1/general-observation-auth', data).then((d) => {
+                console.log(d);
+            });
+            //console.log(data);
+            alert('Cadastrado com sucesso');
+            setSendDisabled(false);
+            history.push('/');
+        } catch (error) {
+            alert(`Erro ao cadastrar, tente novamente. ${error}`);
+            setSendDisabled(false);
+            console.log(data);
+        }
     }
 
     return (

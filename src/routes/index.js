@@ -13,6 +13,7 @@ import AboutUs from '../pages/AboutUs';
 import GeneralObservationNotLogged from '../pages/GeneralObservationNotLogged';
 import Header from '../components/Header';
 import { Container } from '../pages/ObserverReport/styles';
+import GeneralObservation from '../pages/GeneralObservation';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -110,7 +111,24 @@ const GeneralObservationRoute = ({ component: Component, ...rest }) => (
           </div>
         );
       }
-      return <CompG />;
+      return (
+        isAuthenticated() ? (
+          <div style={{ overflow: 'auto' }}>
+            <Header />
+            <Container>
+              <div className="observer-report-container">
+                <div className="content row d-flex p-2">
+                  <form className="col-md-12">
+                    <GeneralObservation {...props} />
+                  </form>
+                </div>
+              </div>
+            </Container>
+          </div>
+        ) : (
+            <CompG />
+          )
+      )
     }
     }
   />
