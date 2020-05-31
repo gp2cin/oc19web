@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { makeStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
@@ -11,6 +11,9 @@ import Box from '@material-ui/core/Box';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Container from '@material-ui/core/Container';
+import api from '../../services/api';
+import { isAuthenticated } from '../../services/auth';
+
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -49,12 +52,61 @@ const useStyles = makeStyles((theme) => ({
     tabs: {
         borderRight: `1px solid ${theme.palette.divider}`,
     },
+    tab: {
+        '&:focus': {
+            outline: 0
+        }
+    }
 }));
+
 export default function MyAccount() {
     const classes = useStyles();
-    const [value, setValue] = React.useState(0);
+    const history = useHistory();
+    const [value, setValue] = useState(0);
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState();
+    const [confirm_password, setConfirmPassword] = useState();
 
-    const handleChange = (event, newValue) => {
+    console.log(password)
+    // eslint-disable-next-line
+    useEffect(() => {
+        try {
+            if (isAuthenticated()) {
+                api.get('api/v1/me')
+                    .then(response => {
+                        console.log(response)
+                        setName(response.data.name)
+                        setEmail(response.data.email)
+                    });
+            }
+        } catch (error) {
+            console.log(error)
+        }
+
+    }, [])
+
+    async function handleChangePassword(e) {
+        try {
+            e.preventDefault();
+            if (password !== confirm_password) alert('Preencha os campos com a mesma senha');
+            else {
+                const response = await api.post('api/v1/me/change-password', { password })
+                console.log(response)
+                if (response.data.message === "Password changed") {
+                    alert('Senha trocada com sucesso')
+                    history.push('/my-account');
+                    setPassword('');
+                    setConfirmPassword('');
+                }
+
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const handleChange = (e, newValue) => {
         setValue(newValue);
     };
 
@@ -72,33 +124,36 @@ export default function MyAccount() {
                         aria-label="Vertical tabs"
                         className={classes.tabs}
                     >
-                        <Tab label="Minha Conta" {...a11yProps(0)} />
-                        <Tab label="Trocar Senha" {...a11yProps(1)} />
-                        <Link to="/">
-                            <Tab label="Sair" {...a11yProps(2)} />
-                        </Link>
+                        <Tab label="Minha Conta" {...a11yProps(0)} className={classes.tab} />
+                        <Tab label="Trocar Senha" {...a11yProps(1)} className={classes.tab} />
                     </Tabs>
                     <TabPanel value={value} index={0}>
-                        <p> Nome: Pedro Sena</p>
-                        <p> Email: teste@email.com</p>
+                        <p> Nome: {`${name}`}</p>
+                        <p> Email: {`${email}`}</p>
                     </TabPanel>
                     <TabPanel value={value} index={1}>
                         <form>
                             <div className={'form-group'}>
                                 <label className={'form-label'}>{'Nova Senha:'}</label>
                                 <input
+                                    required
                                     className={'form-control'}
                                     type={'password'}
+                                    value={password}
+                                    onChange={(e) => { setPassword(e.target.value) }}
                                 ></input>
                             </div>
                             <div className={'form-group'}>
                                 <label className={'form-label'}>{'Confirmar Nova Senha:'}</label>
                                 <input
+                                    required
                                     className={'form-control'}
                                     type={'password'}
+                                    value={confirm_password}
+                                    onChange={(e) => { setConfirmPassword(e.target.value) }}
                                 ></input>
                             </div>
-                            <button className={'btn btn-primary col-md-12'} type={'submit'}>
+                            <button className={'btn btn-primary col-md-12'} type={'submit'} onClick={handleChangePassword}>
                                 {'Trocar Senha'}
                             </button>
                         </form>
