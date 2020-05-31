@@ -16,6 +16,7 @@ import Header from '../../components/Header';
 // import Footer from '../../components/Footer';
 import { Container } from './styles';
 import api from '../../services/api';
+import { uploadFile } from '../../services/s3Upload';
 
 export default function WarningCreation() {
   const [sendDisabled, setSendDisabled] = useState(false);
@@ -255,61 +256,64 @@ export default function WarningCreation() {
 
   async function handleNewWarning(e) {
     e.preventDefault();
-    if (validateEmail(email) && isRequiredFilled()) {
-      if (navigator.geolocation) {
-        setSendDisabled(true);
-        navigator.geolocation.getCurrentPosition((position) => {
-          console.log(position);
+    // if (validateEmail(email) && isRequiredFilled()) {
+    //   if (navigator.geolocation) {
+    //     setSendDisabled(true);
+    //     navigator.geolocation.getCurrentPosition((position) => {
+    //       console.log(position);
           
-          const address = {
-            location: {
-              type: 'Point',
-              coordinates: [`${position.coords.latitude}`, `${position.coords.longitude}`],
-            },
-          };
+    //       const address = {
+    //         location: {
+    //           type: 'Point',
+    //           coordinates: [`${position.coords.latitude}`, `${position.coords.longitude}`],
+    //         },
+    //       };
 
-          if (diseasesControl.length !== 0) {
-            for (var key in diseases) {
-              for (const i in diseasesControl) {
-                if (key === diseasesControl[i].value) {
-                  diseases[key] = true;
-                }
-              }
-            }
-          }
+    //       if (diseasesControl.length !== 0) {
+    //         for (var key in diseases) {
+    //           for (const i in diseasesControl) {
+    //             if (key === diseasesControl[i].value) {
+    //               diseases[key] = true;
+    //             }
+    //           }
+    //         }
+    //       }
 
-          if (symptomsControl.length !== 0) {
-            for (var simpKey in symptoms) {
-              for (const i in symptomsControl) {
-                if (simpKey === symptomsControl[i].value) {
-                  symptoms[simpKey] = true;
-                }
-              }
-            }
-          }
+    //       if (symptomsControl.length !== 0) {
+    //         for (var simpKey in symptoms) {
+    //           for (const i in symptomsControl) {
+    //             if (simpKey === symptomsControl[i].value) {
+    //               symptoms[simpKey] = true;
+    //             }
+    //           }
+    //         }
+    //       }
 
-          const data = {
-            email,
-            address,
-            birthdate,
-            diseases,
-            symptoms,
-            contact_suspect_or_confirmed_case,
-            household_contact_confirmed_case,
-            been_in_health_unit,
-            had_evaluation_for_symptoms,
-            covid19_was_discarded,
-            covid_tested,
-            covid_result,
-          };
-          console.log(data);
-          postWarning(data);
-        }, handleLocationError);
-      } else {
-        alert('Geolocation is not supported by this browser.');
-        setSendDisabled(false);
-      }
-    }
+    //       const data = {
+    //         email,
+    //         address,
+    //         birthdate,
+    //         diseases,
+    //         symptoms,
+    //         contact_suspect_or_confirmed_case,
+    //         household_contact_confirmed_case,
+    //         been_in_health_unit,
+    //         had_evaluation_for_symptoms,
+    //         covid19_was_discarded,
+    //         covid_tested,
+    //         covid_result,
+    //       };
+    //       console.log(data);
+    //       postWarning(data);
+    //     }, handleLocationError);
+    //   } else {
+    //     alert('Geolocation is not supported by this browser.');
+    //     setSendDisabled(false);
+    //   }
+    // }
+    console.log();
+    
+    // const response = await uploadFile()
   }
 
   function handleLocationError(error) {
@@ -512,6 +516,7 @@ export default function WarningCreation() {
                   </FormControl>
                 </div>
               </div>
+              <input type="file" id="img" name="img" onChange={(e) =>uploadFile(e.target.files[0], 'test.png')} accept="image/*"/>
             </form>
             <section className={'col-md-12'}>
               <p>{'Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.'}</p>
