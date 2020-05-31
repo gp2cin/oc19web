@@ -35,8 +35,7 @@ export default function SignUp() {
     const [error, setError] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [first_name, set_first_name] = useState('');
-    const [last_name, set_last_name] = useState('');
+    const [name, setName] = useState('');
     const [gender, setGender] = useState('');
     const [birthdate, setBirthdate] = useState('');
     const [controlDate, setControlDate] = useState();
@@ -63,15 +62,14 @@ export default function SignUp() {
         e.preventDefault();
         if (email === '' ||
             password === '' ||
-            first_name === '' ||
-            last_name === '' ||
+            name === '' ||
             gender === '' ||
             birthdate === '') {
             setError('Preencha todos os dados para entrar');
         } else {
             if (validateEmail(email)) {
                 try {
-                    const response = await api.post("api/v1/signup", { email, password, first_name, last_name, gender, birthdate });
+                    const response = await api.post("api/v1/signup", { email, password, name, gender, birthdate });
                     login(response.data.token);
                     alert('Login efetuado com sucesso.');
                     history.push('/');
@@ -98,17 +96,8 @@ export default function SignUp() {
                         <input
                             placeholder={'Nome'}
                             className={'form-control'}
-                            value={first_name}
-                            onChange={(e) => set_first_name(e.target.value)}
-                        ></input>
-                    </div>
-                    <div className={'form-group'}>
-                        <label className={'form-label'}>{'Sobrenome*'}</label>
-                        <input
-                            placeholder={'Sobrenome'}
-                            className={'form-control'}
-                            value={last_name}
-                            onChange={(e) => set_last_name(e.target.value)}
+                            value={name}
+                            onChange={(e) => setName(e.target.value)}
                         ></input>
                     </div>
                     <div className={'form-group'}>
