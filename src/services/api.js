@@ -15,4 +15,6 @@ api.interceptors.request.use(async (config) => {
   return config;
 });
 
+export const awsApi = axios.create({});
+
 export default api;

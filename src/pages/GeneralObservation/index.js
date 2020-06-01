@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import api from '../../services/api';
+import { awsApi } from '../../services/api';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -14,6 +15,8 @@ export default function GeneralObservation() {
     const [neighborhood, setNeighborhood] = useState('');
     const [observation, setObservation] = useState('');
     const [neighborhood_name, setNeighborhood_name] = useState('');
+    const [image_url, set_image_url] = useState('');
+    const [image, setImage] = useState();
     //List of Recife's neighborhoods from backend
     const [neighborhooods, setNeighborhoods] = useState([]);
     //List of cities from IBGE API
@@ -24,6 +27,7 @@ export default function GeneralObservation() {
     const [loading, setLoading] = useState(false);
     const [sendDisabled, setSendDisabled] = useState(false);
     const report_type = 'general';
+    const [uploadMessage, setUploadMessage] = useState('');
 
     const history = useHistory();
 
@@ -124,27 +128,61 @@ export default function GeneralObservation() {
                 neighborhood,
                 neighborhood_name,
                 report_type,
-                observation
+                observation,
+                image_url
             }
             postObservation(data);
         }
     }
 
     async function postObservation(data) {
+        let errorMessage = 'Erro ao cadastrar observação.';
         try {
-            await api.post('api/v1/general-observation-auth', data).then((d) => {
-                console.log(d);
-            });
+            const response = await api.post('api/v1/general-observation-auth', data)
+            console.log(response);
+            if (response.data.generalObservation) {
+                errorMessage = 'Erro ao buscar URL de cadastro da imagem.';
+                console.log(response.data.generalObservation._id)
+                setUploadMessage('Uploading...')
+                const options = {
+                    params: {
+                        Key: response.data.generalObservation._id,
+                        ContentType: image.type
+                    },
+                    headers: {
+                        'Content-Type': image.type
+                    }
+                }
+                const res = await api.get('api/v1/generate-put-url', options)
+
+                console.log(res.data.putURL);
+                const options2 = {
+                    headers: {
+                        'ContentType': image.type
+                    }
+                }
+                errorMessage = 'Erro ao cadastrar imagem da observação.';
+                const awsRes = await awsApi.put(res.data.putURL, image, options)
+                setUploadMessage('Upload Successful!')
+            }
             //console.log(data);
             alert('Cadastrado com sucesso');
             setSendDisabled(false);
             history.push('/');
         } catch (error) {
-            alert(`Erro ao cadastrar, tente novamente. ${error}`);
+            alert(`${errorMessage} ${error}`);
             setSendDisabled(false);
             console.log(data);
         }
     }
+
+    function getImage(e) {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            const file = files[0];
+            setImage(file);
+        }
+    };
 
     return (
         <div>
@@ -202,14 +240,23 @@ export default function GeneralObservation() {
                     </div>
                 </div>
                 <div className="comments col-md-12">
-                    <p>Observação:</p>
+                    <p>Observação:*</p>
                     <input
-                        placeholder="Observação*"
+                        placeholder="Observação"
                         className="col-md-12 form-control"
                         value={observation}
                         onChange={(e) => setObservation(e.target.value)}
                     ></input>
                 </div>
+
+                <h1>Upload an image to AWS S3 bucket</h1>
+                <input
+                    id='upload-image'
+                    type='file'
+                    accept='image/*'
+                    onChange={(e) => getImage(e)}
+                />
+                <p>{uploadMessage}</p>
 
                 <section className={'col-md-12'}>
                     <button disabled={sendDisabled} onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'button'}>

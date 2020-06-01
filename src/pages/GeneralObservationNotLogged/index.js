@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import api from '../../services/api';
+import { awsApi } from '../../services/api';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -14,6 +15,7 @@ export default function GeneralObservation() {
     const [neighborhood, setNeighborhood] = useState('');
     const [observation, setObservation] = useState('');
     const [neighborhood_name, setNeighborhood_name] = useState('');
+    const [image_url, set_image_url] = useState('');
     //List of Recife's neighborhoods from backend
     const [neighborhooods, setNeighborhoods] = useState([]);
     //List of cities from IBGE API
@@ -126,7 +128,8 @@ export default function GeneralObservation() {
                 neighborhood,
                 neighborhood_name,
                 report_type,
-                observation
+                observation,
+                image_url
             }
             postObservation(data);
         }
