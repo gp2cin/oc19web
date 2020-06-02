@@ -269,7 +269,7 @@ export default function ObserverReport() {
                 console.log(d);
             });
             //console.log(data);
-            alert('Cadastrado com sucesso');
+            alert('Observação cadastrada com sucesso!');
             setSendDisabled(false);
             history.push('/');
         } catch (error) {
@@ -362,7 +362,7 @@ export default function ObserverReport() {
                                 </div>
                                 <div className="report-type col-md-9">
                                     <FormControl component={'fieldset'} className="col-md-9">
-                                        <p>{'Qual tipo de informe você quer fazer?*'}</p>
+                                        <p>{'Escolha o tipo de observação que você quer reportar*'}</p>
                                         <RadioGroup
                                             aria-label={'q'}
                                             name={'q1'}
