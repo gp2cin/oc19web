@@ -66,57 +66,18 @@ export default function ObserverReport() {
                                     </div>
                                 </div> */}
 
-<<<<<<< HEAD
-                                        }
-                                        {
-                            (isRecifeSelected && !loading) &&
-                            <Select
-                                className="select"
-                                placeholder="Escolha"
-                                closeMenuOnSelect={true}
-                                components={animatedComponents}
-                                defaultValue={[]}
-                                isClearable
-                                isSearchable
-                                onChange={handleNeighborhoodChoice}
-                                options={neighborhooods}
-                            />
-                        }
-                        {
-                            (isRecifeSelected && loading) &&
-                            <CircularProgress />
-                        }
-                    </div>
-                </div>
-                <div className="report-type col-md-9">
-                    <FormControl component={'fieldset'} className="col-md-9">
-                        <p>{'Escolha o tipo de observação que você quer reportar*'}</p>
-                        <RadioGroup
-                            aria-label={'q'}
-                            name={'q1'}
-                            value={report_type}
-                            onChange={(e) => setReportType(e.target.value)}
-                        >
-                            <FormControlLabel value={'individual'} control={<Radio />} label={'Individual'} />
-                            <FormControlLabel value={'social'} control={<Radio />} label={'Social'} />
-                        </RadioGroup>
-                    </FormControl>
-                </div>
-                            </div>
-=======
->>>>>>> c1f9bd897c4d3443f7d8da5c7af6c4a6a078cf0e
-            {
-                report_type === 'individual' &&
-                <IndividualObservation />
-            }
-            {
-                report_type === 'bulk' &&
-                <BulkObservation />
-            }
-            {
-                report_type === 'general' &&
-                <GeneralObservation />
-            }
+                            {
+                                report_type === 'individual' &&
+                                <IndividualObservation />
+                            }
+                            {
+                                report_type === 'bulk' &&
+                                <BulkObservation />
+                            }
+                            {
+                                report_type === 'general' &&
+                                <GeneralObservation />
+                            }
                         </form>
                     </div >
                 </div >
