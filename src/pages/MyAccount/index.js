@@ -12,7 +12,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Container from '@material-ui/core/Container';
 import api from '../../services/api';
-import { isAuthenticated } from '../../services/auth';
+import { userInfo } from '../../services/auth';
 
 
 function TabPanel(props) {
@@ -72,18 +72,13 @@ export default function MyAccount() {
     // eslint-disable-next-line
     useEffect(() => {
         try {
-            if (isAuthenticated()) {
-                api.get('api/v1/me')
-                    .then(response => {
-                        console.log(response)
-                        setName(response.data.name)
-                        setEmail(response.data.email)
-                    });
-            }
+            userInfo().then(data => {
+                setName(data.name)
+                setEmail(data.email)
+            });
         } catch (error) {
             console.log(error)
         }
-
     }, [])
 
     async function handleChangePassword(e) {

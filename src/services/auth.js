@@ -30,3 +30,11 @@ export const isAuthenticatedObserver = async () => {
     return false;
   }
 }
+
+export const userInfo = async () => {
+  if (isAuthenticated()) {
+    const response = await api.get('api/v1/me');
+    return response.data
+  }
+}
+

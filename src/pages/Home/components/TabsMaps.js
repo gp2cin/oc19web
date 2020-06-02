@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ScrollableTabsButtonAuto({userAddress}) {
+export default function ScrollableTabsButtonAuto({ userAddress }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
@@ -99,24 +99,25 @@ export default function ScrollableTabsButtonAuto({userAddress}) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" style={{backgroundColor: 'white'}}>
-      <Tabs
-        className={classes.tabs}
-        value={value}
-        onChange={handleChange}
-        indicatorColor="secondary"
-        variant="scrollable"
-        scrollButtons="auto"
-        aria-label="scrollable auto tabs example"
-      >
-        <Tab label="Dados oficiais por município" {...a11yProps(0)} className={classes.tab} />
-        <Tab label="Observações por município" {...a11yProps(1)} className={classes.tab} />
-        {/* <Tab label="Auto casos por município" {...a11yProps(1)} className={classes.tab} /> */}
-        <Tab label="Observações por bairro" {...a11yProps(2)} className={classes.tab} />
-      </Tabs>
+      <AppBar position="static" style={{ backgroundColor: 'white' }}>
+        <Tabs
+          className={classes.tabs}
+          value={value}
+          onChange={handleChange}
+          indicatorColor="secondary"
+          variant="scrollable"
+          scrollButtons="auto"
+          aria-label="scrollable auto tabs example"
+        >
+          <Tab label="Casos por município" {...a11yProps(0)} className={classes.tab} />
+          <Tab label="Observações por município" {...a11yProps(1)} className={classes.tab} />
+          {/* <Tab label="Auto casos por município" {...a11yProps(1)} className={classes.tab} /> */}
+          <Tab label="Observações por bairro" {...a11yProps(2)} className={classes.tab} />
+        </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
         <CustomMap userLocation={userAddress.position} geoJson={geoJsonCity} loading={loadingCity} />
+        <p> Fonte: IRRD-PE</p>
       </TabPanel>
       <TabPanel value={value} index={1}>
         <CustomMap userLocation={userAddress.position} geoJson={geoJsonCity} loading={loadingCity} isObserverCity />
@@ -132,7 +133,7 @@ export default function ScrollableTabsButtonAuto({userAddress}) {
           loading={loadingNeigh}
         />
       </TabPanel>
-      
+
     </div>
   );
 }

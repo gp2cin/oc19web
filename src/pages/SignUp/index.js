@@ -71,7 +71,7 @@ export default function SignUp() {
                 try {
                     const response = await api.post("api/v1/signup", { email, password, name, gender, birthdate });
                     login(response.data.token);
-                    alert('Login efetuado com sucesso.');
+                    alert('Cadastro efetuado com sucesso.');
                     history.push('/');
                 } catch (error) {
                     console.log(error);
@@ -87,7 +87,7 @@ export default function SignUp() {
             <div className={classes.paper}>
                 <img src={Logo} alt="OC19 logo" width="150px" />
                 <Typography component="h1" variant="h5">
-                    <FiUserPlus size={25} /> Sign up
+                    <FiUserPlus size={25} /> Cadastre-se
                 </Typography>
                 {error && <p id="error">{error}</p>}
                 <form onSubmit={handleSignUp}>
