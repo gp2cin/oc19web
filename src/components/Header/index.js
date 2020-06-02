@@ -136,6 +136,9 @@ export default class Header extends Component {
                 <Link to="/signup" className={'btn text-light'}>
                   <FiUserPlus size={22} /> {'Cadastre-se'}
                 </Link>
+                <Link to="/general-observation" className={'btn btn btn-outline-light my-2 my-sm-0'}>
+                  {'Cadastrar Observação'}
+                </Link>
                 <div></div>
               </div>
           }
