@@ -26,11 +26,10 @@ export default function BulkObservation() {
     const [sendDisabled, setSendDisabled] = useState(false);
 
     const [case_type, setCaseType] = useState('');
-    const [date, setDate] = useState(new Date());
-    const [death_date, setDeathDate] = useState('');
-    const [case_name, setCaseName] = useState('');
-    const [case_age, setCaseAge] = useState();
-    const [case_gender, setCaseGender] = useState('');
+    const death_date = '';
+    const case_name = '';
+    const case_age = '';
+    const case_gender = '';
 
     const [info_source, setInfoSource] = useState('');
     const [info_source_link, setInfoSourceLink] = useState('');

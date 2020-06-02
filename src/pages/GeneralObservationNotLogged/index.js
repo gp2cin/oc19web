@@ -15,17 +15,19 @@ export default function GeneralObservation() {
     const [neighborhood, setNeighborhood] = useState('');
     const [observation, setObservation] = useState('');
     const [neighborhood_name, setNeighborhood_name] = useState('');
-    const [image_url, set_image_url] = useState('');
+    const image_url = '';
     //List of Recife's neighborhoods from backend
     const [neighborhooods, setNeighborhoods] = useState([]);
     //List of cities from IBGE API
     const [cities, setCities] = useState([]);
     const [isRecifeSelected, setIsRecifeSelected] = useState(false);
+    const [image, setImage] = useState();
 
     const animatedComponents = makeAnimated();
     const [loading, setLoading] = useState(false);
     const [sendDisabled, setSendDisabled] = useState(false);
     const report_type = 'general';
+    const [uploadMessage, setUploadMessage] = useState('');
 
     const history = useHistory();
 
@@ -135,17 +137,46 @@ export default function GeneralObservation() {
         }
     }
 
+    function getImage(e) {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            const file = files[0];
+            setImage(file);
+        }
+    };
+
     async function postObservation(data) {
+        let errorMessage = 'Erro ao cadastrar observação.';
         try {
-            await api.post('api/v1/general-observation', data).then((d) => {
-                console.log(d);
-            });
+            const response = await api.post('api/v1/general-observation', data)
+            console.log(response);
+            if (response.data.generalObservation && image !== null && image !== undefined) {
+                errorMessage = 'Erro ao buscar URL de cadastro da imagem.';
+                console.log(response.data.generalObservation._id)
+                setUploadMessage('Uploading...')
+                const options = {
+                    params: {
+                        Key: response.data.generalObservation._id,
+                        ContentType: image.type
+                    },
+                    headers: {
+                        'Content-Type': image.type
+                    }
+                }
+                const res = await api.get('api/v1/generate-put-url', options)
+
+                console.log(res.data.putURL);
+                errorMessage = 'Erro ao cadastrar imagem da observação.';
+                await awsApi.put(res.data.putURL, image, options)
+                setUploadMessage('Upload Successful!')
+            }
             //console.log(data);
             alert('Cadastrado com sucesso');
             setSendDisabled(false);
             history.push('/');
         } catch (error) {
-            alert(`Erro ao cadastrar, tente novamente. ${error}`);
+            setUploadMessage('');
+            alert(`${errorMessage} ${error}`);
             setSendDisabled(false);
             console.log(data);
         }
@@ -157,7 +188,7 @@ export default function GeneralObservation() {
             <div className="general-observation-container">
 
                 <div className="first-inputs col-md-12">
-                    <div className="name col-md-6">
+                    <div className="name col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
                         <p>Seu nome:*</p>
                         <input
                             placeholder="Nome Sobrenome"
@@ -166,7 +197,7 @@ export default function GeneralObservation() {
                             onChange={(e) => set_observer_name(e.target.value)}
                         />
                     </div>
-                    <div className="name col-md-6">
+                    <div className="name col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
                         <p>Seu e-mail:*</p>
                         <input
                             placeholder="E-mail"
@@ -192,7 +223,7 @@ export default function GeneralObservation() {
                             options={cities}
                         />
                     </div>
-                    <div className="neighborhood col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
+                    <div className="neighborhood col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
                         <p>Bairro:*</p>
                         {
                             (!isRecifeSelected) &&
@@ -228,13 +259,33 @@ export default function GeneralObservation() {
                     </div>
                 </div>
                 <div className="comments col-md-12">
-                    <p>Observação:</p>
+                    <div className="col-md-12" style={{ padding: '0px' }}>
+                        <p>Observação:*</p>
+                        <input
+                            placeholder="Observação"
+                            className="col-md-12 form-control"
+                            value={observation}
+                            onChange={(e) => setObservation(e.target.value)}
+                        ></input>
+                    </div>
+                </div>
+
+                <div
+                    className="col-md-12 image"
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                    <p>Cadastro de imagem:</p>
                     <input
-                        placeholder="Observação*"
-                        className="col-md-12 form-control"
-                        value={observation}
-                        onChange={(e) => setObservation(e.target.value)}
-                    ></input>
+                        style={{ marginTop: '5px', padding: '0px' }}
+                        id='upload-image'
+                        className="upload-image col-md-12"
+                        type='file'
+                        accept='image/*'
+                        onChange={(e) => getImage(e)}
+                    />
+                    <p>{uploadMessage}</p>
                 </div>
 
                 <section className={'col-md-12'}>

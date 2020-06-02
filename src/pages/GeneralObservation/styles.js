@@ -17,4 +17,11 @@ export const Container = styled.div`
     justify-content: center;
     align-items: center;
   }
+  .image {
+    justify-content: center;
+    align-items: center;
+  }
+  .image input {
+    margin-top: 20px;
+  }
 `;

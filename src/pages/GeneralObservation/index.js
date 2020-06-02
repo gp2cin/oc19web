@@ -15,7 +15,7 @@ export default function GeneralObservation() {
     const [neighborhood, setNeighborhood] = useState('');
     const [observation, setObservation] = useState('');
     const [neighborhood_name, setNeighborhood_name] = useState('');
-    const [image_url, set_image_url] = useState('');
+    const image_url = '';
     const [image, setImage] = useState();
     //List of Recife's neighborhoods from backend
     const [neighborhooods, setNeighborhoods] = useState([]);
@@ -140,7 +140,7 @@ export default function GeneralObservation() {
         try {
             const response = await api.post('api/v1/general-observation-auth', data)
             console.log(response);
-            if (response.data.generalObservation) {
+            if (response.data.generalObservation && image !== null && image !== undefined) {
                 errorMessage = 'Erro ao buscar URL de cadastro da imagem.';
                 console.log(response.data.generalObservation._id)
                 setUploadMessage('Uploading...')
@@ -156,13 +156,8 @@ export default function GeneralObservation() {
                 const res = await api.get('api/v1/generate-put-url', options)
 
                 console.log(res.data.putURL);
-                const options2 = {
-                    headers: {
-                        'ContentType': image.type
-                    }
-                }
                 errorMessage = 'Erro ao cadastrar imagem da observação.';
-                const awsRes = await awsApi.put(res.data.putURL, image, options)
+                await awsApi.put(res.data.putURL, image, options)
                 setUploadMessage('Upload Successful!')
             }
             //console.log(data);
@@ -170,6 +165,7 @@ export default function GeneralObservation() {
             setSendDisabled(false);
             history.push('/');
         } catch (error) {
+            setUploadMessage('');
             alert(`${errorMessage} ${error}`);
             setSendDisabled(false);
             console.log(data);
@@ -204,7 +200,7 @@ export default function GeneralObservation() {
                             options={cities}
                         />
                     </div>
-                    <div className="neighborhood col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
+                    <div className="neighborhood col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
                         <p>Bairro:*</p>
                         {
                             (!isRecifeSelected) &&
@@ -240,24 +236,33 @@ export default function GeneralObservation() {
                     </div>
                 </div>
                 <div className="comments col-md-12">
-                    <p>Observação:*</p>
-                    <input
-                        placeholder="Observação"
-                        className="col-md-12 form-control"
-                        value={observation}
-                        onChange={(e) => setObservation(e.target.value)}
-                    ></input>
+                    <div className="col-md-12" style={{ padding: '0px' }}>
+                        <p>Observação:*</p>
+                        <input
+                            placeholder="Observação"
+                            className="col-md-12 form-control"
+                            value={observation}
+                            onChange={(e) => setObservation(e.target.value)}
+                        ></input>
+                    </div>
                 </div>
-
-                <h1>Upload an image to AWS S3 bucket</h1>
-                <input
-                    id='upload-image'
-                    type='file'
-                    accept='image/*'
-                    onChange={(e) => getImage(e)}
-                />
-                <p>{uploadMessage}</p>
-
+                <div
+                    className="col-md-12 image"
+                    style={{
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                    <p>Cadastro de imagem:</p>
+                    <input
+                        style={{ marginTop: '5px', padding: '0px' }}
+                        id='upload-image'
+                        className="upload-image col-md-12"
+                        type='file'
+                        accept='image/*'
+                        onChange={(e) => getImage(e)}
+                    />
+                    <p>{uploadMessage}</p>
+                </div>
                 <section className={'col-md-12'}>
                     <button disabled={sendDisabled} onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'button'}>
                         {'Enviar'}
