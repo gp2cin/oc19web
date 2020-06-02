@@ -118,6 +118,9 @@ export default class Header extends Component {
                 <Link to="/warnings/new" className={'btn btn btn-outline-light my-2 my-sm-0'}>
                   {'Informar novo caso'}
                 </Link>
+                <Link to="/general-observation" className={'btn btn btn-outline-light my-2 my-sm-0'}>
+                  {'Cadastrar Observação'}
+                </Link>
                 <div></div>
               </div>
           }
