@@ -151,7 +151,7 @@ export default function GeneralObservation() {
             const response = await api.post('api/v1/general-observation', data)
             console.log(response);
             if (response.data.generalObservation && image !== null && image !== undefined) {
-                errorMessage = 'Erro ao buscar URL de cadastro da imagem.';
+                errorMessage = 'Observação cadastrada, mas erro ao buscar URL de cadastro da imagem.';
                 console.log(response.data.generalObservation._id)
                 setUploadMessage('Uploading...')
                 const options = {
@@ -164,16 +164,28 @@ export default function GeneralObservation() {
                     }
                 }
                 const res = await api.get('api/v1/generate-put-url', options)
-
-                console.log(res.data.putURL);
-                errorMessage = 'Erro ao cadastrar imagem da observação.';
-                await awsApi.put(res.data.putURL, image, options)
-                setUploadMessage('Upload Successful!')
+                if (res.data.putURL !== null && res.data.putURL !== undefined) {
+                    console.log(res.data.putURL);
+                    errorMessage = 'Observação cadastrada, mas erro ao cadastrar imagem da observação.';
+                    await awsApi.put(res.data.putURL, image, options)
+                    setUploadMessage('Upload Successful!')
+                    alert('Cadastrado com sucesso');
+                    setSendDisabled(false);
+                    history.push('/');
+                } else {
+                    alert('Observação cadastrada, mas erro ao cadastrar imagem da observação.');
+                    setSendDisabled(false);
+                    history.push('/');
+                }
             }
-            //console.log(data);
-            alert('Cadastrado com sucesso');
-            setSendDisabled(false);
-            history.push('/');
+            if (response.data.generalObservation) {
+                alert('Cadastrado com sucesso');
+                setSendDisabled(false);
+            } else {
+                alert('Erro ao cadastrar observação.');
+                setSendDisabled(false);
+            }
+
         } catch (error) {
             setUploadMessage('');
             alert(`${errorMessage} ${error}`);
