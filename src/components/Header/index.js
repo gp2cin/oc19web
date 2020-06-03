@@ -65,46 +65,25 @@ export default class Header extends Component {
           <Link to="/" className={'navbar-brand'}>
             <img src={Logo} className={'navbar-logo'} alt="OC19 logo" />
           </Link>
-          {
-            !this.state.isAuth ?
-              <div className="collapse navbar-collapse" id="navbarCollapse">
-                <ul className="navbar-nav mr-auto">
-                  <li className="nav-item active">
-                    <Link to="/" className={'navbar-brand'}>
-                      <FiHome size={22} /> {'Home'}
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/official-cases" className={'navbar-brand'}>
-                      <FiDatabase size={22} /> {'Dados'}
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/about-us" className={'navbar-brand'}>
-                      <FiInfo size={22} /> {'Sobre'}
-                    </Link>
-                  </li>
-                </ul>
-              </div> : <div className="collapse navbar-collapse" id="navbarCollapse">
-                <ul className="navbar-nav mr-auto">
-                  <li className="nav-item active">
-                    <Link to="/" className={'navbar-brand'}>
-                      <FiHome size={22} /> {'Home'}
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/official-cases" className={'navbar-brand'}>
-                      <FiDatabase size={22} /> {'Dados'}
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link to="/about-us" className={'navbar-brand'}>
-                      <FiInfo size={22} /> {'Sobre'}
-                    </Link>
-                  </li>
-                </ul>
-              </div>
-          }
+          <div className="collapse navbar-collapse" id="navbarCollapse">
+            <ul className="navbar-nav mr-auto">
+              <li className="nav-item active">
+                <Link to="/" className={'navbar-brand'}>
+                  <FiHome size={22} /> {'Home'}
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/official-cases" className={'navbar-brand'}>
+                  <FiDatabase size={22} /> {'Dados'}
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link to="/about-us" className={'navbar-brand'}>
+                  <FiInfo size={22} /> {'Sobre'}
+                </Link>
+              </li>
+            </ul>
+          </div>
 
           {
             this.state.isAuth ?
@@ -149,7 +128,6 @@ export default class Header extends Component {
                     {'Cadastrar Observação'}
                   </Link>
                 </div>
-
               </div>
           }
         </nav>
