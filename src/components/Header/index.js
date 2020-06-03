@@ -5,13 +5,13 @@ import Logo from '../../assets/ocovid19-logo-white.png';
 import { Link } from 'react-router-dom';
 import { FiLogIn, FiHome, FiInfo, FiDatabase, FiUser, FiUserPlus, FiLogOut } from 'react-icons/fi';
 import { logout, isAuthenticated } from '../../services/auth';
-// import { userInfo } from '../../services/auth';
+
 export default class Header extends Component {
 
   state = {
     isAuth: isAuthenticated(),
     redirect: false,
-    username: undefined
+    username: localStorage.getItem('NAME')
   }
 
   componentDidMount() {
@@ -24,14 +24,6 @@ export default class Header extends Component {
     alert('Logout efetuado com sucesso.');
     this.setRedirect();
   }
-
-  // setUser = () => {
-  //   console.log('Antes: ', this.state.username)
-  //   userInfo().then(data => {
-  //     this.setState({ username: data.name.toLocaleUpperCase() })
-  //   })
-  //   console.log('Depois: ', this.state.username)
-  // }
 
   setRedirect = () => {
     this.setState({
@@ -49,7 +41,6 @@ export default class Header extends Component {
     return (
       < HeaderMain >
         <div>{this.renderRedirect()}</div>
-        {/* <div>{this.setUser()}</div> */}
         <nav className="navbar navbar-expand-sm navbar-dark fixed-top bg-header">
           <button
             type="button"
