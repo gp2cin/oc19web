@@ -7,12 +7,12 @@ import { FiLogIn, FiHome, FiInfo, FiDatabase, FiUser, FiUserPlus, FiLogOut } fro
 import { logout, isAuthenticated } from '../../services/auth';
 
 export default class Header extends Component {
-
   state = {
     isAuth: isAuthenticated(),
     redirect: false,
-    username: localStorage.getItem('NAME')
   }
+
+  getUsername = () => localStorage.getItem('NAME');
 
   componentDidMount() {
     this.setState({ isAuth: isAuthenticated() });
@@ -81,7 +81,7 @@ export default class Header extends Component {
               <div className={'form-inline mt-2 mt-md-0 mr-10'}>
                 <div className="dropdown mr-2">
                   <button className="btn text-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Olá, {`${this.state.username}`}
+                    Olá, {this.getUsername()}
                   </button>
                   <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <Link to="/my-account" className={'btn dropdown-item'}>
