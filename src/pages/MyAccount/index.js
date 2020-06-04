@@ -12,6 +12,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Container from '@material-ui/core/Container';
 import api from '../../services/api';
+import { isAuthenticated } from '../../services/auth'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -90,8 +91,14 @@ export default function MyAccount() {
         setValue(newValue);
     };
 
+    function handleAuth() {
+        if (!isAuthenticated()) {
+            history.push('/');
+        }
+    }
+
     return (
-        <Container style={{ marginTop: "40px" }}>
+        <Container style={{ marginTop: "40px" }} onChange={handleAuth()}>
             <Header />
             <div style={{ minHeight: "300px" }}>
                 <h1> Minha Conta </h1>
@@ -142,6 +149,5 @@ export default function MyAccount() {
             </div>
             <Footer />
         </Container >
-
     );
 }
