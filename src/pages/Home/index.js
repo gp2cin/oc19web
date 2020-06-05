@@ -9,6 +9,7 @@ import { addressPoints } from './mock.js';
 // import MarkerClusterGroup from 'react-leaflet-markercluster';
 import api from '../../services/api';
 import TabsMaps from './components/TabsMaps';
+import { Link } from '@material-ui/core';
 
 class Home extends Component {
   state = {
@@ -167,7 +168,7 @@ class Home extends Component {
         </Map> */}
 
           <div className="col-md-12 row justify-content-center align-items-center report-home">
-            <div className="col-lg-4 report-item">
+            <div href="/warnings/new" className="col-lg-4 report-item">
               <div className={'text-center row justify-content-center align-items-center'}>
                 <div
                   className={'rounded-circle row justify-content-center align-items-center'}
@@ -184,9 +185,11 @@ class Home extends Component {
                   ></span>
                 </div>
               </div>
+              <Link href="/warnings/new" color="inherit">
+                <h2 className={'text-center report-title'}>{'Informe'}</h2>
+                <p className={'text-center'}>{'Seus sintomas'}</p>
+              </Link>
 
-              <h2 className={'text-center report-title'}>{'Informe'}</h2>
-              <p className={'text-center'}>{'Seus sintomas'}</p>
               {/* <p className={'text-center'}>
               <a className="btn btn-secondary" href="#" role="button">
                 {'Informar'}
@@ -210,9 +213,11 @@ class Home extends Component {
                   ></span>
                 </div>
               </div>
+              <Link href="/official-cases" color="inherit">
+                <h2 className={'text-center report-title'}>{'Acompanhe'}</h2>
+                <p className={'text-center'}>{'o Covid-19 na sua região.'}</p>
+              </Link>
 
-              <h2 className={'text-center report-title'}>{'Acompanhe'}</h2>
-              <p className={'text-center'}>{'o Covid-19 na sua região.'}</p>
               {/* <p className={'text-center'}>
               <a className="btn btn-secondary" href="#" role="button">
                 {'Ver mais'}
@@ -236,8 +241,10 @@ class Home extends Component {
                   ></span>
                 </div>
               </div>
-              <h2 className={'text-center report-title'}>{'Participe'}</h2>
-              <p className={'text-center'}>{officialCases.state}</p>
+              <Link href="/signup" color="inherit">
+                <h2 className={'text-center report-title'}>{'Participe'}</h2>
+                <p className={'text-center'}>Cadastre-se.</p>
+              </Link>
               {/* <p className={'text-center'}>
               <a className="btn btn-secondary" href="#" role="button">
                 {'Ver mais'}
@@ -247,9 +254,8 @@ class Home extends Component {
           </div>
 
           <div className="col-md-12 box-official">
-            <h1 className="col-lg-12 text-center">{'Números oficiais'}</h1>
+            <h1 className="col-lg-12 text-center">{'Dados IRRD-PE'}</h1>
             <h6 className="col-lg-12 text-center">
-              {`Fonte: IRRD-PE `}
               <span>{`Atualizado em: ${moment(officialCases.updatedAt).format('DD/MM/YYYY')}`}</span>{' '}
             </h6>
           </div>

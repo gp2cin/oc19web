@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 
@@ -12,8 +12,7 @@ import Header from '../../components/Header';
 import Footer from '../../components/Footer';
 import Container from '@material-ui/core/Container';
 import api from '../../services/api';
-import { isAuthenticated } from '../../services/auth';
-
+import { isAuthenticated } from '../../services/auth'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -63,28 +62,10 @@ export default function MyAccount() {
     const classes = useStyles();
     const history = useHistory();
     const [value, setValue] = useState(0);
-    const [name, setName] = useState('');
-    const [email, setEmail] = useState('');
     const [password, setPassword] = useState();
     const [confirm_password, setConfirmPassword] = useState();
-
-    console.log(password)
-    // eslint-disable-next-line
-    useEffect(() => {
-        try {
-            if (isAuthenticated()) {
-                api.get('api/v1/me')
-                    .then(response => {
-                        console.log(response)
-                        setName(response.data.name)
-                        setEmail(response.data.email)
-                    });
-            }
-        } catch (error) {
-            console.log(error)
-        }
-
-    }, [])
+    const name = localStorage.getItem('NAME');
+    const email = localStorage.getItem('EMAIL');
 
     async function handleChangePassword(e) {
         try {
@@ -110,8 +91,14 @@ export default function MyAccount() {
         setValue(newValue);
     };
 
+    function handleAuth() {
+        if (!isAuthenticated()) {
+            history.push('/');
+        }
+    }
+
     return (
-        <Container style={{ marginTop: "40px" }}>
+        <Container style={{ marginTop: "40px" }} onChange={handleAuth()}>
             <Header />
             <div style={{ minHeight: "300px" }}>
                 <h1> Minha Conta </h1>
@@ -162,6 +149,5 @@ export default function MyAccount() {
             </div>
             <Footer />
         </Container >
-
     );
 }

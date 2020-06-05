@@ -50,7 +50,6 @@ export default function SignIn() {
         try {
           const response = await api.post("api/v1/signin", { email, password });
           login(response.data.token);
-          alert('Login efetuado com sucesso.');
           history.push('/');
         } catch (err) {
           console.log(err);
@@ -66,7 +65,7 @@ export default function SignIn() {
       <div className={classes.paper}>
         <img src={Logo} alt="OC19 logo" width="150px" />
         <Typography component="h1" variant="h5">
-          <FiUser size={25} /> Sign in
+          <FiUser size={25} /> Entrar
         </Typography>
         {error && <p id="error">{error}</p>}
         <form onSubmit={handleSignIn}>

@@ -95,7 +95,7 @@ export default function OfficialCases() {
         <div className="external-container">
             <Header />
             <div className="official-cases-container row">
-                <h1>Acompanhe os casos oficiais de <strong>Pernambuco</strong> .</h1>
+                <h1>Casos da COVID-19 em <strong>Pernambuco</strong> .</h1>
                 <div className="state-cases-container col-md-10">
                     <div className="result-cases col-7">
                         <p>Número de casos confirmados:</p>
@@ -115,14 +115,14 @@ export default function OfficialCases() {
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Letalidade:</p>
-                        <p1>{state.lethality_percentage ? ((state.lethality_percentage * 100).toPrecision(3)) + '%' : '-'}</p1>
+                        <p1>{state.lethality_percentage ? ((state.lethality_percentage * 100).toLocaleString()) + '%' : '-'}</p1>
                     </div>
                     <div className="result-cases col-md-7">
                         <p>Mortalidade a cada 100 mil hab.:</p>
                         <p1>{state.mortality_100k ? state.mortality_100k.toLocaleString() : '-'}</p1>
                     </div>
                 </div>
-                <h1>Busque os casos registrados oficialmente nos municipios de <strong>Pernambuco</strong> .</h1>
+                <h1>Casos por município de <strong>Pernambuco</strong> .</h1>
                 <div className="search-container col-md-10">
                     <div className="city-select  col-md-6">
                         <p>Escolha uma cidade:</p>
