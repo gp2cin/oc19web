@@ -29,9 +29,11 @@ export const Container = styled.div`
   @media only screen and (max-width: 768px) {
     .observer-report-container {
       padding: 0px;
+      padding-top: 30px;
     }
     .content {
       margin: 0 auto;
+      margin-top: 30px;
     }
     [class*="col-"] {
       width: 100%;

@@ -198,7 +198,7 @@ export default function GeneralObservation() {
         <div>
 
             <div className="general-observation-container">
-
+                <p>Campos com o símbolo " * " devem ser respondidos obrigatoriamente.</p>
                 <div className="first-inputs col-md-12">
                     <div className="name col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
                         <p>Seu nome:*</p>

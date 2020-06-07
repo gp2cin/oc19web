@@ -25,6 +25,7 @@ export default function ObserverReport() {
             <Header />
             <Container>
                 <div className="observer-report-container">
+                    <p>Campos com o símbolo " * " devem ser respondidos obrigatoriamente.</p>
                     <section>
                         <h1 className={'text-center'}>{'Protocolo de Observações do OCOVID19'}</h1>
                         <p className={'text-center'}>

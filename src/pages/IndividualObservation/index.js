@@ -27,7 +27,7 @@ export default function IndividualObservation() {
     const [sendDisabled, setSendDisabled] = useState(false);
 
     const [case_type, setCaseType] = useState('');
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState();
     const [death_date, setDeathDate] = useState('');
     const [case_name, setCaseName] = useState('');
     const [case_age, setCaseAge] = useState();
@@ -185,10 +185,6 @@ export default function IndividualObservation() {
                 alert('Você precisa preencher todos os campos obrigatórios!');
                 return false;
             }
-            if (case_type === 'death' && report_type === 'individual' && death_date === '') {
-                alert('Você precisa preencher todos os campos obrigatórios! Preencha a data de morte.');
-                return false;
-            }
             return true;
         }
         alert('Você precisa preencher todos os campos obrigatórios!');
@@ -325,7 +321,7 @@ export default function IndividualObservation() {
                     {
                         case_type === 'death' &&
                         <div className="death-date col-md-9">
-                            <p>{'Em caso de óbito, informe a data do óbito:*'}</p>
+                            <p>{'Data do óbito:'}</p>
                             <DatePicker
                                 maxDate={new Date()}
                                 className={'date-picker form-control col-md-9'}
