@@ -5,6 +5,8 @@ import makeAnimated from 'react-select/animated';
 import api from '../../services/api';
 import { awsApi } from '../../services/api';
 
+import formatName from '../../utils/formatName';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
@@ -12,6 +14,7 @@ export default function GeneralObservation() {
     const observer_name = '';
     const observer_email = '';
     const [city, setCity] = useState('');
+    const [city_ca, setCity_ca] = useState('');
     const [neighborhood, setNeighborhood] = useState('');
     const [observation, setObservation] = useState('');
     const [neighborhood_name, setNeighborhood_name] = useState('');
@@ -53,7 +56,7 @@ export default function GeneralObservation() {
     async function handleCityChoice(choice) {
         if (choice !== null) {
             setCity(choice.label);
-
+            setCity_ca(formatName(choice.label));
             //Get Recife's neighborhoods form backend
             if (choice.label === 'Recife') {
                 console.log('Recife!!')
@@ -125,6 +128,7 @@ export default function GeneralObservation() {
                 observer_name,
                 observer_email,
                 city,
+                city_ca,
                 neighborhood,
                 neighborhood_name,
                 report_type,
@@ -167,10 +171,10 @@ export default function GeneralObservation() {
                     setSendDisabled(false);
                     history.push('/');
                 }
-            }
-            if (response.data.generalObservation) {
-                alert('Cadastrado com sucesso');
+            } else if (response.data.generalObservation) {
+                alert('Cadastrado com sucesso2');
                 setSendDisabled(false);
+                history.push('/');
             } else {
                 alert('Erro ao cadastrar observação.');
                 setSendDisabled(false);

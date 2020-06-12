@@ -7,6 +7,8 @@ import api from '../../services/api';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import formatName from '../../utils/formatName';
+
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -14,6 +16,7 @@ import FormControl from '@material-ui/core/FormControl';
 
 export default function IndividualObservation() {
     const [city, setCity] = useState('');
+    const [city_ca, setCity_ca] = useState('');
     const [neighborhood, setNeighborhood] = useState('');
     const [neighborhood_name, setNeighborhood_name] = useState('');
     //List of Recife's neighborhoods from backend
@@ -27,7 +30,7 @@ export default function IndividualObservation() {
     const [sendDisabled, setSendDisabled] = useState(false);
 
     const [case_type, setCaseType] = useState('');
-    const [date, setDate] = useState(new Date());
+    const [date, setDate] = useState();
     const [death_date, setDeathDate] = useState('');
     const [case_name, setCaseName] = useState('');
     const [case_age, setCaseAge] = useState();
@@ -103,7 +106,7 @@ export default function IndividualObservation() {
     async function handleCityChoice(choice) {
         if (choice !== null) {
             setCity(choice.label);
-
+            setCity_ca(formatName(choice.label));
             //Get Recife's neighborhoods form backend
             if (choice.label === 'Recife') {
                 console.log('Recife!!')
@@ -185,10 +188,6 @@ export default function IndividualObservation() {
                 alert('Você precisa preencher todos os campos obrigatórios!');
                 return false;
             }
-            if (case_type === 'death' && report_type === 'individual' && death_date === '') {
-                alert('Você precisa preencher todos os campos obrigatórios! Preencha a data de morte.');
-                return false;
-            }
             return true;
         }
         alert('Você precisa preencher todos os campos obrigatórios!');
@@ -217,6 +216,7 @@ export default function IndividualObservation() {
             }
             const data = {
                 city,
+                city_ca,
                 neighborhood,
                 neighborhood_name,
                 report_type,
@@ -325,7 +325,7 @@ export default function IndividualObservation() {
                     {
                         case_type === 'death' &&
                         <div className="death-date col-md-9">
-                            <p>{'Em caso de óbito, informe a data do óbito:*'}</p>
+                            <p>{'Data do óbito:'}</p>
                             <DatePicker
                                 maxDate={new Date()}
                                 className={'date-picker form-control col-md-9'}

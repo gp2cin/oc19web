@@ -10,40 +10,40 @@ import { CircularProgress } from '@material-ui/core';
 const PlotTypleOptions = { byCity: 'byCity', byNeighborhood: 'byNeighborhood' };
 
 export default function CustomMap({ userLocation, geoJson, loading, plotType = 'byCity', isObserverCity }) {
-  function onEachFeature(feature, layer) {
-    if (plotType === PlotTypleOptions.byCity) {
-      // const { confirmed, active, deaths, recovered } = feature.properties.official_cases;
-      const { confirmed, recovered } = feature.properties.official_cases;
+  // function onEachFeature(feature, layer) {
+  //   if (plotType === PlotTypleOptions.byCity) {
+  //     // const { confirmed, active, deaths, recovered } = feature.properties.official_cases;
+  //     const { confirmed, recovered } = feature.properties.official_cases;
 
-      layer.bindPopup(`
-      <div style='display: flex'> 
-        <div>
-          ${feature.properties.name}
-        <div/>
-        <div style='font-size: 10px; margin-top: 5px; padding-top: 5px;border-top: 1px solid rgba(217, 217, 217, 0.8)'/>
-        <div style='font-size: 10px'>
-          Confirmados: ${confirmed} 
-        <div/>
-        <div style='font-size: 10px'>
-          Recuperados: ${recovered} 
-        <div/>
-      </div>
-    `);
-    } else {
-      const { observer_reports } = feature.properties;
-      layer.bindPopup(`
-      <div style='display: flex'> 
-        <div>
-          ${feature.properties.name}
-        <div/>
-        <div style='font-size: 10px; margin-top: 5px; padding-top: 5px;border-top: 1px solid rgba(217, 217, 217, 0.8)'/>
-        <div style='font-size: 10px'>
-          Casos observados:  ${observer_reports} 
-        <div/>
-      </div>
-    `);
-    }
-  }
+  //     layer.bindPopup(`
+  //     <div style='display: flex'> 
+  //       <div>
+  //         ${feature.properties.name}
+  //       <div/>
+  //       <div style='font-size: 10px; margin-top: 5px; padding-top: 5px;border-top: 1px solid rgba(217, 217, 217, 0.8)'/>
+  //       <div style='font-size: 10px'>
+  //         Confirmados: ${confirmed} 
+  //       <div/>
+  //       <div style='font-size: 10px'>
+  //         Recuperados: ${recovered} 
+  //       <div/>
+  //     </div>
+  //   `);
+  //   } else {
+  //     const { observer_reports } = feature.properties;
+  //     layer.bindPopup(`
+  //     <div style='display: flex'> 
+  //       <div>
+  //         ${feature.properties.name}
+  //       <div/>
+  //       <div style='font-size: 10px; margin-top: 5px; padding-top: 5px;border-top: 1px solid rgba(217, 217, 217, 0.8)'/>
+  //       <div style='font-size: 10px'>
+  //         Casos observados:  ${observer_reports} 
+  //       <div/>
+  //     </div>
+  //   `);
+  //   }
+  // }
 
   function getCaseOnPoint(caseAmount, locationName) {
     return new divIcon({
@@ -70,15 +70,30 @@ export default function CustomMap({ userLocation, geoJson, loading, plotType = '
       } = geoLocation;
 
       let cases;
+      let confirmed;
+      let recovered;
+      let deaths;
+      let active;
+      let suspect;
+
       if (plotType === PlotTypleOptions.byCity) {
-        if(isObserverCity){
-          cases = geoLocation.properties.observer_reports;
+        if (isObserverCity) {
+          cases = geoLocation.properties.observer_reports.total;
+          deaths = geoLocation.properties.observer_reports.deaths;
+          suspect = geoLocation.properties.observer_reports.suspect;
+          confirmed = geoLocation.properties.observer_reports.confirmed;
         } else {
           cases = geoLocation.properties.official_cases.confirmed;
+          deaths = geoLocation.properties.official_cases.deaths;
+          recovered = geoLocation.properties.official_cases.recovered;
+          active = geoLocation.properties.official_cases.active;
         }
-        
+
       } else {
-        cases = geoLocation.properties.observer_reports;
+        cases = geoLocation.properties.observer_reports.total;
+        confirmed = geoLocation.properties.observer_reports.confirmed;
+        deaths = geoLocation.properties.observer_reports.deaths;
+        suspect = geoLocation.properties.observer_reports.suspect;
       }
       const { lat, lng } = polygon(coordinates).getBounds().getCenter();
 
@@ -88,6 +103,27 @@ export default function CustomMap({ userLocation, geoJson, loading, plotType = '
             <div>{name}</div>
             <div style={{ fontSize: '10px', marginTop: 5, borderTop: '1px solid rgba(217, 217, 217, 0.8)' }}>
               Casos: {cases}
+              {
+                ((plotType !== PlotTypleOptions.byCity) || (plotType === PlotTypleOptions.byCity && isObserverCity === true)) ?
+                  <div>Confirmados: {confirmed}</div>
+                  : <div></div>
+              }
+              Mortes: {deaths}
+              {
+                (plotType === PlotTypleOptions.byCity && !isObserverCity) ?
+                  <div>Recuperados: {recovered}</div>
+                  : <div></div>
+              }
+              {
+                ((plotType !== PlotTypleOptions.byCity) || (plotType === PlotTypleOptions.byCity && isObserverCity === true)) ?
+                  <div>Suspeitos: {suspect}</div>
+                  : <div></div>
+              }
+              {
+                (plotType === PlotTypleOptions.byCity && !isObserverCity) ?
+                  <div>Ativos: {active}</div>
+                  : <div></div>
+              }
             </div>
           </Popup>
         </Marker>
@@ -158,10 +194,10 @@ export default function CustomMap({ userLocation, geoJson, loading, plotType = '
           <>
             {renderCases()}
             {plotType === PlotTypleOptions.byCity ? (
-              <GeoJSON key={'pernambuco-geoJson'} data={geoJson} onEachFeature={onEachFeature} />
+              <GeoJSON key={'pernambuco-geoJson'} data={geoJson} />
             ) : (
-              <GeoJSON key={'recife-geoJson'} data={geoJson} onEachFeature={onEachFeature} />
-            )}
+                <GeoJSON key={'recife-geoJson'} data={geoJson} />
+              )}
           </>
         )}
       </Map>
