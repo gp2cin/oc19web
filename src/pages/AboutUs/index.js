@@ -24,13 +24,13 @@ export default function WhoWeAre() {
         <div className="contact-us-container col-md-12">
           <h1> Fale Conosco </h1>
           <div className="contact-container col-md-7">
-            <FiArrowRightCircle size={28} color="#b23137" /> <a rel="noopener noreferrer" target="_blank" href="https://sites.google.com/cin.ufpe.br/observatoriocovid-19/">Site do projeto Observatório Covid-19</a>
+            <FiArrowRightCircle size={28} color="#b23137" /> <a rel="noopener noreferrer" target="_blank" href="https://www.cin.ufpe.br/~ocovid19">Site do projeto Observatório Covid-19</a>
           </div>
           <div className="contact-container col-md-7">
             <FiMail size={28} color="#b23137" /> <a href="mailto:ocovid19@cin.ufpe.br">ocovid19@cin.ufpe.br</a>
           </div>
           <div className="contact-container col-md-7">
-            <FiInstagram size={28} color="#b23137" /> <a rel="noopener noreferrer" target="_blank" href="https://www.instagram.com/observatorio.covid.19/">Instagram</a>
+            <FiInstagram size={28} color="#b23137" /> <a rel="noopener noreferrer" target="_blank" href="https://www.instagram.com/observatorio.covid.19/">@observatorio.covid.19</a>
           </div>
         </div>
       </div>
