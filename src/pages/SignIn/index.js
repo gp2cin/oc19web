@@ -9,7 +9,6 @@ import { login } from '../../services/auth';
 import Header from '../../components/Header';
 import { FiUser } from 'react-icons/fi';
 
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
@@ -92,13 +91,13 @@ export default function SignIn() {
           <button className={'btn btn-success col-md-12'} type={'submit'}>
             {'Entrar'}
           </button>
-          <Grid container>
+          {/* <Grid container>
             <Grid item xs>
               <Link to="#" variant="body2" className={'btn disabled'} >
                 Esqueci a senha
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </form>
       </div>
       <Copyright />

@@ -13,6 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import DatePicker from 'react-datepicker';
+import MaskedInput from 'react-maskedinput';
 
 import Logo from '../../assets/ocovid19-logo.png';
 import useStyles from './styles';
@@ -144,6 +145,10 @@ export default function SignUp() {
                             locale={'BR'}
                             selected={controlDate}
                             onChange={(controlDate) => handleBirthdate(controlDate)}
+                            customInput={
+                                <MaskedInput
+                                    mask="11/11/1111" placeholder="DD/MM/AAAA" />
+                            }
                         />
                     </div>
                     <button className={'btn btn-primary col-md-12'} type={'submit'}>

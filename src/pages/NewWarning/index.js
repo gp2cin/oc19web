@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+// import Datefield from '../../components/Datefield';
+import MaskedInput from 'react-maskedinput';
 import DatePicker from 'react-datepicker';
 import { useHistory } from 'react-router-dom';
 
@@ -28,7 +30,7 @@ export default function WarningCreation() {
 
   const [symptomsControl, setSymptomsControl] = useState([]);
   console.log(date);
-  
+
   //Symptoms object wich goes to the backend
   const symptoms = {
     headache: false,
@@ -212,8 +214,8 @@ export default function WarningCreation() {
   const [isRequiredQ7, setIsRequiredQ7] = useState('');
 
   function handleBirthdate(d) {
-    
-    
+
+
     if (d !== null) {
       const s = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
       setDate(d);
@@ -260,7 +262,7 @@ export default function WarningCreation() {
         setSendDisabled(true);
         navigator.geolocation.getCurrentPosition((position) => {
           console.log(position);
-          
+
           const address = {
             location: {
               type: 'Point',
@@ -269,7 +271,7 @@ export default function WarningCreation() {
           };
 
           if (diseasesControl.length !== 0) {
-            for (var key in diseases) {
+            for (let key in diseases) {
               for (const i in diseasesControl) {
                 if (key === diseasesControl[i].value) {
                   diseases[key] = true;
@@ -279,7 +281,7 @@ export default function WarningCreation() {
           }
 
           if (symptomsControl.length !== 0) {
-            for (var simpKey in symptoms) {
+            for (let simpKey in symptoms) {
               for (const i in symptomsControl) {
                 if (simpKey === symptomsControl[i].value) {
                   symptoms[simpKey] = true;
@@ -395,13 +397,19 @@ export default function WarningCreation() {
                 </div>
                 <div className={'birthdate-container col-md-3'}>
                   <p>{'Data de nascimento'}</p>
+                  {/* <Datefield /> */}
                   <DatePicker
+                    placeholderText="DD/MM/AAAA"
                     maxDate={new Date()}
                     className={'date-picker form-control'}
                     dateFormat={'dd/MM/yyyy'}
                     locale={'BR'}
                     selected={date}
                     onChange={(date) => handleBirthdate(date)}
+                    customInput={
+                      <MaskedInput
+                        mask="11/11/1111" placeholder="DD/MM/AAAA" />
+                    }
                   />
                 </div>
               </div>
@@ -514,7 +522,7 @@ export default function WarningCreation() {
               </div>
             </form>
             <section className={'col-md-12'}>
-              <p>{'Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.'}</p>
+              {/* <p>{'Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.'}</p> */}
               <button disabled={sendDisabled} onClick={handleNewWarning} className={'btn btn-primary col-md-12'} type={'submit'}>
                 {'Enviar'}
               </button>
