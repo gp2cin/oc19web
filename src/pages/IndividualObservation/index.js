@@ -7,6 +7,8 @@ import api from '../../services/api';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import formatName from '../../utils/formatName';
+
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
@@ -15,6 +17,7 @@ import CustomSnackBar from '../../components/CustomSnackBar';
 
 export default function IndividualObservation() {
   const [city, setCity] = useState('');
+  const [city_ca, setCity_ca] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const [neighborhood_name, setNeighborhood_name] = useState('');
   //List of Recife's neighborhoods from backend
@@ -30,9 +33,8 @@ export default function IndividualObservation() {
   // Snack
   const [snack, setSnack] = useState({ type: 'sucess', message: '' });
   const [openSnack, setOpenSnack] = useState(false);
-
   const [case_type, setCaseType] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState();
   const [death_date, setDeathDate] = useState('');
   const [case_name, setCaseName] = useState('');
   const [case_age, setCaseAge] = useState();
@@ -108,10 +110,64 @@ export default function IndividualObservation() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+ 
+
+  function handleNewObserverReport(e) {
+    e.preventDefault();
+    if (isRequiredFilled()) {
+      setSendDisabled(true);
+      if (diseasesControl.length !== 0) {
+        for (var key in diseases) {
+          for (const i in diseasesControl) {
+            if (key === diseasesControl[i].value) {
+              diseases[key] = true;
+            }
+          }
+        }
+      }
+      const data = {
+        city,
+        neighborhood,
+        neighborhood_name,
+        report_type,
+        case_type,
+        death_date,
+        case_name,
+        case_age,
+        case_gender,
+        diseases,
+        household_contact_confirmed_case,
+        info_source,
+        info_source_link,
+        general_comments,
+      };
+      postObserverReport(data);
+    }
+  }
+
+  async function postObserverReport(data) {
+    try {
+      await api.post('api/v1/observer-report', data).then((d) => {
+        console.log(d);
+      });
+      //console.log(data);
+      setSnack({ type: 'success', message: 'Cadastrado com sucesso' });
+      setOpenSnack(true);
+
+      setSendDisabled(false);
+      setTimeout(() => history.push('/'), 3000);
+    } catch (error) {
+      setSnack({ type: 'error', message: 'Erro ao cadastrar, tente novamente' });
+      setOpenSnack(true);
+      setSendDisabled(false);
+      console.log(data);
+    }
+  }
+
   async function handleCityChoice(choice) {
     if (choice !== null) {
       setCity(choice.label);
-
+      setCity_ca(formatName(choice.label));
       //Get Recife's neighborhoods form backend
       if (choice.label === 'Recife') {
         console.log('Recife!!');
@@ -182,86 +238,24 @@ export default function IndividualObservation() {
           household_contact_confirmed_case === {} ||
           info_source === '')
       ) {
+        console.log(case_type);
+        console.log(caseHadPreExistingDiseases);
+        console.log(household_contact_confirmed_case);
+        console.log(info_source);
         setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios' });
         setOpenSnack(true);
         return false;
       }
-      if (case_type === 'death' && report_type === 'individual' && death_date === '') {
-        setSnack({
-          type: 'error',
-          message: 'Você precisa preencher todos os campos obrigatórios! Preencha a data de morte.',
-        });
-        setOpenSnack(true);
-
-        return false;
-      }
       return true;
     }
-    setSnack({
-      type: 'error',
-      message: 'Você precisa preencher todos os campos obrigatórios!',
-    });
+    setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios' });
     setOpenSnack(true);
-
     return false;
   }
-
   function handleNeighborhoodChoice(choice) {
     if (choice !== null) {
       setNeighborhood(choice.value);
       setNeighborhood_name(choice.label);
-    }
-  }
-
-  function handleNewObserverReport(e) {
-    e.preventDefault();
-    if (isRequiredFilled()) {
-      setSendDisabled(true);
-      if (diseasesControl.length !== 0) {
-        for (var key in diseases) {
-          for (const i in diseasesControl) {
-            if (key === diseasesControl[i].value) {
-              diseases[key] = true;
-            }
-          }
-        }
-      }
-      const data = {
-        city,
-        neighborhood,
-        neighborhood_name,
-        report_type,
-        case_type,
-        death_date,
-        case_name,
-        case_age,
-        case_gender,
-        diseases,
-        household_contact_confirmed_case,
-        info_source,
-        info_source_link,
-        general_comments,
-      };
-      postObserverReport(data);
-    }
-  }
-
-  async function postObserverReport(data) {
-    try {
-      await api.post('api/v1/observer-report', data).then((d) => {
-        console.log(d);
-      });
-      //console.log(data);
-      setSnack({ type: 'error', message: 'Cadastrado com sucesso' });
-      setOpenSnack(true);
-
-      setSendDisabled(false);
-      setTimeout(() => history.push('/'), 3000)
-    } catch (error) {
-      setSnack({ type: 'error', message: 'Erro ao cadastrar, tente novamente' });
-      setOpenSnack(true);
-      setSendDisabled(false);
-      console.log(data);
     }
   }
 
@@ -326,7 +320,7 @@ export default function IndividualObservation() {
           </div>
           {case_type === 'death' && (
             <div className="death-date col-md-9">
-              <p>{'Em caso de óbito, informe a data do óbito:*'}</p>
+              <p>{'Data do óbito:'}</p>
               <DatePicker
                 maxDate={new Date()}
                 className={'date-picker form-control col-md-9'}

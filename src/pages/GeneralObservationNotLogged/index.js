@@ -4,6 +4,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import api from '../../services/api';
 import { awsApi } from '../../services/api';
+import formatName from '../../utils/formatName';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CustomSnackBar from '../../components/CustomSnackBar';
@@ -12,6 +13,7 @@ export default function GeneralObservation() {
   const [observer_name, set_observer_name] = useState('');
   const [observer_email, set_observer_email] = useState('');
   const [city, setCity] = useState('');
+  const [city_ca, setCity_ca] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const [observation, setObservation] = useState('');
   const [neighborhood_name, setNeighborhood_name] = useState('');
@@ -35,33 +37,10 @@ export default function GeneralObservation() {
 
   const history = useHistory();
 
-  useEffect(() => {
-    //base de dados do IBGE, código de Pernambuco: 26
-    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/26/municipios`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(cities);
-        let arr = [];
-        for (const i in data) {
-          const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
-          arr = [...arr, itemToAdd];
-        }
-        setCities(arr);
-      })
-      .catch(() => {
-        setSnack({
-          type: 'error',
-          message: 'Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ',
-        });
-        setOpenSnack(true);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   async function handleCityChoice(choice) {
     if (choice !== null) {
       setCity(choice.label);
-
+      setCity_ca(formatName(choice.label));
       //Get Recife's neighborhoods form backend
       if (choice.label === 'Recife') {
         console.log('Recife!!');
@@ -91,21 +70,23 @@ export default function GeneralObservation() {
             console.log('BAIRROS NULOS');
           }
         } catch (error) {
-          console.log(`Erro ao buscar bairros ${error}`);
+          setSnack({
+            type: 'error',
+            message: 'Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ',
+          });
+          setOpenSnack(true);
+
           setLoading(false);
         }
+
+        //Get Recife's neighborhoods form backend
       } else {
         setNeighborhoods([]);
         setIsRecifeSelected(false);
         setLoading(false);
       }
-    } else {
-      setNeighborhoods([]);
-      setIsRecifeSelected(false);
-      setLoading(false);
     }
   }
-
   function handleNeighborhoodChoice(choice) {
     if (choice !== null) {
       setNeighborhood(choice.value);
@@ -136,6 +117,7 @@ export default function GeneralObservation() {
         observer_name,
         observer_email,
         city,
+        city_ca,
         neighborhood,
         neighborhood_name,
         report_type,
@@ -151,6 +133,58 @@ export default function GeneralObservation() {
     if (files && files.length > 0) {
       const file = files[0];
       setImage(file);
+    }
+  }
+
+  async function postObservation(data) {
+    let errorMessage = 'Erro ao cadastrar observação.';
+    try {
+      const response = await api.post('api/v1/general-observation', data);
+      console.log(response);
+      if (response.data.generalObservation && image !== null && image !== undefined) {
+        errorMessage = 'Observação cadastrada, mas erro ao buscar URL de cadastro da imagem.';
+        console.log(response.data.generalObservation._id);
+        setUploadMessage('Uploading...');
+        const options = {
+          params: {
+            Key: response.data.generalObservation._id,
+            ContentType: image.type,
+          },
+          headers: {
+            'Content-Type': image.type,
+          },
+        };
+        const res = await api.get('api/v1/generate-put-url', options);
+        if (res.data.putURL !== null && res.data.putURL !== undefined) {
+          console.log(res.data.putURL);
+          errorMessage = 'Observação cadastrada, mas erro ao cadastrar imagem da observação.';
+          await awsApi.put(res.data.putURL, image, options);
+          setUploadMessage('Upload Successful!');
+          setSnack({ type: 'success', message: 'Observação cadastrada com sucesso' });
+          setOpenSnack(true);
+          setSendDisabled(false);
+          history.push('/');
+        } else {
+          setSnack({ type: 'success', message: 'Observação cadastrada com sucesso' });
+          setOpenSnack(true);
+          setSendDisabled(false);
+          history.push('/');
+        }
+      } else if (response.data.generalObservation) {
+        setSnack({ type: 'success', message: 'Observação cadastrada com sucesso' });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        history.push('/');
+      } else {
+        setSnack({ type: 'error', message: 'Erro ao cadastrar a observação' });
+        setOpenSnack(true);
+        setSendDisabled(false);
+      }
+    } catch (error) {
+      setUploadMessage('');
+      alert(`${errorMessage} ${error}`);
+      setSendDisabled(false);
+      console.log(data);
     }
   }
 
@@ -181,7 +215,7 @@ export default function GeneralObservation() {
       }
       //console.log(data);
 
-      setSnack({ type: 'sucess', message: 'Observação cadastrada com sucesso' });
+      setSnack({ type: 'success', message: 'Observação cadastrada com sucesso' });
       setOpenSnack(true);
 
       setTimeout(() => history.push('/'), 3000);
@@ -199,6 +233,7 @@ export default function GeneralObservation() {
     <div>
       <CustomSnackBar open={openSnack} setOpen={setOpenSnack} message={snack.message} type={snack.type} />
       <div className="general-observation-container">
+        <p>Campos com o símbolo " * " devem ser respondidos obrigatoriamente.</p>
         <div className="first-inputs col-md-12">
           <div className="name col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
             <p>Seu nome:*</p>

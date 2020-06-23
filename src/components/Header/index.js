@@ -26,7 +26,6 @@ export default class Header extends Component {
     this.setState({ isAuth: false });
     this.setState({ snack: { message: 'Deslogado com sucesso' }, openSnack: true });
     logout();
-   
 
     setTimeout(() => this.setRedirect(), 3000);
   };
@@ -131,7 +130,7 @@ export default class Header extends Component {
               </div>
               <div className={'mr-2'}>
                 <Link to="/warnings/new" className={'btn btn btn-outline-light my-2 my-sm-0'} type="button">
-                  {'Informar novo caso'}
+                  {'Fazer auto observação'}
                 </Link>
               </div>
               <div>

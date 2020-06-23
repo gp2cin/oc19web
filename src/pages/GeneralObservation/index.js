@@ -5,6 +5,8 @@ import makeAnimated from 'react-select/animated';
 import api from '../../services/api';
 import { awsApi } from '../../services/api';
 
+import formatName from '../../utils/formatName';
+
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CustomSnackBar from '../../components/CustomSnackBar';
 
@@ -12,6 +14,7 @@ export default function GeneralObservation() {
   const observer_name = '';
   const observer_email = '';
   const [city, setCity] = useState('');
+  const [city_ca, setCity_ca] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const [observation, setObservation] = useState('');
   const [neighborhood_name, setNeighborhood_name] = useState('');
@@ -30,38 +33,15 @@ export default function GeneralObservation() {
   const [uploadMessage, setUploadMessage] = useState('');
 
   // Snack
-  const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+  const [snack, setSnack] = useState({ type: 'success', message: '' });
   const [openSnack, setOpenSnack] = useState(false);
 
   const history = useHistory();
 
-  useEffect(() => {
-    //base de dados do IBGE, código de Pernambuco: 26
-    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/26/municipios`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(cities);
-        let arr = [];
-        for (const i in data) {
-          const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
-          arr = [...arr, itemToAdd];
-        }
-        setCities(arr);
-      })
-      .catch((error) => {
-        setSnack({
-          type: 'errror',
-          message: 'Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página.',
-        });
-        setOpenSnack(true);
-      });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
   async function handleCityChoice(choice) {
     if (choice !== null) {
       setCity(choice.label);
-
+      setCity_ca(formatName(choice.label));
       //Get Recife's neighborhoods form backend
       if (choice.label === 'Recife') {
         console.log('Recife!!');
@@ -91,28 +71,22 @@ export default function GeneralObservation() {
             console.log('BAIRROS NULOS');
           }
         } catch (error) {
-          console.log(`Erro ao buscar bairros ${error}`);
+          setSnack({
+            type: 'errror',
+            message: 'Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página.',
+          });
+          setOpenSnack(true);
           setLoading(false);
         }
+
+        //Get Recife's neighborhoods form backend
       } else {
         setNeighborhoods([]);
         setIsRecifeSelected(false);
         setLoading(false);
       }
-    } else {
-      setNeighborhoods([]);
-      setIsRecifeSelected(false);
-      setLoading(false);
     }
   }
-
-  function handleNeighborhoodChoice(choice) {
-    if (choice !== null) {
-      setNeighborhood(choice.value);
-      setNeighborhood_name(choice.label);
-    }
-  }
-
   function isRequiredFilled() {
     if (city !== '' && neighborhood_name !== '' && observation !== '') {
       return true;
@@ -122,7 +96,6 @@ export default function GeneralObservation() {
         message: 'Você precisa preencher todos os campos obrigatórios! ',
       });
       setOpenSnack(true);
-
       return false;
     }
   }
@@ -134,6 +107,7 @@ export default function GeneralObservation() {
         observer_name,
         observer_email,
         city,
+        city_ca,
         neighborhood,
         neighborhood_name,
         report_type,
@@ -144,6 +118,12 @@ export default function GeneralObservation() {
     }
   }
 
+  function handleNeighborhoodChoice(choice) {
+    if (choice !== null) {
+      setNeighborhood(choice.value);
+      setNeighborhood_name(choice.label);
+    }
+  }
   async function postObservation(data) {
     let errorMessage = 'Erro ao cadastrar observação.';
     try {

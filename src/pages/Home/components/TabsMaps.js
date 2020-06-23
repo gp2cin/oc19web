@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import Box from '@material-ui/core/Box';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import CustomMap from './CustomMap';
 
@@ -65,6 +66,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const CustomTooltip = withStyles((theme) => ({
+  tooltip: {
+    boxShadow: theme.shadows[1],
+    fontSize: 14,
+  },
+}))(Tooltip);
+
 export default function ScrollableTabsButtonAuto({ userAddress }) {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
@@ -109,10 +117,16 @@ export default function ScrollableTabsButtonAuto({ userAddress }) {
           scrollButtons="auto"
           aria-label="scrollable auto tabs example"
         >
-          <Tab label="Casos por município" {...a11yProps(0)} className={classes.tab} />
-          <Tab label="Observações por município" {...a11yProps(1)} className={classes.tab} />
+          <CustomTooltip title="Dados provenientes do Instituto para Redução de Riscos e Desastres de Pernambuco (IRRD).">
+            <Tab label="Casos por município" {...a11yProps(0)} className={classes.tab} />
+          </CustomTooltip>
+          <CustomTooltip title="Dados provenientes da Rede de Observadores OCovid19.">
+            <Tab label="Observações por município" {...a11yProps(1)} className={classes.tab} />
+          </CustomTooltip>
           {/* <Tab label="Auto casos por município" {...a11yProps(1)} className={classes.tab} /> */}
-          <Tab label="Observações por bairro" {...a11yProps(2)} className={classes.tab} />
+          <CustomTooltip title="Dados provenientes da Rede de Observadores OCovid19.">
+            <Tab label="Observações por bairro" {...a11yProps(2)} className={classes.tab} />
+          </CustomTooltip>
         </Tabs>
       </AppBar>
       <TabPanel value={value} index={0}>
