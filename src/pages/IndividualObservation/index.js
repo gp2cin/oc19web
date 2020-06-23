@@ -7,7 +7,7 @@ import api from '../../services/api';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-import formatName from '../../utils/formatName';
+// import formatName from '../../utils/formatName';
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -17,7 +17,7 @@ import CustomSnackBar from '../../components/CustomSnackBar';
 
 export default function IndividualObservation() {
   const [city, setCity] = useState('');
-  const [city_ca, setCity_ca] = useState('');
+  // const [city_ca, setCity_ca] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const [neighborhood_name, setNeighborhood_name] = useState('');
   //List of Recife's neighborhoods from backend
@@ -167,7 +167,7 @@ export default function IndividualObservation() {
   async function handleCityChoice(choice) {
     if (choice !== null) {
       setCity(choice.label);
-      setCity_ca(formatName(choice.label));
+      // setCity_ca(formatName(choice.label));
       //Get Recife's neighborhoods form backend
       if (choice.label === 'Recife') {
         console.log('Recife!!');

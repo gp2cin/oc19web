@@ -36,6 +36,24 @@ export default function GeneralObservation() {
   const [openSnack, setOpenSnack] = useState(false);
 
   const history = useHistory();
+  useEffect(() => {
+    //base de dados do IBGE, código de Pernambuco: 26
+    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/26/municipios`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(cities);
+        let arr = [];
+        for (const i in data) {
+          const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
+          arr = [...arr, itemToAdd];
+        }
+        setCities(arr);
+      })
+      .catch((error) => {
+        alert(`Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleCityChoice(choice) {
     if (choice !== null) {
@@ -137,64 +155,10 @@ export default function GeneralObservation() {
   }
 
   async function postObservation(data) {
-    let errorMessage = 'Erro ao cadastrar observação.';
     try {
       const response = await api.post('api/v1/general-observation', data);
       console.log(response);
       if (response.data.generalObservation && image !== null && image !== undefined) {
-        errorMessage = 'Observação cadastrada, mas erro ao buscar URL de cadastro da imagem.';
-        console.log(response.data.generalObservation._id);
-        setUploadMessage('Uploading...');
-        const options = {
-          params: {
-            Key: response.data.generalObservation._id,
-            ContentType: image.type,
-          },
-          headers: {
-            'Content-Type': image.type,
-          },
-        };
-        const res = await api.get('api/v1/generate-put-url', options);
-        if (res.data.putURL !== null && res.data.putURL !== undefined) {
-          console.log(res.data.putURL);
-          errorMessage = 'Observação cadastrada, mas erro ao cadastrar imagem da observação.';
-          await awsApi.put(res.data.putURL, image, options);
-          setUploadMessage('Upload Successful!');
-          setSnack({ type: 'success', message: 'Observação cadastrada com sucesso' });
-          setOpenSnack(true);
-          setSendDisabled(false);
-          history.push('/');
-        } else {
-          setSnack({ type: 'success', message: 'Observação cadastrada com sucesso' });
-          setOpenSnack(true);
-          setSendDisabled(false);
-          history.push('/');
-        }
-      } else if (response.data.generalObservation) {
-        setSnack({ type: 'success', message: 'Observação cadastrada com sucesso' });
-        setOpenSnack(true);
-        setSendDisabled(false);
-        history.push('/');
-      } else {
-        setSnack({ type: 'error', message: 'Erro ao cadastrar a observação' });
-        setOpenSnack(true);
-        setSendDisabled(false);
-      }
-    } catch (error) {
-      setUploadMessage('');
-      alert(`${errorMessage} ${error}`);
-      setSendDisabled(false);
-      console.log(data);
-    }
-  }
-
-  async function postObservation(data) {
-    let errorMessage = 'Erro ao cadastrar observação.';
-    try {
-      const response = await api.post('api/v1/general-observation', data);
-      console.log(response);
-      if (response.data.generalObservation && image !== null && image !== undefined) {
-        errorMessage = 'Erro ao buscar URL de cadastro da imagem.';
         console.log(response.data.generalObservation._id);
         setUploadMessage('Uploading...');
         const options = {
@@ -209,7 +173,7 @@ export default function GeneralObservation() {
         const res = await api.get('api/v1/generate-put-url', options);
 
         console.log(res.data.putURL);
-        errorMessage = 'Erro ao cadastrar imagem da observação.';
+
         await awsApi.put(res.data.putURL, image, options);
         setUploadMessage('Upload Successful!');
       }

@@ -37,6 +37,29 @@ export default function GeneralObservation() {
   const [openSnack, setOpenSnack] = useState(false);
 
   const history = useHistory();
+  
+  useEffect(() => {
+    //base de dados do IBGE, código de Pernambuco: 26
+    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/26/municipios`)
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(cities);
+        let arr = [];
+        for (const i in data) {
+          const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
+          arr = [...arr, itemToAdd];
+        }
+        setCities(arr);
+      })
+      .catch((error) => {
+        setSnack({
+          type: 'errror',
+          message: 'Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página.',
+        });
+        setOpenSnack(true);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   async function handleCityChoice(choice) {
     if (choice !== null) {
