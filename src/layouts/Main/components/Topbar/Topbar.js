@@ -29,7 +29,7 @@ const Topbar = (props) => {
   const classes = useStyles();
 
   return (
-    <AppBar {...rest} style={{ backgroundColor: '#B23137' }} className={clsx(classes.root, className)}>
+    <AppBar elevation={8} {...rest} style={{ backgroundColor: '#B23137' }} className={clsx(classes.root, className)}>
       <Toolbar>
         <RouterLink to="/">
           <img width={100} alt="Logo" src={Logo} />

@@ -9,28 +9,25 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
+    margin: theme.spacing(1),
     minHeight: 'fit-content',
   },
 
   name: {
-    marginTop: theme.spacing(1),
+    fontSize: '16px',
   },
 }));
 
 const Profile = (props) => {
   const { className, ...rest } = props;
-  // const user = localStorage.getItem('')
-  const classes = useStyles();
+  let name = localStorage.getItem('NAME');
 
-  const user = {
-    name: 'Shen Zhi',
-  };
+  const classes = useStyles();
 
   return (
     <div {...rest} className={clsx(classes.root, className)}>
-      <Typography className={classes.name} variant="h4">
-        Olá, {user.name}
+      <Typography className={classes.name} variant="h5">
+        Olá, {name}
       </Typography>
     </div>
   );

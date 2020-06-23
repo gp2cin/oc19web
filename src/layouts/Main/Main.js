@@ -15,11 +15,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   shiftContent: {
-    paddingLeft: 240,
+    paddingLeft: 220,
   },
   content: {
     height: '100%',
-    padding: 24,
+    padding: theme.spacing(3),
+    display: 'flex',
+    flexDirection: 'column',
   },
 }));
 
@@ -54,7 +56,7 @@ const Main = (props) => {
       <Topbar onSidebarOpen={handleSidebarOpen} />
       <Sidebar onClose={handleSidebarClose} open={shouldOpenSidebar} variant={isDesktop ? 'persistent' : 'temporary'} />
       <main className={classes.content}>
-        {children}
+        <div style={{ flexGrow: 1 }}>{children}</div>
         <Footer />
       </main>
     </div>
