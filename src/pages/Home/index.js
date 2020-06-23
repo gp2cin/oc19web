@@ -12,6 +12,11 @@ import TabsMaps from './components/TabsMaps';
 import { Link } from '@material-ui/core';
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    console.log(props);
+  }
+
   state = {
     mapHidden: false,
     layerHidden: false,
@@ -136,7 +141,7 @@ class Home extends Component {
     return (
       <Container className={'row'}>
         <Header />
-        <div className='marginContainer'>
+        <div className="marginContainer">
           <TabsMaps userAddress={userAddress} />
           {/* <Map center={userAddress.position} maxZoom={18} zoom={mapInfo.zoom} className={'homeMap'}>
           <HeatmapLayer
@@ -268,7 +273,7 @@ class Home extends Component {
 
               <div
                 className="mx-auto"
-              // style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}
+                // style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}
               >
                 <span
                   style={{ width: '80%', fontSize: '5em', borderRadius: '21px 21px 0 0' }}

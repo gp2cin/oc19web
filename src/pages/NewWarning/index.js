@@ -18,6 +18,7 @@ import Header from '../../components/Header';
 // import Footer from '../../components/Footer';
 import { Container } from './styles';
 import api from '../../services/api';
+import CustomSnackBar from '../../components/CustomSnackBar';
 
 export default function WarningCreation() {
   const [sendDisabled, setSendDisabled] = useState(false);
@@ -25,11 +26,14 @@ export default function WarningCreation() {
   const [date, setDate] = useState(null);
   const [birthdate, setBirthdate] = useState('');
 
+  // snackbar
+  const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+  const [openSnack, setOpenSnack] = useState(false);
+
   const animatedComponents = makeAnimated();
   const history = useHistory();
 
   const [symptomsControl, setSymptomsControl] = useState([]);
-  console.log(date);
 
   //Symptoms object wich goes to the backend
   const symptoms = {
@@ -214,8 +218,6 @@ export default function WarningCreation() {
   const [isRequiredQ7, setIsRequiredQ7] = useState('');
 
   function handleBirthdate(d) {
-
-
     if (d !== null) {
       const s = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
       setDate(d);
@@ -245,11 +247,15 @@ export default function WarningCreation() {
         console.log(d);
       });
       //console.log(data);
-      alert('Caso cadastrado com sucesso');
+
+      setSnack({ type: 'sucess', message: 'Caso cadastrado com sucesso' });
+      setOpenSnack(true);
       setSendDisabled(false);
-      history.push('/');
+      setTimeout(() => history.push('/'), 3000);
     } catch (error) {
-      alert(`Erro ao cadastrar caso, tente novamente. ${error}`);
+      setSnack({ type: 'error', message: 'Erro ao cadastrar caso, tente novamente.' });
+      setOpenSnack(true);
+
       setSendDisabled(false);
       console.log(data);
     }
@@ -308,7 +314,6 @@ export default function WarningCreation() {
           postWarning(data);
         }, handleLocationError);
       } else {
-        alert('Geolocation is not supported by this browser.');
         setSendDisabled(false);
       }
     }
@@ -317,23 +322,23 @@ export default function WarningCreation() {
   function handleLocationError(error) {
     switch (error.code) {
       case error.PERMISSION_DENIED:
-        alert("User denied the request for Geolocation.");
+        alert('User denied the request for Geolocation.');
         setSendDisabled(false);
         break;
       case error.POSITION_UNAVAILABLE:
-        alert("Location information is unavailable.");
+        alert('Location information is unavailable.');
         setSendDisabled(false);
         break;
       case error.TIMEOUT:
-        alert("The request to get user location timed out.");
+        alert('The request to get user location timed out.');
         setSendDisabled(false);
         break;
       case error.UNKNOWN_ERROR:
-        alert("An unknown error occurred.");
+        alert('An unknown error occurred.');
         setSendDisabled(false);
         break;
       default:
-        alert("An unknown error occurred.");
+        alert('An unknown error occurred.');
         setSendDisabled(false);
     }
   }
@@ -342,10 +347,10 @@ export default function WarningCreation() {
     if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
       return true;
     }
-    alert('Você preencheu um endereço de e-mail invávido!');
+    setSnack({ type: 'error', message: 'Você preencheu um endereço de e-mail inválido!' });
+    setOpenSnack(true);
     return false;
   }
-
 
   function isRequiredFilled() {
     if (
@@ -358,22 +363,26 @@ export default function WarningCreation() {
       covid_tested !== {}
     ) {
       if (had_evaluation_for_symptoms === true && covid19_was_discarded === {}) {
-        alert('Você precisa preencher todos os campos obrigatórios!');
+        setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
+        setOpenSnack(true);
         return false;
       }
       if (covid_tested === true && covid_result === {}) {
-        alert('Você precisa preencher todos os campos obrigatórios!');
+        setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
+        setOpenSnack(true);
         return false;
       }
       return true;
     }
-    alert('Você precisa preencher todos os campos obrigatórios!');
+    setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
+    setOpenSnack(true);
     return false;
   }
 
   return (
     <div style={{ overflow: 'auto' }}>
       <Header />
+      <CustomSnackBar open={openSnack} setOpen={setOpenSnack} message={snack.message} type={snack.type} />
       <Container>
         <div className={'new-warning-container'}>
           <section>
