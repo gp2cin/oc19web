@@ -137,22 +137,19 @@ const Routes = () => (
   <BrowserRouter>
     <Switch>
       <Route exact path={'/'} component={() => <PageWithContainer Page={Home} />} />
-      <Route exact path={'/warnings/new'} component={() => <PageWithContainer Page={<NewWarning />} />} />
-      <Route path={'/official-cases'} component={() => <PageWithContainer Page={<OfficialCases />} />} />
-      <PrivateRouteObserver
-        path={'/observer-report'}
-        component={() => <PageWithContainer Page={<ObserverReport />} />}
-      />
-      <Route path={'/about-us'} component={() => <PageWithContainer Page={<AboutUs />} />} />
+      <Route exact path={'/warnings/new'} component={() => <PageWithContainer Page={NewWarning} />} />
+      <Route path={'/official-cases'} component={() => <PageWithContainer Page={OfficialCases} />} />
+      <PrivateRouteObserver path={'/observer-report'} component={() => <PageWithContainer Page={ObserverReport} />} />
+      <Route path={'/about-us'} component={() => <PageWithContainer Page={AboutUs} />} />
       <GeneralObservationRoute
         path={'/general-observation'}
-        component={() => <PageWithContainer Page={<GeneralObservationNotLogged />} />}
+        component={() => <PageWithContainer Page={GeneralObservationNotLogged} />}
       />
-      <Route path={'/signin'} component={() => <PageWithContainer Page={<SignIn />} />} />
-      <Route path={'/signup'} component={() => <PageWithContainer Page={<SignUp />} />} />
-      <Route path={'/my-account'} component={() => <PageWithContainer Page={<MyAccount />} />} />
+      <Route path={'/signin'} component={() => <PageWithContainer Page={SignIn} />} />
+      <Route path={'/signup'} component={() => <PageWithContainer Page={SignUp} />} />
+      <Route path={'/my-account'} component={() => <PageWithContainer Page={MyAccount} />} />
 
-      <RouteWithLayout component={<AnalystHome />} exact layout={MainLayout} path="/dashboard" />
+      <RouteWithLayout component={AnalystHome} exact layout={MainLayout} path="/dashboard" />
       <Route path={'*'} component={() => <h1>Page not found</h1>} />
     </Switch>
   </BrowserRouter>

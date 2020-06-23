@@ -6,29 +6,30 @@ import { useMediaQuery } from '@material-ui/core';
 
 import { Sidebar, Topbar, Footer } from './components';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles((theme) => ({
   root: {
     paddingTop: 56,
     height: '100%',
     [theme.breakpoints.up('sm')]: {
-      paddingTop: 64
-    }
+      paddingTop: 64,
+    },
   },
   shiftContent: {
-    paddingLeft: 240
+    paddingLeft: 240,
   },
   content: {
-    height: '100%'
-  }
+    height: '100%',
+    padding: 24,
+  },
 }));
 
-const Main = props => {
+const Main = (props) => {
   const { children } = props;
 
   const classes = useStyles();
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up('lg'), {
-    defaultMatches: true
+    defaultMatches: true,
   });
 
   const [openSidebar, setOpenSidebar] = useState(false);
@@ -47,15 +48,11 @@ const Main = props => {
     <div
       className={clsx({
         [classes.root]: true,
-        [classes.shiftContent]: isDesktop
+        [classes.shiftContent]: isDesktop,
       })}
     >
       <Topbar onSidebarOpen={handleSidebarOpen} />
-      <Sidebar
-        onClose={handleSidebarClose}
-        open={shouldOpenSidebar}
-        variant={isDesktop ? 'persistent' : 'temporary'}
-      />
+      <Sidebar onClose={handleSidebarClose} open={shouldOpenSidebar} variant={isDesktop ? 'persistent' : 'temporary'} />
       <main className={classes.content}>
         {children}
         <Footer />
@@ -65,7 +62,7 @@ const Main = props => {
 };
 
 Main.propTypes = {
-  children: PropTypes.node
+  children: PropTypes.node,
 };
 
 export default Main;
