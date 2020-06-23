@@ -3,31 +3,41 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import { isAuthenticated, isAuthenticatedObserver } from '../services/auth';
 
-import Home from '../pages/Home';
-import SignIn from '../pages/SignIn';
-import SignUp from '../pages/SignUp';
-import NewWarning from '../pages/NewWarning';
-import OfficialCases from '../pages/OfficialCases';
-import ObserverReport from '../pages/ObserverReport';
-import MyAccount from '../pages/MyAccount';
-import AboutUs from '../pages/AboutUs';
-import GeneralObservationNotLogged from '../pages/GeneralObservationNotLogged';
+import Home from '../pages/GeneralWebsite/Home';
+import SignIn from '../pages/GeneralWebsite/SignIn';
+import SignUp from '../pages/GeneralWebsite/SignUp';
+import NewWarning from '../pages/GeneralWebsite/NewWarning';
+import OfficialCases from '../pages/GeneralWebsite/OfficialCases';
+import ObserverReport from '../pages/GeneralWebsite/ObserverReport';
+import MyAccount from '../pages/GeneralWebsite/MyAccount';
+import AboutUs from '../pages/GeneralWebsite/AboutUs';
+import GeneralObservationNotLogged from '../pages/GeneralWebsite/GeneralObservationNotLogged';
 import Header from '../components/Header';
-import { Container } from '../pages/ObserverReport/styles';
-import GeneralObservation from '../pages/GeneralObservation';
+import { Container } from '../pages/GeneralWebsite/ObserverReport/styles';
+import GeneralObservation from '../pages/GeneralWebsite/GeneralObservation';
 
-const PrivateRoute = ({ component: Component, ...rest }) => (
-  <Route
-    {...rest}
-    render={(props) =>
-      isAuthenticated() ? (
-        <Component {...props} />
-      ) : (
-          <Redirect to={{ pathname: '/', state: { from: props.location } }} />
-        )
-    }
-  />
-);
+// PageWithContainer
+import PageWithContainer from './PageWithContainer';
+
+// Dashboard
+import { RouteWithLayout } from '../components';
+import { Main as MainLayout } from '../layouts';
+
+// Analyst
+import { Home as AnalystHome } from '../pages/Analyst';
+
+// const PrivateRoute = ({ component: Component, ...rest }) => (
+//   <Route
+//     {...rest}
+//     render={(props) =>
+//       isAuthenticated() ? (
+//         <Component {...props} />
+//       ) : (
+//         <Redirect to={{ pathname: '/', state: { from: props.location } }} />
+//       )
+//     }
+//   />
+// );
 
 const PrivateRouteObserver = ({ component: Component, ...rest }) => (
   <Route
@@ -46,12 +56,11 @@ const PrivateRouteObserver = ({ component: Component, ...rest }) => (
 
         componentDidMount() {
           this._isMounted = true;
-          isAuthenticatedObserver()
-            .then(is => {
-              console.log('IS AUTHOBS1')
-              console.log(is)
-              this.setState({ isObs: is })
-            });
+          isAuthenticatedObserver().then((is) => {
+            console.log('IS AUTHOBS1');
+            console.log(is);
+            this.setState({ isObs: is });
+          });
         }
 
         componentWillUnmount() {
@@ -60,36 +69,28 @@ const PrivateRouteObserver = ({ component: Component, ...rest }) => (
 
         handleCheck = async () => {
           const temp = await isAuthenticatedObserver();
-          console.log('IS AUTHOBS')
-          console.log(temp)
+          console.log('IS AUTHOBS');
+          console.log(temp);
           this.setState({ isObs: temp });
-        }
+        };
         handleRedirect = () => {
           if (this.state.isObs === false) {
             console.log('BCSKHSJCANBJADSNCJK');
-            return <Redirect to='/' />
+            return <Redirect to="/" />;
           }
-        }
+        };
         render() {
           return (
             <div>
               {this.handleCheck}
-              <div>
-                {
-                  !this.state.isObs ?
-                    <Redirect to='/general-observation' /> :
-                    <Component {...props} />
-                }
-              </div>
+              <div>{!this.state.isObs ? <Redirect to="/general-observation" /> : <Component {...props} />}</div>
             </div>
           );
         }
       }
       return <Comp />;
-    }
-    }
+    }}
   />
-
 );
 
 const GeneralObservationRoute = ({ component: Component, ...rest }) => (
@@ -112,42 +113,46 @@ const GeneralObservationRoute = ({ component: Component, ...rest }) => (
           </div>
         );
       }
-      return (
-        isAuthenticated() ? (
-          <div style={{ overflow: 'auto' }}>
-            <Header />
-            <Container>
-              <div className="observer-report-container">
-                <div className="content row d-flex p-2">
-                  <form className="col-md-12">
-                    <GeneralObservation {...props} />
-                  </form>
-                </div>
+      return isAuthenticated() ? (
+        <div style={{ overflow: 'auto' }}>
+          <Header />
+          <Container>
+            <div className="observer-report-container">
+              <div className="content row d-flex p-2">
+                <form className="col-md-12">
+                  <GeneralObservation {...props} />
+                </form>
               </div>
-            </Container>
-          </div>
-        ) : (
-            <CompG />
-          )
-      )
-    }
-    }
+            </div>
+          </Container>
+        </div>
+      ) : (
+        <CompG />
+      );
+    }}
   />
 );
 
 const Routes = () => (
   <BrowserRouter>
     <Switch>
-      <Route exact path={'/'} component={Home} />
-      <Route exact path={'/warnings/new'} component={NewWarning} />
-      <Route path={'/official-cases'} component={OfficialCases} />
-      <PrivateRouteObserver path={'/observer-report'} component={ObserverReport} />
-      <Route path={'/about-us'} component={AboutUs} />
-      <GeneralObservationRoute path={'/general-observation'} component={GeneralObservationNotLogged} />
-      <Route path={'/signin'} component={SignIn} />
-      <Route path={'/signup'} component={SignUp} />
-      <Route path={'/my-account'} component={MyAccount} />
-      <PrivateRoute path={'/app'} component={() => <h1>App</h1>} />
+      <Route exact path={'/'} component={() => <PageWithContainer Page={Home} />} />
+      <Route exact path={'/warnings/new'} component={() => <PageWithContainer Page={<NewWarning />} />} />
+      <Route path={'/official-cases'} component={() => <PageWithContainer Page={<OfficialCases />} />} />
+      <PrivateRouteObserver
+        path={'/observer-report'}
+        component={() => <PageWithContainer Page={<ObserverReport />} />}
+      />
+      <Route path={'/about-us'} component={() => <PageWithContainer Page={<AboutUs />} />} />
+      <GeneralObservationRoute
+        path={'/general-observation'}
+        component={() => <PageWithContainer Page={<GeneralObservationNotLogged />} />}
+      />
+      <Route path={'/signin'} component={() => <PageWithContainer Page={<SignIn />} />} />
+      <Route path={'/signup'} component={() => <PageWithContainer Page={<SignUp />} />} />
+      <Route path={'/my-account'} component={() => <PageWithContainer Page={<MyAccount />} />} />
+
+      <RouteWithLayout component={<AnalystHome />} exact layout={MainLayout} path="/dashboard" />
       <Route path={'*'} component={() => <h1>Page not found</h1>} />
     </Switch>
   </BrowserRouter>
