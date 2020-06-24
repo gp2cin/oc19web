@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { FiUserPlus } from 'react-icons/fi';
+import MaskedInput from 'react-maskedinput';
 import api from '../../../services/api';
 import { login } from '../../../services/auth';
 import Header from '../../../components/Header';
@@ -145,6 +146,7 @@ export default function SignUp() {
               locale={'BR'}
               selected={controlDate}
               onChange={(controlDate) => handleBirthdate(controlDate)}
+              customInput={<MaskedInput mask="11/11/1111" placeholder="DD/MM/AAAA" />}
             />
           </div>
           <button className={'btn btn-primary col-md-12'} type={'submit'}>
