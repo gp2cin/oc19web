@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(3),
     display: 'flex',
     flexDirection: 'column',
+    backgroundColor: '#F4F6F8',
   },
 }));
 

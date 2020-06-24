@@ -5,7 +5,11 @@ import { makeStyles } from '@material-ui/styles';
 import { Typography } from '@material-ui/core';
 
 const useStyles = makeStyles(() => ({
-  root: {},
+  root: {
+    borderTop: '1px solid rgba(0,0,0,0.2)',
+    marginTop: 8,
+    paddingTop: 8,
+  },
 }));
 
 const Footer = (props) => {

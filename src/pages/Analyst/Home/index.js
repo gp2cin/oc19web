@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/styles';
 import { Grid } from '@material-ui/core';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {},
 }));
 
@@ -12,9 +12,7 @@ const Dashboard = () => {
   return (
     <div className={classes.root}>
       <Grid container spacing={4}>
-        <Grid item lg={3} sm={6} xl={3} xs={12}>
-          oi
-        </Grid>
+        <Grid item lg={3} sm={6} xl={3} xs={12}></Grid>
       </Grid>
     </div>
   );

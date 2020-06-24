@@ -40,7 +40,7 @@ const Sidebar = (props) => {
   const pages = [
     {
       title: 'Dashboard',
-      href: '/dashboard',
+      href: '/analista/dashboard',
       icon: <DashboardIcon />,
     },
     {
@@ -50,7 +50,7 @@ const Sidebar = (props) => {
     },
     {
       title: 'Perfil',
-      href: '/users',
+      href: '/analista/perfil',
       icon: <Person />,
     },
   ];
