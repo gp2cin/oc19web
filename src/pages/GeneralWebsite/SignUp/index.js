@@ -140,13 +140,14 @@ export default function SignUp() {
           <div className={'form-group'}>
             <label className={'form-label'}>{'Data de Nascimento*'}</label>
             <DatePicker
+              placeholderText="DD/MM/AAAA"
               maxDate={new Date()}
               className={'date-picker form-control ml-1'}
               dateFormat={'dd/MM/yyyy'}
               locale={'BR'}
               selected={controlDate}
               onChange={(controlDate) => handleBirthdate(controlDate)}
-              customInput={<MaskedInput mask="11/11/1111" placeholder="DD/MM/AAAA" />}
+              customInput={<MaskedInput mask="11/11/1111" />}
             />
           </div>
           <button className={'btn btn-primary col-md-12'} type={'submit'}>

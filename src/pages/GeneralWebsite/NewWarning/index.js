@@ -413,7 +413,7 @@ export default function WarningCreation() {
                     locale={'BR'}
                     selected={date}
                     onChange={(date) => handleBirthdate(date)}
-                    customInput={<MaskedInput mask="11/11/1111" placeholder="DD/MM/AAAA" />}
+                    customInput={<MaskedInput mask="11/11/1111" />}
                   />
                 </div>
               </div>
