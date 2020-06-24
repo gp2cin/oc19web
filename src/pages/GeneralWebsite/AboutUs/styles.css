@@ -14,11 +14,11 @@ a {
 }
 
 #aboutus-container {
-    font-size: 20px;
     margin-top:50px;
 }
 
 #aboutus-row {
+    font-size: 20px;
     background-color: #f8f9fa;
     margin-bottom:20px;
     border-radius: 5px;
