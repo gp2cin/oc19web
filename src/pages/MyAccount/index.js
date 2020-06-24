@@ -72,7 +72,7 @@ export default function MyAccount() {
             e.preventDefault();
             if (password !== confirm_password) alert('Preencha os campos com a mesma senha');
             else {
-                const response = await api.post('api/v1/me/change-password', { password })
+                const response = await api.put('api/v1/me/change-password', { password })
                 console.log(response)
                 if (response.data.message === "Password changed") {
                     alert('Senha trocada com sucesso')
