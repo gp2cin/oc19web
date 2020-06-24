@@ -40,6 +40,15 @@ export default function BulkObservation() {
     const [number_of_cases, setNumberOfCases] = useState(0);
     const report_type = 'social';
 
+    const [requiredInputStyle, setRequiredInputStyle] = useState({
+        neighborhood: {},
+        neighborhoodSelect: {},
+        city: {},
+        numberOfCases: {},
+        informationSource: {},
+        caseType: {}
+    });
+
     const history = useHistory();
 
     useEffect(() => {
@@ -122,10 +131,44 @@ export default function BulkObservation() {
             neighborhood_name !== '' &&
             city !== '' &&
             case_type !== '' &&
-            number_of_cases !== 0 &&
+            (number_of_cases !== 0 && number_of_cases !== '' && number_of_cases !== '0') &&
             info_source !== ''
         ) {
             return true;
+        }
+        if (neighborhood_name === '') {
+            setRequiredInputStyle(prev => ({
+                ...prev,
+                neighborhood: { borderColor: 'coral' },
+                neighborhoodSelect: {
+                    control: (base, state) => ({
+                        ...base,
+                        borderColor: 'coral',
+                    }),
+                }
+            }))
+        }
+        if (city === '') {
+            setRequiredInputStyle(prev => ({
+                ...prev,
+                city: {
+                    control: (base, state) => ({
+                        ...base,
+                        borderColor: 'coral',
+                    }),
+                }
+            }))
+        }
+        if (case_type === '') {
+            setRequiredInputStyle(prev => ({ ...prev, caseType: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+        }
+        console.log('NUM')
+        console.log(number_of_cases)
+        if (number_of_cases === 0 || number_of_cases === '' || number_of_cases === '0') {
+            setRequiredInputStyle(prev => ({ ...prev, numberOfCases: { borderColor: 'coral' } }))
+        }
+        if (info_source === '') {
+            setRequiredInputStyle(prev => ({ ...prev, informationSource: { borderColor: 'coral' } }))
         }
         alert('Você precisa preencher todos os campos obrigatórios!');
         return false;
@@ -186,8 +229,12 @@ export default function BulkObservation() {
                             defaultValue={[]}
                             isClearable
                             isSearchable
-                            onChange={handleCityChoice}
+                            onChange={(e) => {
+                                handleCityChoice(e)
+                                setRequiredInputStyle(prev => ({ ...prev, city: {} }))
+                            }}
                             options={cities}
+                            styles={requiredInputStyle.city}
                         />
                     </div>
                     <div className="neighborhood col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
@@ -198,9 +245,11 @@ export default function BulkObservation() {
                                 placeholder="Bairro"
                                 className="col-md-12 form-control"
                                 value={neighborhood_name}
+                                style={requiredInputStyle.neighborhood}
                                 onChange={(e) => {
                                     setNeighborhood('');
                                     setNeighborhood_name(e.target.value);
+                                    setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }));
                                 }}
                             ></input>
 
@@ -215,8 +264,12 @@ export default function BulkObservation() {
                                 defaultValue={[]}
                                 isClearable
                                 isSearchable
-                                onChange={handleNeighborhoodChoice}
+                                onChange={(e) => {
+                                    handleNeighborhoodChoice(e)
+                                    setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }));
+                                }}
                                 options={neighborhooods}
+                                style={requiredInputStyle.neighborhoodSelect}
                             />
                         }
                         {
@@ -226,14 +279,17 @@ export default function BulkObservation() {
                     </div>
                 </div>
                 <div className="social-info col-md-12">
-                    <div className="case-type col-md-9">
+                    <div className="case-type col-md-9" style={requiredInputStyle.caseType}>
                         <FormControl component={'fieldset'} className="col-md-9">
                             <p>{'Tipo de caso:*'}</p>
                             <RadioGroup
                                 aria-label={'q'}
                                 name={'q2'}
                                 value={case_type}
-                                onChange={(e) => setCaseType(e.target.value)}
+                                onChange={(e) => {
+                                    setCaseType(e.target.value)
+                                    setRequiredInputStyle(prev => ({ ...prev, caseType: {} }));
+                                }}
                             >
                                 <FormControlLabel value={'suspect'} control={<Radio />} label={'Caso Suspeito'} />
                                 <FormControlLabel value={'confirmed'} control={<Radio />} label={'Caso Confirmado'} />
@@ -251,7 +307,11 @@ export default function BulkObservation() {
                                 min="0"
                                 step="1"
                                 value={number_of_cases}
-                                onChange={(e) => setNumberOfCases(e.target.value)}
+                                onChange={(e) => {
+                                    setNumberOfCases(e.target.value)
+                                    setRequiredInputStyle(prev => ({ ...prev, numberOfCases: {} }));
+                                }}
+                                style={requiredInputStyle.numberOfCases}
                             ></input>
                         </div>
                         <div className="info-source col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
@@ -260,7 +320,11 @@ export default function BulkObservation() {
                                 placeholder="Fonte da informação"
                                 className="col-md-12 form-control"
                                 value={info_source}
-                                onChange={(e) => setInfoSource(e.target.value)}
+                                onChange={(e) => {
+                                    setInfoSource(e.target.value)
+                                    setRequiredInputStyle(prev => ({ ...prev, informationSource: {} }));
+                                }}
+                                style={requiredInputStyle.informationSource}
                             ></input>
                         </div>
                     </div>
