@@ -24,8 +24,10 @@ import { RouteWithLayout } from '../components';
 import { Main as MainLayout } from '../layouts';
 
 // Analyst
-import { Home as AnalystHome } from '../pages/Analyst';
+import { Home as AnalystHome, Reports as AnalystReports } from '../pages/Analyst';
 import { DashboardProfile } from '../pages/SharedViewsDash';
+
+import { ANALYST_HOME, ANALYST_PROFILE, ANALYST_REPORTS } from './constants/analyst';
 
 // const PrivateRoute = ({ component: Component, ...rest }) => (
 //   <Route
@@ -150,8 +152,9 @@ const Routes = () => (
       <Route path={'/signup'} component={() => <PageWithContainer Page={SignUp} />} />
       <Route path={'/my-account'} component={() => <PageWithContainer Page={MyAccount} />} />
 
-      <RouteWithLayout component={AnalystHome} exact layout={MainLayout} path="/analista/dashboard" />
-      <RouteWithLayout component={DashboardProfile} exact layout={MainLayout} path="/analista/perfil" />
+      <RouteWithLayout component={AnalystHome} exact layout={MainLayout} path={ANALYST_HOME} />
+      <RouteWithLayout component={DashboardProfile} exact layout={MainLayout} path={ANALYST_PROFILE} />
+      <RouteWithLayout component={AnalystReports} exact layout={MainLayout} path={ANALYST_REPORTS} />
       <Route path={'*'} component={() => <h1>Page not found</h1>} />
     </Switch>
   </BrowserRouter>

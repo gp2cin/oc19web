@@ -9,6 +9,8 @@ import Person from '@material-ui/icons/Person';
 
 import { Profile, SidebarNav } from './components';
 
+import { ANALYST_REPORTS, ANALYST_PROFILE, ANALYST_HOME } from '../../../../routes/constants/analyst';
+
 const useStyles = makeStyles((theme) => ({
   drawer: {
     width: 220,
@@ -40,17 +42,17 @@ const Sidebar = (props) => {
   const pages = [
     {
       title: 'Dashboard',
-      href: '/analista/dashboard',
+      href: ANALYST_HOME,
       icon: <DashboardIcon />,
     },
     {
-      title: 'Observações',
-      href: '/users',
+      title: 'Relatórios',
+      href: ANALYST_REPORTS,
       icon: <PeopleIcon />,
     },
     {
       title: 'Perfil',
-      href: '/analista/perfil',
+      href: ANALYST_PROFILE,
       icon: <Person />,
     },
   ];
