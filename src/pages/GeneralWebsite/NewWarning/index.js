@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import Datefield from '../../../components/Datefield';
 import MaskedInput from 'react-maskedinput';
 import DatePicker from 'react-datepicker';
 import { useHistory } from 'react-router-dom';
@@ -406,7 +405,6 @@ export default function WarningCreation() {
                 </div>
                 <div className={'birthdate-container col-md-3'}>
                   <p>{'Data de nascimento'}</p>
-                  {/* <Datefield /> */}
                   <DatePicker
                     placeholderText="DD/MM/AAAA"
                     maxDate={new Date()}
