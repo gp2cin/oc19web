@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Select, Paper, Grid, Typography } from '@material-ui/core';
+import { Select, Paper, Grid, Typography, Button } from '@material-ui/core';
 
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -93,6 +93,9 @@ export default function Reports() {
                 </Select>
               </Grid>
             </Grid>
+          </Grid>
+          <Grid item>
+            <Button variant="outlined">Buscar</Button>
           </Grid>
         </Grid>
       </Paper>
