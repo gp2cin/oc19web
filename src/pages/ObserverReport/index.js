@@ -41,9 +41,9 @@ export default function ObserverReport() {
                                 value={report_type}
                                 onChange={(e) => setReportType(e.target.value)}
                             >
-                                <FormControlLabel value={'individual'} control={<Radio />} label={'Individual'} />
-                                <FormControlLabel value={'bulk'} control={<Radio />} label={'Em quantidade'} />
-                                <FormControlLabel value={'general'} control={<Radio />} label={'Geral'} />
+                                <FormControlLabel value={'individual'} control={<Radio />} label={'Observação individual'} />
+                                <FormControlLabel value={'bulk'} control={<Radio />} label={'Observação em lote'} />
+                                <FormControlLabel value={'general'} control={<Radio />} label={'Observação geral'} />
                             </RadioGroup>
                         </FormControl>
                     </div>
