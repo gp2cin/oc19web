@@ -32,6 +32,13 @@ export default function GeneralObservation() {
     const report_type = 'general';
     const [uploadMessage, setUploadMessage] = useState('');
 
+    const [requiredInputStyle, setRequiredInputStyle] = useState({
+        neighborhood: {},
+        neighborhoodSelect: {},
+        city: {},
+        observation: {},
+    });
+
     const history = useHistory();
 
     useEffect(() => {
@@ -116,6 +123,32 @@ export default function GeneralObservation() {
         ) {
             return true;
         } else {
+            if (city === '') {
+                setRequiredInputStyle(prev => ({
+                    ...prev,
+                    city: {
+                        control: (base, state) => ({
+                            ...base,
+                            borderColor: 'coral',
+                        }),
+                    }
+                }))
+            }
+            if (neighborhood_name === '') {
+                setRequiredInputStyle(prev => ({
+                    ...prev,
+                    neighborhood: { borderColor: 'coral' },
+                    neighborhoodSelect: {
+                        control: (base, state) => ({
+                            ...base,
+                            borderColor: 'coral',
+                        }),
+                    }
+                }))
+            }
+            if (observation === '') {
+                setRequiredInputStyle(prev => ({ ...prev, observation: { borderColor: 'red' } }))
+            }
             alert('Você precisa preencher todos os campos obrigatórios!');
             return false;
         }
@@ -211,8 +244,12 @@ export default function GeneralObservation() {
                             defaultValue={[]}
                             isClearable
                             isSearchable
-                            onChange={handleCityChoice}
+                            onChange={(e) => {
+                                handleCityChoice(e);
+                                setRequiredInputStyle(prev => ({ ...prev, city: {} }));
+                            }}
                             options={cities}
+                            styles={requiredInputStyle.city}
                         />
                     </div>
                     <div className="neighborhood col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
@@ -226,7 +263,9 @@ export default function GeneralObservation() {
                                 onChange={(e) => {
                                     setNeighborhood('');
                                     setNeighborhood_name(e.target.value);
+                                    setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }));
                                 }}
+                                style={requiredInputStyle.neighborhood}
                             ></input>
 
                         }
@@ -240,8 +279,12 @@ export default function GeneralObservation() {
                                 defaultValue={[]}
                                 isClearable
                                 isSearchable
-                                onChange={handleNeighborhoodChoice}
+                                onChange={(e) => {
+                                    handleNeighborhoodChoice(e);
+                                    setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }));
+                                }}
                                 options={neighborhooods}
+                                style={requiredInputStyle.neighborhoodSelect}
                             />
                         }
                         {
@@ -257,7 +300,11 @@ export default function GeneralObservation() {
                             placeholder="Observação"
                             className="col-md-12 form-control"
                             value={observation}
-                            onChange={(e) => setObservation(e.target.value)}
+                            style={requiredInputStyle.observation}
+                            onChange={(e) => {
+                                setObservation(e.target.value)
+                                setRequiredInputStyle(prev => ({ ...prev, observation: {} }));
+                            }}
                         ></input>
                     </div>
                 </div>

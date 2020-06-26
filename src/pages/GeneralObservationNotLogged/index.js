@@ -30,6 +30,13 @@ export default function GeneralObservation() {
     const [sendDisabled, setSendDisabled] = useState(false);
     const report_type = 'general';
     const [uploadMessage, setUploadMessage] = useState('');
+    const [requiredInputStyle, setRequiredInputStyle] = useState({
+        observerName: {},
+        observerEmail: {},
+        neighborhoodSelect: {},
+        city: {},
+        observation: {},
+    });
 
     const history = useHistory();
 
@@ -117,6 +124,38 @@ export default function GeneralObservation() {
         ) {
             return true;
         } else {
+            if (observer_name === '') {
+                setRequiredInputStyle(prev => ({ ...prev, observerName: { borderColor: 'red' } }))
+            }
+            if (observer_email === '') {
+                setRequiredInputStyle(prev => ({ ...prev, observerEmail: { borderColor: 'red' } }))
+            }
+            if (city === '') {
+                setRequiredInputStyle(prev => ({
+                    ...prev,
+                    city: {
+                        control: (base, state) => ({
+                            ...base,
+                            borderColor: 'red',
+                        }),
+                    }
+                }))
+            }
+            if (neighborhood_name === '') {
+                setRequiredInputStyle(prev => ({
+                    ...prev,
+                    neighborhood: { borderColor: 'red' },
+                    neighborhoodSelect: {
+                        control: (base, state) => ({
+                            ...base,
+                            borderColor: 'red',
+                        }),
+                    }
+                }))
+            }
+            if (observation === '') {
+                setRequiredInputStyle(prev => ({ ...prev, observation: { borderColor: 'red' } }))
+            }
             alert('Você precisa preencher todos os campos obrigatórios!');
             return false;
         }
@@ -209,7 +248,11 @@ export default function GeneralObservation() {
                             placeholder="Nome Sobrenome"
                             className="col-md-12 form-control"
                             value={observer_name}
-                            onChange={(e) => set_observer_name(e.target.value)}
+                            style={requiredInputStyle.observerName}
+                            onChange={(e) => {
+                                set_observer_name(e.target.value)
+                                setRequiredInputStyle(prev => ({ ...prev, observerName: {} }))
+                            }}
                         />
                     </div>
                     <div className="name col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
@@ -218,7 +261,11 @@ export default function GeneralObservation() {
                             placeholder="E-mail"
                             className="col-md-12 form-control"
                             value={observer_email}
-                            onChange={(e) => set_observer_email(e.target.value)}
+                            style={requiredInputStyle.observerEmail}
+                            onChange={(e) => {
+                                set_observer_email(e.target.value)
+                                setRequiredInputStyle(prev => ({ ...prev, observerEmail: {} }))
+                            }}
                         />
                     </div>
                 </div>
@@ -234,7 +281,11 @@ export default function GeneralObservation() {
                             defaultValue={[]}
                             isClearable
                             isSearchable
-                            onChange={handleCityChoice}
+                            styles={requiredInputStyle.city}
+                            onChange={(e) => {
+                                handleCityChoice(e)
+                                setRequiredInputStyle(prev => ({ ...prev, city: {} }))
+                            }}
                             options={cities}
                         />
                     </div>
@@ -246,9 +297,11 @@ export default function GeneralObservation() {
                                 placeholder="Bairro"
                                 className="col-md-12 form-control"
                                 value={neighborhood_name}
+                                style={requiredInputStyle.neighborhood}
                                 onChange={(e) => {
                                     setNeighborhood('');
                                     setNeighborhood_name(e.target.value);
+                                    setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }))
                                 }}
                             ></input>
 
@@ -263,7 +316,11 @@ export default function GeneralObservation() {
                                 defaultValue={[]}
                                 isClearable
                                 isSearchable
-                                onChange={handleNeighborhoodChoice}
+                                style={requiredInputStyle.neighborhoodSelect}
+                                onChange={(e) => {
+                                    handleNeighborhoodChoice(e)
+                                    setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }))
+                                }}
                                 options={neighborhooods}
                             />
                         }
@@ -280,7 +337,11 @@ export default function GeneralObservation() {
                             placeholder="Observação"
                             className="col-md-12 form-control"
                             value={observation}
-                            onChange={(e) => setObservation(e.target.value)}
+                            style={requiredInputStyle.observation}
+                            onChange={(e) => {
+                                setObservation(e.target.value)
+                                setRequiredInputStyle(prev => ({ ...prev, observation: {} }))
+                            }}
                         ></input>
                     </div>
                 </div>

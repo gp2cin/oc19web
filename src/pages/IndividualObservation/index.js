@@ -35,7 +35,7 @@ export default function IndividualObservation() {
     const [case_name, setCaseName] = useState('');
     const [case_age, setCaseAge] = useState();
     const [case_gender, setCaseGender] = useState('');
-    const [caseHadPreExistingDiseases, setCaseHadPreExistingDiseases] = React.useState();
+    const [caseHadPreExistingDiseases, setCaseHadPreExistingDiseases] = React.useState('');
     const [household_contact_confirmed_case, setCaseHouseholdContact] = React.useState();
     const handleChangeQ5 = (event) => {
         if (event.target.value === 'true') {
@@ -49,8 +49,17 @@ export default function IndividualObservation() {
     const [info_source, setInfoSource] = useState('');
     const [info_source_link, setInfoSourceLink] = useState('');
     const [general_comments, setGeneralComments] = useState('');
-    const report_type = 'individual'
-        ;
+    const report_type = 'individual';
+    const [requiredInputStyle, setRequiredInputStyle] = useState({
+        neighborhood: {},
+        neighborhoodSelect: {},
+        city: {},
+        caseGender: {},
+        caseHadPreExistingDiseases: {},
+        householdContactConfirmedCase: {},
+        informationSource: {}
+    });
+
     const history = useHistory();
 
     //List of diseases to construct the select on frontend
@@ -172,26 +181,56 @@ export default function IndividualObservation() {
         if (
             neighborhood_name !== '' &&
             city !== '' &&
-            report_type !== ''
+            info_source !== '' &&
+            case_type !== '' &&
+            case_gender !== '' &&
+            caseHadPreExistingDiseases !== '' &&
+            household_contact_confirmed_case !== ''
+
         ) {
-            if (report_type === 'individual' &&
-                (case_type === '' ||
-                    case_gender === '' ||
-                    caseHadPreExistingDiseases === {} ||
-                    household_contact_confirmed_case === {} ||
-                    info_source === '')
-            ) {
-                console.log(case_type);
-                console.log(caseHadPreExistingDiseases);
-                console.log(household_contact_confirmed_case);
-                console.log(info_source);
-                alert('Você precisa preencher todos os campos obrigatórios!');
-                return false;
-            }
             return true;
+        } else {
+            if (neighborhood_name === '') {
+                setRequiredInputStyle(prev => ({
+                    ...prev,
+                    neighborhood: { borderColor: 'red' },
+                    neighborhoodSelect: {
+                        control: (base, state) => ({
+                            ...base,
+                            borderColor: 'red',
+                        }),
+                    }
+                }));
+            }
+            if (city === '') {
+                setRequiredInputStyle(prev => ({
+                    ...prev,
+                    city: {
+                        control: (base, state) => ({
+                            ...base,
+                            borderColor: 'red',
+                        }),
+                    }
+                }))
+            }
+            if (info_source === '') {
+                setRequiredInputStyle(prev => ({ ...prev, informationSource: { borderColor: 'red' } }))
+            }
+            if (case_type === '') {
+                setRequiredInputStyle(prev => ({ ...prev, caseType: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+            }
+            if (case_gender === '') {
+                setRequiredInputStyle(prev => ({ ...prev, caseGender: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+            }
+            if (caseHadPreExistingDiseases === '') {
+                setRequiredInputStyle(prev => ({ ...prev, caseHadPreExistingDiseases: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+            }
+            if (household_contact_confirmed_case === null || household_contact_confirmed_case === undefined) {
+                setRequiredInputStyle(prev => ({ ...prev, householdContactConfirmedCase: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+            }
+            alert('Você precisa preencher todos os campos obrigatórios!');
+            return false;
         }
-        alert('Você precisa preencher todos os campos obrigatórios!');
-        return false;
     }
 
     function handleNeighborhoodChoice(choice) {
@@ -267,7 +306,11 @@ export default function IndividualObservation() {
                             defaultValue={[]}
                             isClearable
                             isSearchable
-                            onChange={handleCityChoice}
+                            styles={requiredInputStyle.city}
+                            onChange={(e) => {
+                                handleCityChoice(e);
+                                setRequiredInputStyle(prev => ({ ...prev, city: {} }))
+                            }}
                             options={cities}
                         />
                     </div>
@@ -279,9 +322,11 @@ export default function IndividualObservation() {
                                 placeholder="Bairro"
                                 className="col-md-12 form-control"
                                 value={neighborhood_name}
+                                style={requiredInputStyle.neighborhood}
                                 onChange={(e) => {
                                     setNeighborhood('');
                                     setNeighborhood_name(e.target.value);
+                                    setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }))
                                 }}
                             ></input>
 
@@ -296,7 +341,11 @@ export default function IndividualObservation() {
                                 defaultValue={[]}
                                 isClearable
                                 isSearchable
-                                onChange={handleNeighborhoodChoice}
+                                style={requiredInputStyle.neighborhoodSelect}
+                                onChange={(e) => {
+                                    handleNeighborhoodChoice(e)
+                                    setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }))
+                                }}
                                 options={neighborhooods}
                             />
                         }
@@ -307,14 +356,17 @@ export default function IndividualObservation() {
                     </div>
                 </div>
                 <div className="individual-info col-md-12">
-                    <div className="case-type col-md-9">
+                    <div className="case-type col-md-9" style={requiredInputStyle.caseType}>
                         <FormControl component={'fieldset'} className="col-md-9">
                             <p>{'Tipo de caso:*'}</p>
                             <RadioGroup
                                 aria-label={'q'}
                                 name={'q2'}
                                 value={case_type}
-                                onChange={(e) => setCaseType(e.target.value)}
+                                onChange={(e) => {
+                                    setCaseType(e.target.value)
+                                    setRequiredInputStyle(prev => ({ ...prev, caseType: {} }))
+                                }}
                             >
                                 <FormControlLabel value={'suspect'} control={<Radio />} label={'Caso Suspeito'} />
                                 <FormControlLabel value={'confirmed'} control={<Radio />} label={'Caso Confirmado'} />
@@ -359,14 +411,17 @@ export default function IndividualObservation() {
                             ></input>
                         </div>
                     </div>
-                    <div className="gender col-md-9">
+                    <div className="gender col-md-9" style={requiredInputStyle.caseGender}>
                         <FormControl component={'fieldset'} className="col-md-9">
                             <p>{'Sexo:*'}</p>
                             <RadioGroup
                                 aria-label={'q'}
                                 name={'q3'}
                                 value={case_gender}
-                                onChange={(e) => setCaseGender(e.target.value)}
+                                onChange={(e) => {
+                                    setCaseGender(e.target.value)
+                                    setRequiredInputStyle(prev => ({ ...prev, caseGender: {} }))
+                                }}
                             >
                                 <FormControlLabel value={'male'} control={<Radio />} label={'Masculino'} />
                                 <FormControlLabel value={'female'} control={<Radio />} label={'Feminino'} />
@@ -374,14 +429,17 @@ export default function IndividualObservation() {
                             </RadioGroup>
                         </FormControl>
                     </div>
-                    <div className="had-pre-existing-diseases col-md-9">
+                    <div className="had-pre-existing-diseases col-md-9" style={requiredInputStyle.caseHadPreExistingDiseases}>
                         <FormControl component={'fieldset'} className="col-md-9">
                             <p>{'O paciente tinha alguma doença preexistente?*'}</p>
                             <RadioGroup
                                 aria-label={'q'}
                                 name={'q4'}
                                 value={caseHadPreExistingDiseases}
-                                onChange={(e) => setCaseHadPreExistingDiseases(e.target.value)}
+                                onChange={(e) => {
+                                    setCaseHadPreExistingDiseases(e.target.value)
+                                    setRequiredInputStyle(prev => ({ ...prev, caseHadPreExistingDiseases: {} }))
+                                }}
                             >
                                 <FormControlLabel value={'yes'} control={<Radio />} label={'Sim'} />
                                 <FormControlLabel value={'no'} control={<Radio />} label={'Não'} />
@@ -407,14 +465,17 @@ export default function IndividualObservation() {
                             />
                         </div>
                     }
-                    <div className="had-household-contact col-md-9">
+                    <div className="had-household-contact col-md-9" style={requiredInputStyle.householdContactConfirmedCase}>
                         <FormControl component={'fieldset'} className="col-md-9">
                             <p>{'O paciente manteve contato domiciliar com caso confirmado por COVID-19 nos últimos 14 dias?*'}</p>
                             <RadioGroup
                                 aria-label={'q'}
                                 name={'q5'}
                                 value={household_contact_confirmed_case}
-                                onChange={handleChangeQ5}
+                                onChange={(e) => {
+                                    handleChangeQ5(e)
+                                    setRequiredInputStyle(prev => ({ ...prev, householdContactConfirmedCase: {} }))
+                                }}
                             >
                                 <FormControlLabel value={'true'} control={<Radio />} label={'Sim'} />
                                 <FormControlLabel value={'false'} control={<Radio />} label={'Não'} />
@@ -426,10 +487,14 @@ export default function IndividualObservation() {
                         <div className="info-source col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
                             <p>Fonte da informação:*</p>
                             <input
-                                placeholder="Fonte da informação"
+                                placeholder="Fonte da informação*"
                                 className="col-md-12 form-control"
+                                style={requiredInputStyle.informationSource}
                                 value={info_source}
-                                onChange={(e) => setInfoSource(e.target.value)}
+                                onChange={(e) => {
+                                    setInfoSource(e.target.value)
+                                    setRequiredInputStyle(prev => ({ ...prev, informationSource: {} }))
+                                }}
                             ></input>
                         </div>
                         <div className="info-source-link col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>

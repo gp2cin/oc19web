@@ -162,8 +162,6 @@ export default function BulkObservation() {
         if (case_type === '') {
             setRequiredInputStyle(prev => ({ ...prev, caseType: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
         }
-        console.log('NUM')
-        console.log(number_of_cases)
         if (number_of_cases === 0 || number_of_cases === '' || number_of_cases === '0') {
             setRequiredInputStyle(prev => ({ ...prev, numberOfCases: { borderColor: 'coral' } }))
         }

@@ -17,4 +17,14 @@ export const Container = styled.div`
     justify-content: center;
     align-items: center;
   }
+  .gender {
+    backgorund-color: red;
+    margin-top: 10px !important;
+  }
+  .had-pre-existing-diseases {
+    margin-top: 10px !important;
+  }
+  .had-household-contact {
+    margin-top: 10px !important;
+  }
 `;

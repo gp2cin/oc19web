@@ -11,4 +11,7 @@ export const Container = styled.div`
     background-color: #f8f9fa !important;
     padding: 30px;
   }
+  .from-control {
+    margin-top: 10px !important;
+  }
 `;
