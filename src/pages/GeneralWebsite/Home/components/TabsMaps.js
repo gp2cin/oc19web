@@ -147,7 +147,6 @@ export default function ScrollableTabsButtonAuto({ userAddress }) {
           loading={loadingNeigh}
         />
       </TabPanel>
-
     </div>
   );
 }

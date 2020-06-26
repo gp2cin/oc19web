@@ -4,7 +4,7 @@ import { Container } from './styles';
 
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
-// import HeatmapLayer from '../../components/HeatmapLayer';
+// import HeatmapLayer from '../../../components/HeatmapLayer';
 import { addressPoints } from './mock.js';
 // import MarkerClusterGroup from 'react-leaflet-markercluster';
 import api from '../../../services/api';
@@ -12,6 +12,11 @@ import TabsMaps from './components/TabsMaps';
 import { Link } from '@material-ui/core';
 
 class Home extends Component {
+  constructor(props) {
+    super(props);
+    console.log(props);
+  }
+
   state = {
     mapHidden: false,
     layerHidden: false,
@@ -136,7 +141,7 @@ class Home extends Component {
     return (
       <Container className={'row'}>
         <Header />
-        <div className='marginContainer'>
+        <div className="marginContainer">
           <TabsMaps userAddress={userAddress} />
           {/* <Map center={userAddress.position} maxZoom={18} zoom={mapInfo.zoom} className={'homeMap'}>
           <HeatmapLayer

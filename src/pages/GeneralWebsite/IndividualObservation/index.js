@@ -13,6 +13,7 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
+import CustomSnackBar from '../../../components/CustomSnackBar';
 
 export default function IndividualObservation() {
   const [city, setCity] = useState('');
@@ -29,13 +30,16 @@ export default function IndividualObservation() {
   const [loading, setLoading] = useState(false);
   const [sendDisabled, setSendDisabled] = useState(false);
 
+  // Snack
+  const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+  const [openSnack, setOpenSnack] = useState(false);
   const [case_type, setCaseType] = useState('');
   const [date, setDate] = useState();
   const [death_date, setDeathDate] = useState('');
   const [case_name, setCaseName] = useState('');
   const [case_age, setCaseAge] = useState();
   const [case_gender, setCaseGender] = useState('');
-  const [caseHadPreExistingDiseases, setCaseHadPreExistingDiseases] = React.useState('');
+  const [caseHadPreExistingDiseases, setCaseHadPreExistingDiseases] = React.useState();
   const [household_contact_confirmed_case, setCaseHouseholdContact] = React.useState();
   const handleChangeQ5 = (event) => {
     if (event.target.value === 'true') {
@@ -96,21 +100,78 @@ export default function IndividualObservation() {
   useEffect(() => {
     //base de dados do IBGE, código de Pernambuco: 26
     fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/26/municipios`)
-      .then(res => res.json())
+      .then((res) => res.json())
       .then((data) => {
-        console.log(cities)
-        let arr = []
+        console.log(cities);
+        let arr = [];
         for (const i in data) {
           const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
-          arr = [...arr, itemToAdd]
+          arr = [...arr, itemToAdd];
         }
         setCities(arr);
-      }).catch(error => {
-        alert(`Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`);
+      })
+      .catch((error) => {
+        setSnack({
+          type: 'error',
+          message: 'Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página',
+        });
+        setOpenSnack(true);
       });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, []);
 
+  function handleNewObserverReport(e) {
+    e.preventDefault();
+    if (isRequiredFilled()) {
+      setSendDisabled(true);
+      if (diseasesControl.length !== 0) {
+        for (var key in diseases) {
+          for (const i in diseasesControl) {
+            if (key === diseasesControl[i].value) {
+              diseases[key] = true;
+            }
+          }
+        }
+      }
+      const data = {
+        city,
+        city_ca,
+        neighborhood,
+        neighborhood_name,
+        report_type,
+        case_type,
+        death_date,
+        case_name,
+        case_age,
+        case_gender,
+        diseases,
+        household_contact_confirmed_case,
+        info_source,
+        info_source_link,
+        general_comments,
+      };
+      postObserverReport(data);
+    }
+  }
+
+  async function postObserverReport(data) {
+    try {
+      await api.post('api/v1/observer-report', data).then((d) => {
+        console.log(d);
+      });
+      //console.log(data);
+      setSnack({ type: 'success', message: 'Cadastrado com sucesso' });
+      setOpenSnack(true);
+
+      setSendDisabled(false);
+      setTimeout(() => history.push('/'), 3000);
+    } catch (error) {
+      setSnack({ type: 'error', message: 'Erro ao cadastrar, tente novamente' });
+      setOpenSnack(true);
+      setSendDisabled(false);
+      console.log(data);
+    }
+  }
 
   async function handleCityChoice(choice) {
     if (choice !== null) {
@@ -228,7 +289,8 @@ export default function IndividualObservation() {
       if (household_contact_confirmed_case === null || household_contact_confirmed_case === undefined) {
         setRequiredInputStyle(prev => ({ ...prev, householdContactConfirmedCase: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
       }
-      alert('Você precisa preencher todos os campos obrigatórios!');
+      setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios' });
+      setOpenSnack(true);
       return false;
     }
   }
@@ -240,61 +302,10 @@ export default function IndividualObservation() {
     }
   }
 
-  function handleNewObserverReport(e) {
-    e.preventDefault();
-    if (isRequiredFilled()) {
-      setSendDisabled(true);
-      if (diseasesControl.length !== 0) {
-        for (var key in diseases) {
-          for (const i in diseasesControl) {
-            if (key === diseasesControl[i].value) {
-              diseases[key] = true;
-            }
-          }
-        }
-      }
-      const data = {
-        city,
-        city_ca,
-        neighborhood,
-        neighborhood_name,
-        report_type,
-        case_type,
-        death_date,
-        case_name,
-        case_age,
-        case_gender,
-        diseases,
-        household_contact_confirmed_case,
-        info_source,
-        info_source_link,
-        general_comments,
-      }
-      postObserverReport(data);
-    }
-  }
-
-  async function postObserverReport(data) {
-    try {
-      await api.post('api/v1/observer-report', data).then((d) => {
-        console.log(d);
-      });
-      //console.log(data);
-      alert('Cadastrado com sucesso');
-      setSendDisabled(false);
-      history.push('/');
-    } catch (error) {
-      alert(`Erro ao cadastrar, tente novamente. ${error}`);
-      setSendDisabled(false);
-      console.log(data);
-    }
-  }
-
   return (
     <div>
-
+      <CustomSnackBar open={openSnack} setOpen={setOpenSnack} message={snack.message} type={snack.type} />
       <div className="individual-observation-container">
-
         <div className="seccond-inputs col-md-12">
           <div className="city-select col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
             <p>Cidade:*</p>
@@ -521,12 +532,16 @@ export default function IndividualObservation() {
         </div>
 
         <section className={'col-md-12'}>
-          <button disabled={sendDisabled} onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'submit'}>
+          <button
+            disabled={sendDisabled}
+            onClick={handleNewObserverReport}
+            className={'btn btn-primary col-md-12'}
+            type={'submit'}
+          >
             {'Enviar'}
           </button>
         </section>
       </div>
-
     </div>
   );
 }

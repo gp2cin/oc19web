@@ -9,9 +9,10 @@ import { login } from '../../../services/auth';
 import Header from '../../../components/Header';
 import { FiUser } from 'react-icons/fi';
 
-import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
+
+import CustomSnackBar from '../../../components/CustomSnackBar';
 
 function Copyright() {
   return (
@@ -28,8 +29,9 @@ function Copyright() {
 export default function SignIn() {
   const classes = useStyles();
   const [email, setEmail] = useState('');
+  const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+  const [openSnack, setOpenSnack] = useState(false);
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
 
   const history = useHistory();
 
@@ -37,37 +39,45 @@ export default function SignIn() {
     if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
       return true;
     }
-    alert('Você preencheu um endereço de e-mail invávido!');
+
     return false;
   }
 
   async function handleSignIn(e) {
     e.preventDefault();
     if (email === '' || password === '') {
-      setError('Preencha todos os dados para entrar');
+      setSnack({ type: 'fail', message: 'Preencha todos os dados para entrar' });
+      setOpenSnack(true);
     } else {
       if (validateEmail(email)) {
         try {
-          const response = await api.post("api/v1/signin", { email, password });
+          const response = await api.post('api/v1/signin', { email, password });
+          setSnack({ type: 'success', message: 'Login efetuado com sucesso' });
+          setOpenSnack(true);
           login(response.data.token);
-          history.push('/');
+          setTimeout(() => history.push('/'), 3000);
         } catch (err) {
           console.log(err);
-          setError('Erro ao efetuar o signin.');
+          setSnack({ type: 'error', message: 'Login ou senha incorreto, tente novamente' });
+          setOpenSnack(true);
         }
+      } else {
+        setSnack({ type: 'error', message: 'Email incorreto' });
+        setOpenSnack(true);
       }
     }
-  };
+  }
 
   return (
     <Container component="main" maxWidth="xs">
       <Header />
+      <CustomSnackBar open={openSnack} setOpen={setOpenSnack} message={snack.message} type={snack.type} />
       <div className={classes.paper}>
         <img src={Logo} alt="OC19 logo" width="150px" />
         <Typography component="h1" variant="h5">
           <FiUser size={25} /> Entrar
         </Typography>
-        {error && <p id="error">{error}</p>}
+
         <form onSubmit={handleSignIn}>
           <div className={'form-group'}>
             <label className={'form-label'}>{'E-mail*'}</label>
@@ -92,13 +102,13 @@ export default function SignIn() {
           <button className={'btn btn-success col-md-12'} type={'submit'}>
             {'Entrar'}
           </button>
-          <Grid container>
+          {/* <Grid container>
             <Grid item xs>
-              <Link to="#" variant="body2" className={'btn disabled'} >
+              <Link to="#" variant="body2" className={'btn disabled'}>
                 Esqueci a senha
               </Link>
             </Grid>
-          </Grid>
+          </Grid> */}
         </form>
       </div>
       <Copyright />

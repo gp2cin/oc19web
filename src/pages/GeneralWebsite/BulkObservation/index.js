@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import api from '../../../services/api';
+import CustomSnackBar from '../../../components/CustomSnackBar';
 
 import formatName from '../../../utils/formatName';
 
@@ -24,6 +25,8 @@ export default function BulkObservation() {
     const [cities, setCities] = useState([]);
     const [isRecifeSelected, setIsRecifeSelected] = useState(false);
 
+    const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+    const [openSnack, setOpenSnack] = useState(false);
     const animatedComponents = makeAnimated();
     const [loading, setLoading] = useState(false);
     const [sendDisabled, setSendDisabled] = useState(false);
@@ -64,7 +67,8 @@ export default function BulkObservation() {
                 }
                 setCities(arr);
             }).catch(error => {
-                alert(`Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`);
+                setSnack({ type: 'error', message: `Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}` });
+                setOpenSnack(true);
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -168,7 +172,8 @@ export default function BulkObservation() {
         if (info_source === '') {
             setRequiredInputStyle(prev => ({ ...prev, informationSource: { borderColor: 'red' } }))
         }
-        alert('Você precisa preencher todos os campos obrigatórios!');
+        setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
+        setOpenSnack(true);
         return false;
     }
 
@@ -202,11 +207,13 @@ export default function BulkObservation() {
                 console.log(d);
             });
             //console.log(data);
-            alert('Cadastrado com sucesso');
+            setSnack({ type: 'sucess', message: 'Cadastrado com sucesso' });
+            setOpenSnack(true);
             setSendDisabled(false);
-            history.push('/');
+            setTimeout(() => history.push('/'), 3000);
         } catch (error) {
-            alert(`Erro ao cadastrar, tente novamente. ${error}`);
+            setSnack({ type: 'error', message: `Erro ao cadastrar, tente novamente. ${error}` });
+            setOpenSnack(true);
             setSendDisabled(false);
             console.log(data);
         }
@@ -214,7 +221,7 @@ export default function BulkObservation() {
 
     return (
         <div>
-
+            <CustomSnackBar open={openSnack} setOpen={setOpenSnack} message={snack.message} type={snack.type} />
             <div className="bulk-observation-container">
                 <div className="seccond-inputs col-md-12">
                     <div className="city-select col-md-6" style={{ padding: 0, paddingRight: '10px' }}>

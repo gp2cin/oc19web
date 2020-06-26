@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import MaskedInput from 'react-maskedinput';
 import DatePicker from 'react-datepicker';
 import { useHistory } from 'react-router-dom';
 
@@ -13,15 +14,20 @@ import makeAnimated from 'react-select/animated';
 import 'react-datepicker/dist/react-datepicker.css';
 // import './styles.css';
 import Header from '../../../components/Header';
-// import Footer from '../../components/Footer';
+// import Footer from '../../../components/Footer';
 import { Container } from './styles';
 import api from '../../../services/api';
+import CustomSnackBar from '../../../components/CustomSnackBar';
 
 export default function WarningCreation() {
   const [sendDisabled, setSendDisabled] = useState(false);
   const [email, setEmail] = useState('');
   const [date, setDate] = useState(null);
   const [birthdate, setBirthdate] = useState('');
+
+  // snackbar
+  const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+  const [openSnack, setOpenSnack] = useState(false);
 
   const animatedComponents = makeAnimated();
   const history = useHistory();
@@ -190,8 +196,6 @@ export default function WarningCreation() {
   const [isRequiredQ7, setIsRequiredQ7] = useState('');
 
   function handleBirthdate(d) {
-
-
     if (d !== null) {
       const s = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + d.getDate()).slice(-2);
       setDate(d);
@@ -221,11 +225,15 @@ export default function WarningCreation() {
         console.log(d);
       });
       //console.log(data);
-      alert('Caso cadastrado com sucesso');
+
+      setSnack({ type: 'sucess', message: 'Caso cadastrado com sucesso' });
+      setOpenSnack(true);
       setSendDisabled(false);
-      history.push('/');
+      setTimeout(() => history.push('/'), 3000);
     } catch (error) {
-      alert(`Erro ao cadastrar caso, tente novamente. ${error}`);
+      setSnack({ type: 'error', message: 'Erro ao cadastrar caso, tente novamente.' });
+      setOpenSnack(true);
+
       setSendDisabled(false);
       console.log(data);
     }
@@ -247,7 +255,7 @@ export default function WarningCreation() {
           };
 
           if (diseasesControl.length !== 0) {
-            for (var key in diseases) {
+            for (let key in diseases) {
               for (const i in diseasesControl) {
                 if (key === diseasesControl[i].value) {
                   diseases[key] = true;
@@ -257,7 +265,7 @@ export default function WarningCreation() {
           }
 
           if (symptomsControl.length !== 0) {
-            for (var simpKey in symptoms) {
+            for (let simpKey in symptoms) {
               for (const i in symptomsControl) {
                 if (simpKey === symptomsControl[i].value) {
                   symptoms[simpKey] = true;
@@ -284,7 +292,6 @@ export default function WarningCreation() {
           postWarning(data);
         }, handleLocationError);
       } else {
-        alert('Geolocation is not supported by this browser.');
         setSendDisabled(false);
       }
     }
@@ -293,23 +300,23 @@ export default function WarningCreation() {
   function handleLocationError(error) {
     switch (error.code) {
       case error.PERMISSION_DENIED:
-        alert("User denied the request for Geolocation.");
+        alert('User denied the request for Geolocation.');
         setSendDisabled(false);
         break;
       case error.POSITION_UNAVAILABLE:
-        alert("Location information is unavailable.");
+        alert('Location information is unavailable.');
         setSendDisabled(false);
         break;
       case error.TIMEOUT:
-        alert("The request to get user location timed out.");
+        alert('The request to get user location timed out.');
         setSendDisabled(false);
         break;
       case error.UNKNOWN_ERROR:
-        alert("An unknown error occurred.");
+        alert('An unknown error occurred.');
         setSendDisabled(false);
         break;
       default:
-        alert("An unknown error occurred.");
+        alert('An unknown error occurred.');
         setSendDisabled(false);
     }
   }
@@ -319,7 +326,8 @@ export default function WarningCreation() {
       return true;
     }
     setRequiredInputStyle(prev => ({ ...prev, email: { borderColor: 'red' } }))
-    alert('Você preencheu um endereço de e-mail invávido!');
+    setSnack({ type: 'error', message: 'Você preencheu um endereço de e-mail inválido!' });
+    setOpenSnack(true);
     return false;
   }
 
@@ -342,22 +350,26 @@ export default function WarningCreation() {
         if (covid_tested === true && (covid_result === {} || covid_result === null || covid_result === undefined)) {
           setRequiredInputStyle(prev => ({ ...prev, covid19WasDiscarded: { borderWidth: 1, borderStyle: 'solid', borderColor: 'red' } }))
           setRequiredInputStyle(prev => ({ ...prev, covidResult: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
-          alert('Você precisa preencher todos os campos obrigatórios! 2');
+          setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
+          setOpenSnack(true);
           return false;
         }
         setRequiredInputStyle(prev => ({ ...prev, covid19WasDiscarded: { borderWidth: 1, borderStyle: 'solid', borderColor: 'red' } }))
-        alert('Você precisa preencher todos os campos obrigatórios! 1');
+        setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
+        setOpenSnack(true);
         return false;
       }
       if (covid_tested === true && (covid_result === {} || covid_result === null || covid_result === undefined)) {
         if (had_evaluation_for_symptoms === true && (covid19_was_discarded === {} || covid19_was_discarded === null || covid19_was_discarded === undefined)) {
           setRequiredInputStyle(prev => ({ ...prev, covidResult: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
           setRequiredInputStyle(prev => ({ ...prev, covid19WasDiscarded: { borderWidth: 1, borderStyle: 'solid', borderColor: 'red' } }))
-          alert('Você precisa preencher todos os campos obrigatórios! 1');
+          setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
+          setOpenSnack(true);
           return false;
         }
         setRequiredInputStyle(prev => ({ ...prev, covidResult: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
-        alert('Você precisa preencher todos os campos obrigatórios! 2');
+        setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
+        setOpenSnack(true);
         return false;
       }
       return true;
@@ -384,13 +396,15 @@ export default function WarningCreation() {
     if (covid_tested === {} || covid_tested === null || covid_tested === undefined) {
       setRequiredInputStyle(prev => ({ ...prev, covidTested: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
     }
-    alert('Você precisa preencher todos os campos obrigatórios!');
+    setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
+    setOpenSnack(true);
     return false;
   }
 
   return (
     <div style={{ overflow: 'auto' }}>
       <Header />
+      <CustomSnackBar open={openSnack} setOpen={setOpenSnack} message={snack.message} type={snack.type} />
       <Container>
         <div className={'new-warning-container'}>
           <section>
@@ -419,6 +433,7 @@ export default function WarningCreation() {
                 <div className={'birthdate-container col-md-3'} style={requiredInputStyle.birthdate}>
                   <p>{'Data de nascimento'}</p>
                   <DatePicker
+                    placeholderText="DD/MM/AAAA"
                     maxDate={new Date()}
                     className={'date-picker form-control'}
                     dateFormat={'dd/MM/yyyy'}
@@ -428,6 +443,7 @@ export default function WarningCreation() {
                       handleBirthdate(date)
                       setRequiredInputStyle(prev => ({ ...prev, birthdate: {} }))
                     }}
+                    customInput={<MaskedInput mask="11/11/1111" />}
                   />
                 </div>
               </div>
@@ -571,8 +587,13 @@ export default function WarningCreation() {
               </div>
             </form>
             <section className={'col-md-12'}>
-              <p>{'Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.'}</p>
-              <button disabled={sendDisabled} onClick={handleNewWarning} className={'btn btn-primary col-md-12'} type={'submit'}>
+              {/* <p>{'Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.'}</p> */}
+              <button
+                disabled={sendDisabled}
+                onClick={handleNewWarning}
+                className={'btn btn-primary col-md-12'}
+                type={'submit'}
+              >
                 {'Enviar'}
               </button>
             </section>

@@ -4,6 +4,7 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import api from '../../../services/api';
 import { awsApi } from '../../../services/api';
+import CustomSnackBar from '../../../components/CustomSnackBar';
 
 import formatName from '../../../utils/formatName';
 
@@ -26,6 +27,8 @@ export default function GeneralObservation() {
     const [cities, setCities] = useState([]);
     const [isRecifeSelected, setIsRecifeSelected] = useState(false);
 
+    const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+    const [openSnack, setOpenSnack] = useState(false);
     const animatedComponents = makeAnimated();
     const [loading, setLoading] = useState(false);
     const [sendDisabled, setSendDisabled] = useState(false);
@@ -54,7 +57,8 @@ export default function GeneralObservation() {
                 }
                 setCities(arr);
             }).catch(error => {
-                alert(`Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`);
+                setSnack({ type: 'error', message: `Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}` });
+                setOpenSnack(true);
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -149,7 +153,8 @@ export default function GeneralObservation() {
             if (observation === '') {
                 setRequiredInputStyle(prev => ({ ...prev, observation: { borderColor: 'red' } }))
             }
-            alert('Você precisa preencher todos os campos obrigatórios!');
+            setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
+            setOpenSnack(true);
             return false;
         }
     }
@@ -196,25 +201,30 @@ export default function GeneralObservation() {
                     errorMessage = 'Observação cadastrada, mas erro ao cadastrar imagem da observação.';
                     await awsApi.put(res.data.putURL, image, options)
                     setUploadMessage('Upload Successful!')
-                    alert('Cadastrado com sucesso');
+                    setSnack({ type: 'sucess', message: 'Cadastrado com sucesso' });
+                    setOpenSnack(true);
                     setSendDisabled(false);
-                    history.push('/');
+                    setTimeout(() => history.push('/'), 3000);
                 } else {
-                    alert('Observação cadastrada, mas erro ao cadastrar imagem da observação.');
+                    setSnack({ type: 'sucess', message: 'Observação cadastrada, mas erro ao cadastrar imagem da observação.' });
+                    setOpenSnack(true);
                     setSendDisabled(false);
-                    history.push('/');
+                    setTimeout(() => history.push('/'), 3000);
                 }
             } else if (response.data.generalObservation) {
-                alert('Cadastrado com sucesso2');
+                setSnack({ type: 'sucess', message: 'Cadastrado com sucesso' });
+                setOpenSnack(true);
                 setSendDisabled(false);
-                history.push('/');
+                setTimeout(() => history.push('/'), 3000);
             } else {
-                alert('Erro ao cadastrar observação.');
+                setSnack({ type: 'error', message: 'Erro ao cadastrar observação.' });
+                setOpenSnack(true);
                 setSendDisabled(false);
             }
         } catch (error) {
             setUploadMessage('');
-            alert(`${errorMessage} ${error}`);
+            setSnack({ type: 'error', message: `${errorMessage} ${error}` });
+            setOpenSnack(true);
             setSendDisabled(false);
             console.log(data);
         }
@@ -230,7 +240,7 @@ export default function GeneralObservation() {
 
     return (
         <div>
-
+            <CustomSnackBar open={openSnack} setOpen={setOpenSnack} message={snack.message} type={snack.type} />
             <div className="general-observation-container">
 
                 <div className="seccond-inputs col-md-12">
