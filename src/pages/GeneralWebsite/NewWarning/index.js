@@ -12,10 +12,10 @@ import makeAnimated from 'react-select/animated';
 
 import 'react-datepicker/dist/react-datepicker.css';
 // import './styles.css';
-import Header from '../../components/Header';
+import Header from '../../../components/Header';
 // import Footer from '../../components/Footer';
 import { Container } from './styles';
-import api from '../../services/api';
+import api from '../../../services/api';
 
 export default function WarningCreation() {
   const [sendDisabled, setSendDisabled] = useState(false);

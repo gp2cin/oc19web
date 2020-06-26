@@ -3,10 +3,10 @@ import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 
 import './styles.css';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 
-import api from '../../services/api';
+import api from '../../../services/api';
 import moment from 'moment';
 
 export default function OfficialCases() {

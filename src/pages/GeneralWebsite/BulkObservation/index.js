@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import api from '../../services/api';
+import api from '../../../services/api';
 
-import formatName from '../../utils/formatName';
+import formatName from '../../../utils/formatName';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -139,11 +139,11 @@ export default function BulkObservation() {
         if (neighborhood_name === '') {
             setRequiredInputStyle(prev => ({
                 ...prev,
-                neighborhood: { borderColor: 'coral' },
+                neighborhood: { borderColor: 'red' },
                 neighborhoodSelect: {
                     control: (base, state) => ({
                         ...base,
-                        borderColor: 'coral',
+                        borderColor: 'red',
                     }),
                 }
             }))
@@ -154,7 +154,7 @@ export default function BulkObservation() {
                 city: {
                     control: (base, state) => ({
                         ...base,
-                        borderColor: 'coral',
+                        borderColor: 'red',
                     }),
                 }
             }))
@@ -163,10 +163,10 @@ export default function BulkObservation() {
             setRequiredInputStyle(prev => ({ ...prev, caseType: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
         }
         if (number_of_cases === 0 || number_of_cases === '' || number_of_cases === '0') {
-            setRequiredInputStyle(prev => ({ ...prev, numberOfCases: { borderColor: 'coral' } }))
+            setRequiredInputStyle(prev => ({ ...prev, numberOfCases: { borderColor: 'red' } }))
         }
         if (info_source === '') {
-            setRequiredInputStyle(prev => ({ ...prev, informationSource: { borderColor: 'coral' } }))
+            setRequiredInputStyle(prev => ({ ...prev, informationSource: { borderColor: 'red' } }))
         }
         alert('Você precisa preencher todos os campos obrigatórios!');
         return false;

@@ -3,10 +3,10 @@ import { useHistory, Link } from 'react-router-dom';
 import './styles.css';
 import useStyles from './styles';
 
-import Logo from '../../assets/ocovid19-logo.png';
-import api from '../../services/api';
-import { login } from '../../services/auth';
-import Header from '../../components/Header';
+import Logo from '../../../assets/ocovid19-logo.png';
+import api from '../../../services/api';
+import { login } from '../../../services/auth';
+import Header from '../../../components/Header';
 import { FiUser } from 'react-icons/fi';
 
 import Grid from '@material-ui/core/Grid';

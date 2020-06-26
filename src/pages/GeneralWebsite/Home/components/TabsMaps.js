@@ -8,7 +8,7 @@ import Tooltip from '@material-ui/core/Tooltip';
 
 import CustomMap from './CustomMap';
 
-import api from '../../../services/api';
+import api from '../../../../services/api';
 
 import Typography from '@material-ui/core/Typography';
 import { AppBar } from '@material-ui/core';

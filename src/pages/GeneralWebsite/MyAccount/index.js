@@ -8,11 +8,11 @@ import Tab from '@material-ui/core/Tab';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 import Container from '@material-ui/core/Container';
-import api from '../../services/api';
-import { isAuthenticated } from '../../services/auth'
+import api from '../../../services/api';
+import { isAuthenticated } from '../../../services/auth'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;

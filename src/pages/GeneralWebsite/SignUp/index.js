@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { FiUserPlus } from 'react-icons/fi';
-import api from '../../services/api';
-import { login } from '../../services/auth';
-import Header from '../../components/Header';
+import api from '../../../services/api';
+import { login } from '../../../services/auth';
+import Header from '../../../components/Header';
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -14,7 +14,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 import DatePicker from 'react-datepicker';
 
-import Logo from '../../assets/ocovid19-logo.png';
+import Logo from '../../../assets/ocovid19-logo.png';
 import useStyles from './styles';
 
 function Copyright() {

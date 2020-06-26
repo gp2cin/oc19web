@@ -2,8 +2,8 @@ import React from 'react';
 import { FiMail, FiArrowRightCircle, FiInstagram } from 'react-icons/fi';
 
 import './styles.css';
-import Header from '../../components/Header';
-import Footer from '../../components/Footer';
+import Header from '../../../components/Header';
+import Footer from '../../../components/Footer';
 
 export default function WhoWeAre() {
   return (

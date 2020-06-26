@@ -2,37 +2,38 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
-import api from '../../services/api';
-import { awsApi } from '../../services/api';
-import formatName from '../../utils/formatName';
+import api from '../../../services/api';
+import { awsApi } from '../../../services/api';
+
+import formatName from '../../../utils/formatName';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
 
 export default function GeneralObservation() {
-    const [observer_name, set_observer_name] = useState('');
-    const [observer_email, set_observer_email] = useState('');
+    const observer_name = '';
+    const observer_email = '';
     const [city, setCity] = useState('');
     const [city_ca, setCity_ca] = useState('');
     const [neighborhood, setNeighborhood] = useState('');
     const [observation, setObservation] = useState('');
     const [neighborhood_name, setNeighborhood_name] = useState('');
     const image_url = '';
+    const [image, setImage] = useState();
     //List of Recife's neighborhoods from backend
     const [neighborhooods, setNeighborhoods] = useState([]);
     //List of cities from IBGE API
     const [cities, setCities] = useState([]);
     const [isRecifeSelected, setIsRecifeSelected] = useState(false);
-    const [image, setImage] = useState();
 
     const animatedComponents = makeAnimated();
     const [loading, setLoading] = useState(false);
     const [sendDisabled, setSendDisabled] = useState(false);
     const report_type = 'general';
     const [uploadMessage, setUploadMessage] = useState('');
+
     const [requiredInputStyle, setRequiredInputStyle] = useState({
-        observerName: {},
-        observerEmail: {},
+        neighborhood: {},
         neighborhoodSelect: {},
         city: {},
         observation: {},
@@ -116,20 +117,12 @@ export default function GeneralObservation() {
     }
 
     function isRequiredFilled() {
-        if (observer_name !== '' &&
-            observer_email !== '' &&
-            city !== '' &&
+        if (city !== '' &&
             neighborhood_name !== '' &&
             observation !== ''
         ) {
             return true;
         } else {
-            if (observer_name === '') {
-                setRequiredInputStyle(prev => ({ ...prev, observerName: { borderColor: 'red' } }))
-            }
-            if (observer_email === '') {
-                setRequiredInputStyle(prev => ({ ...prev, observerEmail: { borderColor: 'red' } }))
-            }
             if (city === '') {
                 setRequiredInputStyle(prev => ({
                     ...prev,
@@ -179,18 +172,10 @@ export default function GeneralObservation() {
         }
     }
 
-    function getImage(e) {
-        const files = e.target.files;
-        if (files && files.length > 0) {
-            const file = files[0];
-            setImage(file);
-        }
-    };
-
     async function postObservation(data) {
         let errorMessage = 'Erro ao cadastrar observação.';
         try {
-            const response = await api.post('api/v1/general-observation', data)
+            const response = await api.post('api/v1/general-observation-auth', data)
             console.log(response);
             if (response.data.generalObservation && image !== null && image !== undefined) {
                 errorMessage = 'Observação cadastrada, mas erro ao buscar URL de cadastro da imagem.';
@@ -227,7 +212,6 @@ export default function GeneralObservation() {
                 alert('Erro ao cadastrar observação.');
                 setSendDisabled(false);
             }
-
         } catch (error) {
             setUploadMessage('');
             alert(`${errorMessage} ${error}`);
@@ -236,39 +220,18 @@ export default function GeneralObservation() {
         }
     }
 
+    function getImage(e) {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            const file = files[0];
+            setImage(file);
+        }
+    };
+
     return (
         <div>
 
             <div className="general-observation-container">
-                <p>Campos com o símbolo " * " devem ser respondidos obrigatoriamente.</p>
-                <div className="first-inputs col-md-12">
-                    <div className="name col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
-                        <p>Seu nome:*</p>
-                        <input
-                            placeholder="Nome Sobrenome"
-                            className="col-md-12 form-control"
-                            value={observer_name}
-                            style={requiredInputStyle.observerName}
-                            onChange={(e) => {
-                                set_observer_name(e.target.value)
-                                setRequiredInputStyle(prev => ({ ...prev, observerName: {} }))
-                            }}
-                        />
-                    </div>
-                    <div className="name col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
-                        <p>Seu e-mail:*</p>
-                        <input
-                            placeholder="E-mail"
-                            className="col-md-12 form-control"
-                            value={observer_email}
-                            style={requiredInputStyle.observerEmail}
-                            onChange={(e) => {
-                                set_observer_email(e.target.value)
-                                setRequiredInputStyle(prev => ({ ...prev, observerEmail: {} }))
-                            }}
-                        />
-                    </div>
-                </div>
 
                 <div className="seccond-inputs col-md-12">
                     <div className="city-select col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
@@ -281,12 +244,12 @@ export default function GeneralObservation() {
                             defaultValue={[]}
                             isClearable
                             isSearchable
-                            styles={requiredInputStyle.city}
                             onChange={(e) => {
-                                handleCityChoice(e)
-                                setRequiredInputStyle(prev => ({ ...prev, city: {} }))
+                                handleCityChoice(e);
+                                setRequiredInputStyle(prev => ({ ...prev, city: {} }));
                             }}
                             options={cities}
+                            styles={requiredInputStyle.city}
                         />
                     </div>
                     <div className="neighborhood col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
@@ -297,12 +260,12 @@ export default function GeneralObservation() {
                                 placeholder="Bairro"
                                 className="col-md-12 form-control"
                                 value={neighborhood_name}
-                                style={requiredInputStyle.neighborhood}
                                 onChange={(e) => {
                                     setNeighborhood('');
                                     setNeighborhood_name(e.target.value);
-                                    setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }))
+                                    setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }));
                                 }}
+                                style={requiredInputStyle.neighborhood}
                             ></input>
 
                         }
@@ -316,12 +279,12 @@ export default function GeneralObservation() {
                                 defaultValue={[]}
                                 isClearable
                                 isSearchable
-                                style={requiredInputStyle.neighborhoodSelect}
                                 onChange={(e) => {
-                                    handleNeighborhoodChoice(e)
-                                    setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }))
+                                    handleNeighborhoodChoice(e);
+                                    setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }));
                                 }}
                                 options={neighborhooods}
+                                style={requiredInputStyle.neighborhoodSelect}
                             />
                         }
                         {
@@ -340,12 +303,11 @@ export default function GeneralObservation() {
                             style={requiredInputStyle.observation}
                             onChange={(e) => {
                                 setObservation(e.target.value)
-                                setRequiredInputStyle(prev => ({ ...prev, observation: {} }))
+                                setRequiredInputStyle(prev => ({ ...prev, observation: {} }));
                             }}
                         ></input>
                     </div>
                 </div>
-
                 <div
                     className="col-md-12 image"
                     style={{
@@ -363,7 +325,6 @@ export default function GeneralObservation() {
                     />
                     <p>{uploadMessage}</p>
                 </div>
-
                 <section className={'col-md-12'}>
                     <button disabled={sendDisabled} onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'button'}>
                         {'Enviar'}

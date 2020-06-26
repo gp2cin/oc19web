@@ -3,18 +3,18 @@ import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 
 import { isAuthenticated, isAuthenticatedObserver } from '../services/auth';
 
-import Home from '../pages/Home';
-import SignIn from '../pages/SignIn';
-import SignUp from '../pages/SignUp';
-import NewWarning from '../pages/NewWarning';
-import OfficialCases from '../pages/OfficialCases';
-import ObserverReport from '../pages/ObserverReport';
-import MyAccount from '../pages/MyAccount';
-import AboutUs from '../pages/AboutUs';
-import GeneralObservationNotLogged from '../pages/GeneralObservationNotLogged';
+import Home from '../pages/GeneralWebsite/Home';
+import SignIn from '../pages/GeneralWebsite/SignIn';
+import SignUp from '../pages/GeneralWebsite/SignUp';
+import NewWarning from '../pages/GeneralWebsite/NewWarning';
+import OfficialCases from '../pages/GeneralWebsite/OfficialCases';
+import ObserverReport from '../pages/GeneralWebsite/ObserverReport';
+import MyAccount from '../pages/GeneralWebsite/MyAccount';
+import AboutUs from '../pages/GeneralWebsite/AboutUs';
+import GeneralObservationNotLogged from '../pages/GeneralWebsite/GeneralObservationNotLogged';
 import Header from '../components/Header';
-import { Container } from '../pages/ObserverReport/styles';
-import GeneralObservation from '../pages/GeneralObservation';
+import { Container } from '../pages/GeneralWebsite/ObserverReport/styles';
+import GeneralObservation from '../pages/GeneralWebsite/GeneralObservation';
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route

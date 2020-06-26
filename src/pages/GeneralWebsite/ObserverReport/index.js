@@ -4,7 +4,7 @@ import IndividualObservation from '../IndividualObservation';
 import BulkObservation from '../BulkObservation';
 import GeneralObservation from '../GeneralObservation';
 
-import Header from '../../components/Header';
+import Header from '../../../components/Header';
 // import Footer from '../../components/Footer';
 import { Container } from './styles';
 import './styles.css'
