@@ -21,7 +21,6 @@ body, html {
   -webkit-font-smoothing: antialiased !important;
   height: 100%;
   width: 100%;
-  padding: 0px 5px;
   font-size: 14px;
 }
 .container {
