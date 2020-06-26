@@ -79,7 +79,7 @@ export default function MyAccount() {
         setSnack({ type: 'error', message: 'Preencha os campos com a mesma senha' });
         setOpenSnack(true);
       } else {
-        const response = await api.post('api/v1/me/change-password', { password });
+        const response = await api.put('api/v1/me/change-password', { password });
         console.log(response);
         if (response.data.message === 'Password changed') {
           setSnack({ type: 'success', message: 'Senha trocada com sucesso' });
