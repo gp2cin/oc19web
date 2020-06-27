@@ -273,7 +273,7 @@ class Home extends Component {
 
               <div
                 className="mx-auto"
-                // style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}
+              // style={{ width: '80%', height: '150px', borderRadius: '21px 21px 0 0' }}
               >
                 <span
                   style={{ width: '80%', fontSize: '5em', borderRadius: '21px 21px 0 0' }}

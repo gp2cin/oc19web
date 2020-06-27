@@ -7,7 +7,7 @@ import api from '../../../services/api';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
-// import formatName from '../../../utils/formatName';
+import formatName from '../../../utils/formatName';
 
 import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
@@ -17,7 +17,7 @@ import CustomSnackBar from '../../../components/CustomSnackBar';
 
 export default function IndividualObservation() {
   const [city, setCity] = useState('');
-  // const [city_ca, setCity_ca] = useState('');
+  const [city_ca, setCity_ca] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const [neighborhood_name, setNeighborhood_name] = useState('');
   //List of Recife's neighborhoods from backend
@@ -54,6 +54,16 @@ export default function IndividualObservation() {
   const [info_source_link, setInfoSourceLink] = useState('');
   const [general_comments, setGeneralComments] = useState('');
   const report_type = 'individual';
+  const [requiredInputStyle, setRequiredInputStyle] = useState({
+    neighborhood: {},
+    neighborhoodSelect: {},
+    city: {},
+    caseGender: {},
+    caseHadPreExistingDiseases: {},
+    householdContactConfirmedCase: {},
+    informationSource: {}
+  });
+
   const history = useHistory();
 
   //List of diseases to construct the select on frontend
@@ -125,6 +135,7 @@ export default function IndividualObservation() {
       }
       const data = {
         city,
+        city_ca,
         neighborhood,
         neighborhood_name,
         report_type,
@@ -165,20 +176,20 @@ export default function IndividualObservation() {
   async function handleCityChoice(choice) {
     if (choice !== null) {
       setCity(choice.label);
-      // setCity_ca(formatName(choice.label));
+      setCity_ca(formatName(choice.label));
       //Get Recife's neighborhoods form backend
       if (choice.label === 'Recife') {
-        console.log('Recife!!');
+        console.log('Recife!!')
         setLoading(true);
         setIsRecifeSelected(true);
         try {
-          const response = await api.get('api/v1/neighborhoods?cidade=recife');
+          const response = await api.get('api/v1/neighborhoods?cidade=recife')
           console.log(response);
           if (response !== null) {
-            console.log('Resposta Recife!!');
+            console.log('Resposta Recife!!')
             console.log(response);
             if (response.data !== null) {
-              console.log('Resposta Bairros!!');
+              console.log('Resposta Bairros!!')
               console.log(response.data);
               let arr = [];
               for (const i in response.data) {
@@ -192,12 +203,13 @@ export default function IndividualObservation() {
             }
           } else {
             setLoading(false);
-            console.log('BAIRROS NULOS');
+            console.log('BAIRROS NULOS')
           }
         } catch (error) {
-          console.log(`Erro ao buscar bairros ${error}`);
+          console.log(`Erro ao buscar bairros ${error}`)
           setLoading(false);
         }
+
       } else {
         setNeighborhoods([]);
         setIsRecifeSelected(false);
@@ -227,29 +239,62 @@ export default function IndividualObservation() {
   }
 
   function isRequiredFilled() {
-    if (neighborhood_name !== '' && city !== '' && report_type !== '') {
-      if (
-        report_type === 'individual' &&
-        (case_type === '' ||
-          case_gender === '' ||
-          caseHadPreExistingDiseases === {} ||
-          household_contact_confirmed_case === {} ||
-          info_source === '')
-      ) {
-        console.log(case_type);
-        console.log(caseHadPreExistingDiseases);
-        console.log(household_contact_confirmed_case);
-        console.log(info_source);
-        setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios' });
-        setOpenSnack(true);
-        return false;
-      }
+    if (
+      neighborhood_name !== '' &&
+      city !== '' &&
+      info_source !== '' &&
+      case_type !== '' &&
+      case_gender !== '' &&
+      caseHadPreExistingDiseases !== '' &&
+      household_contact_confirmed_case !== ''
+
+    ) {
       return true;
+    } else {
+      if (neighborhood_name === '') {
+        setRequiredInputStyle(prev => ({
+          ...prev,
+          neighborhood: { borderColor: 'red' },
+          neighborhoodSelect: {
+            control: (base, state) => ({
+              ...base,
+              borderColor: 'red',
+            }),
+          }
+        }));
+      }
+      if (city === '') {
+        setRequiredInputStyle(prev => ({
+          ...prev,
+          city: {
+            control: (base, state) => ({
+              ...base,
+              borderColor: 'red',
+            }),
+          }
+        }))
+      }
+      if (info_source === '') {
+        setRequiredInputStyle(prev => ({ ...prev, informationSource: { borderColor: 'red' } }))
+      }
+      if (case_type === '') {
+        setRequiredInputStyle(prev => ({ ...prev, caseType: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+      }
+      if (case_gender === '') {
+        setRequiredInputStyle(prev => ({ ...prev, caseGender: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+      }
+      if (caseHadPreExistingDiseases === '') {
+        setRequiredInputStyle(prev => ({ ...prev, caseHadPreExistingDiseases: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+      }
+      if (household_contact_confirmed_case === null || household_contact_confirmed_case === undefined) {
+        setRequiredInputStyle(prev => ({ ...prev, householdContactConfirmedCase: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+      }
+      setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios' });
+      setOpenSnack(true);
+      return false;
     }
-    setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios' });
-    setOpenSnack(true);
-    return false;
   }
+
   function handleNeighborhoodChoice(choice) {
     if (choice !== null) {
       setNeighborhood(choice.value);
@@ -272,24 +317,33 @@ export default function IndividualObservation() {
               defaultValue={[]}
               isClearable
               isSearchable
-              onChange={handleCityChoice}
+              styles={requiredInputStyle.city}
+              onChange={(e) => {
+                handleCityChoice(e);
+                setRequiredInputStyle(prev => ({ ...prev, city: {} }))
+              }}
               options={cities}
             />
           </div>
           <div className="neighborhood col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
             <p>Bairro:*</p>
-            {!isRecifeSelected && (
+            {
+              (!isRecifeSelected) &&
               <input
                 placeholder="Bairro"
                 className="col-md-12 form-control"
                 value={neighborhood_name}
+                style={requiredInputStyle.neighborhood}
                 onChange={(e) => {
                   setNeighborhood('');
                   setNeighborhood_name(e.target.value);
+                  setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }))
                 }}
               ></input>
-            )}
-            {isRecifeSelected && !loading && (
+
+            }
+            {
+              (isRecifeSelected && !loading) &&
               <Select
                 className="select"
                 placeholder="Escolha"
@@ -298,25 +352,41 @@ export default function IndividualObservation() {
                 defaultValue={[]}
                 isClearable
                 isSearchable
-                onChange={handleNeighborhoodChoice}
+                style={requiredInputStyle.neighborhoodSelect}
+                onChange={(e) => {
+                  handleNeighborhoodChoice(e)
+                  setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }))
+                }}
                 options={neighborhooods}
               />
-            )}
-            {isRecifeSelected && loading && <CircularProgress />}
+            }
+            {
+              (isRecifeSelected && loading) &&
+              <CircularProgress />
+            }
           </div>
         </div>
         <div className="individual-info col-md-12">
-          <div className="case-type col-md-9">
+          <div className="case-type col-md-9" style={requiredInputStyle.caseType}>
             <FormControl component={'fieldset'} className="col-md-9">
               <p>{'Tipo de caso:*'}</p>
-              <RadioGroup aria-label={'q'} name={'q2'} value={case_type} onChange={(e) => setCaseType(e.target.value)}>
+              <RadioGroup
+                aria-label={'q'}
+                name={'q2'}
+                value={case_type}
+                onChange={(e) => {
+                  setCaseType(e.target.value)
+                  setRequiredInputStyle(prev => ({ ...prev, caseType: {} }))
+                }}
+              >
                 <FormControlLabel value={'suspect'} control={<Radio />} label={'Caso Suspeito'} />
                 <FormControlLabel value={'confirmed'} control={<Radio />} label={'Caso Confirmado'} />
                 <FormControlLabel value={'death'} control={<Radio />} label={'Óbito'} />
               </RadioGroup>
             </FormControl>
           </div>
-          {case_type === 'death' && (
+          {
+            case_type === 'death' &&
             <div className="death-date col-md-9">
               <p>{'Data do óbito:'}</p>
               <DatePicker
@@ -328,7 +398,7 @@ export default function IndividualObservation() {
                 onChange={(date) => handleDeathDate(date)}
               />
             </div>
-          )}
+          }
           <div className="third-inputs col-md-12">
             <div className="name col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
               <p>Nome:</p>
@@ -352,14 +422,17 @@ export default function IndividualObservation() {
               ></input>
             </div>
           </div>
-          <div className="gender col-md-9">
+          <div className="gender col-md-9" style={requiredInputStyle.caseGender}>
             <FormControl component={'fieldset'} className="col-md-9">
               <p>{'Sexo:*'}</p>
               <RadioGroup
                 aria-label={'q'}
                 name={'q3'}
                 value={case_gender}
-                onChange={(e) => setCaseGender(e.target.value)}
+                onChange={(e) => {
+                  setCaseGender(e.target.value)
+                  setRequiredInputStyle(prev => ({ ...prev, caseGender: {} }))
+                }}
               >
                 <FormControlLabel value={'male'} control={<Radio />} label={'Masculino'} />
                 <FormControlLabel value={'female'} control={<Radio />} label={'Feminino'} />
@@ -367,14 +440,17 @@ export default function IndividualObservation() {
               </RadioGroup>
             </FormControl>
           </div>
-          <div className="had-pre-existing-diseases col-md-9">
+          <div className="had-pre-existing-diseases col-md-9" style={requiredInputStyle.caseHadPreExistingDiseases}>
             <FormControl component={'fieldset'} className="col-md-9">
               <p>{'O paciente tinha alguma doença preexistente?*'}</p>
               <RadioGroup
                 aria-label={'q'}
                 name={'q4'}
                 value={caseHadPreExistingDiseases}
-                onChange={(e) => setCaseHadPreExistingDiseases(e.target.value)}
+                onChange={(e) => {
+                  setCaseHadPreExistingDiseases(e.target.value)
+                  setRequiredInputStyle(prev => ({ ...prev, caseHadPreExistingDiseases: {} }))
+                }}
               >
                 <FormControlLabel value={'yes'} control={<Radio />} label={'Sim'} />
                 <FormControlLabel value={'no'} control={<Radio />} label={'Não'} />
@@ -382,7 +458,8 @@ export default function IndividualObservation() {
               </RadioGroup>
             </FormControl>
           </div>
-          {caseHadPreExistingDiseases === 'yes' && (
+          {
+            caseHadPreExistingDiseases === 'yes' &&
             <div className={'deseases-container col-md-9'}>
               <p>{'Quais doenças preexistentes?'}</p>
               <Select
@@ -398,15 +475,18 @@ export default function IndividualObservation() {
                 options={diseaseOptions}
               />
             </div>
-          )}
-          <div className="had-household-contact col-md-9">
+          }
+          <div className="had-household-contact col-md-9" style={requiredInputStyle.householdContactConfirmedCase}>
             <FormControl component={'fieldset'} className="col-md-9">
               <p>{'O paciente manteve contato domiciliar com caso confirmado por COVID-19 nos últimos 14 dias?*'}</p>
               <RadioGroup
                 aria-label={'q'}
                 name={'q5'}
                 value={household_contact_confirmed_case}
-                onChange={handleChangeQ5}
+                onChange={(e) => {
+                  handleChangeQ5(e)
+                  setRequiredInputStyle(prev => ({ ...prev, householdContactConfirmedCase: {} }))
+                }}
               >
                 <FormControlLabel value={'true'} control={<Radio />} label={'Sim'} />
                 <FormControlLabel value={'false'} control={<Radio />} label={'Não'} />
@@ -418,10 +498,14 @@ export default function IndividualObservation() {
             <div className="info-source col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
               <p>Fonte da informação:*</p>
               <input
-                placeholder="Fonte da informação"
+                placeholder="Fonte da informação*"
                 className="col-md-12 form-control"
+                style={requiredInputStyle.informationSource}
                 value={info_source}
-                onChange={(e) => setInfoSource(e.target.value)}
+                onChange={(e) => {
+                  setInfoSource(e.target.value)
+                  setRequiredInputStyle(prev => ({ ...prev, informationSource: {} }))
+                }}
               ></input>
             </div>
             <div className="info-source-link col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>

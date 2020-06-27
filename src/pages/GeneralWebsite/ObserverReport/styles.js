@@ -48,4 +48,13 @@ export const Container = styled.div`
       padding-top: 10px;
     }
   }
+  .gender {
+    margin-top: 10px !important;
+  }
+  .had-pre-existing-diseases {
+    margin-top: 10px !important;
+  }
+  .had-household-contact {
+    margin-top: 10px !important;
+  }
 `;

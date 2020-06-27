@@ -5,13 +5,13 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   /* height: 100vh; */
-  .new-warning-container {
-    margin-top: 85px !important;
+  .official-cases-container {
+    margin-top: 40px !important;
     /* overflow: auto !important; */
     background-color: #f8f9fa !important;
     padding: 30px;
   }
-  .from-control {
-    margin-top: 10px !important;
+  .result-cases {
+    background-color: 'red';
   }
 `;
