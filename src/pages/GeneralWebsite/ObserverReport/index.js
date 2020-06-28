@@ -25,7 +25,6 @@ export default function ObserverReport() {
             <Header />
             <Container>
                 <div className="observer-report-container">
-                    <p>Campos com o símbolo " * " devem ser respondidos obrigatoriamente.</p>
                     <section>
                         <h1 className={'text-center'}>{'Protocolo de Observações do OCOVID19'}</h1>
                         <p className={'text-center'}>
@@ -34,7 +33,8 @@ export default function ObserverReport() {
                     </section>
                     <div className="report-type col-md-12">
                         <FormControl component={'fieldset'} className="col-md-9">
-                            <p>{'Qual tipo de informe você quer fazer?*'}</p>
+                            <p className="main-question">{'Qual tipo de informe você quer fazer?*'}</p>
+                            <p style={{ fontSize: '12px' }}>Uma observação individual diz respeito a informações sobre um ÚNICO INDIVÍDUO. Uma observação em lote agrupa informações para DOIS OU MAIS INDIVÍDUOS.</p>
                             <RadioGroup
                                 aria-label={'q'}
                                 name={'q1'}
