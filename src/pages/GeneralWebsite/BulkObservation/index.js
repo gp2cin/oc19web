@@ -25,7 +25,7 @@ export default function BulkObservation() {
     const [cities, setCities] = useState([]);
     const [isRecifeSelected, setIsRecifeSelected] = useState(false);
 
-    const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+    const [snack, setSnack] = useState({ type: 'success', message: '' });
     const [openSnack, setOpenSnack] = useState(false);
     const animatedComponents = makeAnimated();
     const [loading, setLoading] = useState(false);
@@ -207,7 +207,7 @@ export default function BulkObservation() {
                 console.log(d);
             });
             //console.log(data);
-            setSnack({ type: 'sucess', message: 'Cadastrado com sucesso' });
+            setSnack({ type: 'success', message: 'Cadastrado com successo' });
             setOpenSnack(true);
             setSendDisabled(false);
             setTimeout(() => history.push('/'), 3000);

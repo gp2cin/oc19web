@@ -26,7 +26,7 @@ export default function WarningCreation() {
   const [birthdate, setBirthdate] = useState('');
 
   // snackbar
-  const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+  const [snack, setSnack] = useState({ type: 'success', message: '' });
   const [openSnack, setOpenSnack] = useState(false);
 
   const animatedComponents = makeAnimated();
@@ -226,7 +226,7 @@ export default function WarningCreation() {
       });
       //console.log(data);
 
-      setSnack({ type: 'sucess', message: 'Caso cadastrado com sucesso' });
+      setSnack({ type: 'success', message: 'Caso cadastrado com successo' });
       setOpenSnack(true);
       setSendDisabled(false);
       setTimeout(() => history.push('/'), 3000);

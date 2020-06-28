@@ -26,7 +26,7 @@ export default function GeneralObservation() {
     const [isRecifeSelected, setIsRecifeSelected] = useState(false);
     const [image, setImage] = useState();
 
-    const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+    const [snack, setSnack] = useState({ type: 'success', message: '' });
     const [openSnack, setOpenSnack] = useState(false);
     const animatedComponents = makeAnimated();
     const [loading, setLoading] = useState(false);
@@ -216,18 +216,18 @@ export default function GeneralObservation() {
                     errorMessage = 'Observação cadastrada, mas erro ao cadastrar imagem da observação.';
                     await awsApi.put(res.data.putURL, image, options)
                     setUploadMessage('Upload Successful!')
-                    setSnack({ type: 'sucess', message: 'Cadastrado com sucesso' });
+                    setSnack({ type: 'success', message: 'Cadastrado com successo' });
                     setOpenSnack(true);
                     setSendDisabled(false);
                     setTimeout(() => history.push('/'), 3000);
                 } else {
-                    setSnack({ type: 'sucess', message: 'Observação cadastrada, mas erro ao cadastrar imagem da observação.' });
+                    setSnack({ type: 'success', message: 'Observação cadastrada, mas erro ao cadastrar imagem da observação.' });
                     setOpenSnack(true);
                     setSendDisabled(false);
                     setTimeout(() => history.push('/'), 3000);
                 }
             } else if (response.data.generalObservation) {
-                setSnack({ type: 'sucess', message: 'Cadastrado com sucesso' });
+                setSnack({ type: 'success', message: 'Cadastrado com successo' });
                 setOpenSnack(true);
                 setSendDisabled(false);
                 setTimeout(() => history.push('/'), 3000);
