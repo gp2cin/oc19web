@@ -31,7 +31,7 @@ export default function IndividualObservation() {
   const [sendDisabled, setSendDisabled] = useState(false);
 
   // Snack
-  const [snack, setSnack] = useState({ type: 'sucess', message: '' });
+  const [snack, setSnack] = useState({ type: 'success', message: '' });
   const [openSnack, setOpenSnack] = useState(false);
   const [case_type, setCaseType] = useState('');
   const [date, setDate] = useState();
@@ -160,7 +160,7 @@ export default function IndividualObservation() {
         console.log(d);
       });
       //console.log(data);
-      setSnack({ type: 'success', message: 'Cadastrado com sucesso' });
+      setSnack({ type: 'success', message: 'Cadastrado com successo' });
       setOpenSnack(true);
 
       setSendDisabled(false);
