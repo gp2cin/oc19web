@@ -26,6 +26,10 @@ export const Container = styled.div`
     justify-content: center;
     align-items: center;
   }
+  .main-question {
+    font-size: 16px;
+    font-weight: bold;
+  }
   @media only screen and (max-width: 768px) {
     .observer-report-container {
       padding: 0px;
