@@ -42,7 +42,7 @@ const ChangePassword = (props) => {
 
   const sendForm = async ({ newPassword }) => {
     const response = await api.put('api/v1/me/change-password', { password: newPassword });
-    console.log(response);
+
     if (response.data.message === 'Password changed') {
       setSnack({ type: 'success', message: 'Senha trocada com sucesso' });
       setOpenSnack(true);
@@ -52,11 +52,9 @@ const ChangePassword = (props) => {
   return (
     <Formik
       initialValues={{ repeatNewPassword: '', newPassword: '' }}
-      onSubmit={(values, { setSubmitting }) => {
-        // alert(JSON.stringify(values, null, 2));
-
+      onSubmit={(values) => {
         console.log(values);
-        sendForm(values)
+        sendForm(values);
       }}
       validationSchema={schema}
     >
@@ -80,7 +78,7 @@ const ChangePassword = (props) => {
                   <TextField
                     error={!!(errors.newPassword && touched.newPassword && errors.newPassword !== '')}
                     margin="dense"
-                    autoComplete='off'
+                    autoComplete="off"
                     label="Nova senha"
                     name="newPassword"
                     onBlur={handleBlur}
@@ -98,7 +96,7 @@ const ChangePassword = (props) => {
                   <TextField
                     error={!!(errors.repeatNewPassword && touched.repeatNewPassword && errors.repeatNewPassword !== '')}
                     margin="dense"
-                    autoComplete='off'
+                    autoComplete="off"
                     label="Repetir nova senha"
                     name="repeatNewPassword"
                     onBlur={handleBlur}

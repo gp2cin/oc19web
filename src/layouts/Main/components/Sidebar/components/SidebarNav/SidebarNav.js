@@ -51,7 +51,7 @@ const SidebarNav = (props) => {
   const { pages, className, ...rest } = props;
 
   const classes = useStyles();
-  const history = useHistory()
+  const history = useHistory();
 
   return (
     <List {...rest} className={clsx(classes.root, className)}>
@@ -73,14 +73,11 @@ const SidebarNav = (props) => {
         <Button
           variant="outlined"
           style={{ justifyContent: 'center' }}
-          // activeClassName={classes.active}
           onClick={() => {
             logout();
-            history.push('/signin')
+            history.push('/signin');
           }}
           className={classes.button}
-          // component={CustomRouterLink}
-          // to={page.href}
         >
           {/* <div className={classes.icon}>{page.icon}</div> */}
           <div className={classes.icon}> Sair </div>
