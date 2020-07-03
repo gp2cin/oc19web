@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import Container from '@material-ui/core/Container';
 
 import CustomSnackBar from '../../../components/CustomSnackBar';
+import { ANALYST_HOME } from '../../../routes/constants/analyst';
 
 function Copyright() {
   return (
@@ -55,7 +56,13 @@ export default function SignIn() {
           setSnack({ type: 'success', message: 'Login efetuado com sucesso' });
           setOpenSnack(true);
           login(response.data.token);
-          setTimeout(() => history.push('/'), 3000);
+          console.log(response);
+
+          if (response.data.user.role.name === 'ANALYST') {
+            setTimeout(() => history.push(ANALYST_HOME), 1000);
+          } else {
+            setTimeout(() => history.push('/'), 1000);
+          }
         } catch (err) {
           console.log(err);
           setSnack({ type: 'error', message: 'Login ou senha incorreto, tente novamente' });

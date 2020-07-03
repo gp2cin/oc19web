@@ -51,7 +51,7 @@ export default function Reports() {
     setSecondBar(newValue === 0 ? observerTypes : userTypes);
   };
 
-  const changeObserverType = (e, newValue) => {
+  const changeObserverType = (e) => {
     setObserverType(e.target.value);
   };
 

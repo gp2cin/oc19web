@@ -6,9 +6,8 @@ import { makeStyles } from '@material-ui/styles';
 import { AppBar, Toolbar, Hidden, IconButton } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
-import InputIcon from '@material-ui/icons/Input';
-
 import Logo from '../../../../assets/ocovid19-logo-white.png';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -41,11 +40,7 @@ const Topbar = (props) => {
           <img width={100} alt="Logo" src={Logo} />
         </RouterLink>
         <div className={classes.flexGrow} />
-        <Hidden mdDown>
-          <IconButton className={classes.signOutButton} color="inherit">
-            <InputIcon />
-          </IconButton>
-        </Hidden>
+        
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onSidebarOpen}>
             <MenuIcon />
