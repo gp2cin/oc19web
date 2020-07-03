@@ -5,6 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { Select, Paper, Grid, Typography, Button } from '@material-ui/core';
 
 import MenuItem from '@material-ui/core/MenuItem';
+import ReportTable from './ReportTable';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -58,47 +59,60 @@ export default function Reports() {
   return (
     <div className={classes.root}>
       {/* <AppBar position="static" color="default"> */}
-      <Paper style={{ padding: 15 }}>
-        <Grid container direction="row" alignItems="center" spacing={3}>
-          <Grid item>
-            <Grid container direction="row" spacing={2}>
-              <Grid item style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography>Agente</Typography>
+      <Grid container spacing={2} direction="column">
+        <Grid item>
+          <Paper style={{ padding: 15 }}>
+            <Grid container direction="row" alignItems="center" spacing={3}>
+              <Grid item>
+                <Grid container direction="row" spacing={2}>
+                  <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography>Agente</Typography>
+                  </Grid>
+                  <Grid item>
+                    <Select
+                      value={value}
+                      margin="dense"
+                      variant="outlined"
+                      onChange={handleChange}
+                      style={{ width: 150 }}
+                    >
+                      {['Observador', 'Indivíduo'].map((name, index) => {
+                        return <MenuItem value={index}>{name}</MenuItem>;
+                      })}
+                    </Select>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item>
-                <Select value={value} margin="dense" variant="outlined" onChange={handleChange} style={{ width: 150 }}>
-                  {['Observador', 'Indivíduo'].map((name, index) => {
-                    return <MenuItem value={index}>{name}</MenuItem>;
-                  })}
-                </Select>
-              </Grid>
-            </Grid>
-          </Grid>
-          <Grid item>
-            <Grid container direction="row" spacing={2}>
-              <Grid item style={{ display: 'flex', alignItems: 'center' }}>
-                <Typography>Tipo: </Typography>
+                <Grid container direction="row" spacing={2}>
+                  <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                    <Typography>Tipo: </Typography>
+                  </Grid>
+                  <Grid item>
+                    <Select
+                      value={observerType}
+                      margin="dense"
+                      variant="outlined"
+                      onChange={changeObserverType}
+                      style={{ width: 220 }}
+                    >
+                      {secondBar.map((name, i) => {
+                        return <MenuItem value={i}>{name}</MenuItem>;
+                      })}
+                    </Select>
+                  </Grid>
+                </Grid>
               </Grid>
               <Grid item>
-                <Select
-                  value={observerType}
-                  margin="dense"
-                  variant="outlined"
-                  onChange={changeObserverType}
-                  style={{ width: 220 }}
-                >
-                  {secondBar.map((name, i) => {
-                    return <MenuItem value={i}>{name}</MenuItem>;
-                  })}
-                </Select>
+                <Button variant="outlined">Buscar</Button>
               </Grid>
             </Grid>
-          </Grid>
-          <Grid item>
-            <Button variant="outlined">Buscar</Button>
-          </Grid>
+          </Paper>
         </Grid>
-      </Paper>
+        <Grid item>
+          <ReportTable />
+        </Grid>
+      </Grid>
 
       {/* <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
           {['Observador', 'Usuário'].map((name) => {
