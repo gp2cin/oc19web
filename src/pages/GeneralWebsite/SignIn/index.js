@@ -56,7 +56,6 @@ export default function SignIn() {
           setSnack({ type: 'success', message: 'Login efetuado com sucesso' });
           setOpenSnack(true);
           login(response.data.token);
-          console.log(response);
 
           if (response.data.user.role.name === 'ANALYST') {
             setTimeout(() => history.push(ANALYST_HOME), 1000);
