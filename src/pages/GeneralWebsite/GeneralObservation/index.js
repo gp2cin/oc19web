@@ -287,16 +287,17 @@ export default function GeneralObservation() {
                 <div className="comments col-md-12">
                     <div className="col-md-12" style={{ padding: '0px' }}>
                         <p>Observação:*</p>
-                        <input
-                            placeholder="Observação"
+                        <textarea
+                            rows={10}
+                            placeholder="Digite sua observação aqui"
                             className="col-md-12 form-control"
                             value={observation}
                             style={requiredInputStyle.observation}
                             onChange={(e) => {
                                 setObservation(e.target.value)
-                                setRequiredInputStyle(prev => ({ ...prev, observation: {} }));
+                                setRequiredInputStyle(prev => ({ ...prev, observation: {} }))
                             }}
-                        ></input>
+                        ></textarea>
                     </div>
                 </div>
                 <div

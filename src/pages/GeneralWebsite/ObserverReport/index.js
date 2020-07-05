@@ -34,7 +34,7 @@ export default function ObserverReport() {
                     <div className="report-type col-md-12">
                         <FormControl component={'fieldset'} className="col-md-9">
                             <p className="main-question">{'Qual tipo de informe você quer fazer?*'}</p>
-                            <p style={{ fontSize: '12px' }}>Uma observação individual diz respeito a informações sobre um ÚNICO INDIVÍDUO. Uma observação em lote agrupa informações para DOIS OU MAIS INDIVÍDUOS.</p>
+                            <p style={{ fontSize: '12px' }}>Uma observação individual serve para registro de um caso sobre um ÚNICO INDIVÍDUO. Uma observação em lote agrupa informações sobre casos de DOIS OU MAIS INDIVÍDUOS. Uma observação geral serve para descrever algum acontecimento relevante no contexto da pandemia de COVID-19.</p>
                             <RadioGroup
                                 aria-label={'q'}
                                 name={'q1'}
