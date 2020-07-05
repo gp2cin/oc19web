@@ -36,8 +36,6 @@ export default function GeneralObservation() {
     const [uploadMessage, setUploadMessage] = useState('');
 
     const [requiredInputStyle, setRequiredInputStyle] = useState({
-        neighborhood: {},
-        neighborhoodSelect: {},
         city: {},
         observation: {},
     });
@@ -122,7 +120,6 @@ export default function GeneralObservation() {
 
     function isRequiredFilled() {
         if (city !== '' &&
-            neighborhood_name !== '' &&
             observation !== ''
         ) {
             return true;
@@ -131,18 +128,6 @@ export default function GeneralObservation() {
                 setRequiredInputStyle(prev => ({
                     ...prev,
                     city: {
-                        control: (base, state) => ({
-                            ...base,
-                            borderColor: 'red',
-                        }),
-                    }
-                }))
-            }
-            if (neighborhood_name === '') {
-                setRequiredInputStyle(prev => ({
-                    ...prev,
-                    neighborhood: { borderColor: 'red' },
-                    neighborhoodSelect: {
                         control: (base, state) => ({
                             ...base,
                             borderColor: 'red',
@@ -273,9 +258,7 @@ export default function GeneralObservation() {
                                 onChange={(e) => {
                                     setNeighborhood('');
                                     setNeighborhood_name(e.target.value);
-                                    setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }));
                                 }}
-                                style={requiredInputStyle.neighborhood}
                             ></input>
 
                         }
@@ -291,10 +274,8 @@ export default function GeneralObservation() {
                                 isSearchable
                                 onChange={(e) => {
                                     handleNeighborhoodChoice(e);
-                                    setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }));
                                 }}
                                 options={neighborhooods}
-                                style={requiredInputStyle.neighborhoodSelect}
                             />
                         }
                         {

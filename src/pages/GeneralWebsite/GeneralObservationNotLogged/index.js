@@ -36,7 +36,6 @@ export default function GeneralObservation() {
     const [requiredInputStyle, setRequiredInputStyle] = useState({
         observerName: {},
         observerEmail: {},
-        neighborhoodSelect: {},
         city: {},
         observation: {},
     });
@@ -123,7 +122,6 @@ export default function GeneralObservation() {
         if (observer_name !== '' &&
             observer_email !== '' &&
             city !== '' &&
-            neighborhood_name !== '' &&
             observation !== ''
         ) {
             return true;
@@ -138,18 +136,6 @@ export default function GeneralObservation() {
                 setRequiredInputStyle(prev => ({
                     ...prev,
                     city: {
-                        control: (base, state) => ({
-                            ...base,
-                            borderColor: 'red',
-                        }),
-                    }
-                }))
-            }
-            if (neighborhood_name === '') {
-                setRequiredInputStyle(prev => ({
-                    ...prev,
-                    neighborhood: { borderColor: 'red' },
-                    neighborhoodSelect: {
                         control: (base, state) => ({
                             ...base,
                             borderColor: 'red',
@@ -307,11 +293,9 @@ export default function GeneralObservation() {
                                 placeholder="Bairro"
                                 className="col-md-12 form-control"
                                 value={neighborhood_name}
-                                style={requiredInputStyle.neighborhood}
                                 onChange={(e) => {
                                     setNeighborhood('');
                                     setNeighborhood_name(e.target.value);
-                                    setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }))
                                 }}
                             ></input>
 
@@ -326,10 +310,8 @@ export default function GeneralObservation() {
                                 defaultValue={[]}
                                 isClearable
                                 isSearchable
-                                style={requiredInputStyle.neighborhoodSelect}
                                 onChange={(e) => {
                                     handleNeighborhoodChoice(e)
-                                    setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }))
                                 }}
                                 options={neighborhooods}
                             />

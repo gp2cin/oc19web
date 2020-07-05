@@ -55,8 +55,6 @@ export default function IndividualObservation() {
   const [general_comments, setGeneralComments] = useState('');
   const report_type = 'individual';
   const [requiredInputStyle, setRequiredInputStyle] = useState({
-    neighborhood: {},
-    neighborhoodSelect: {},
     city: {},
     caseGender: {},
     caseHadPreExistingDiseases: {},
@@ -240,7 +238,6 @@ export default function IndividualObservation() {
 
   function isRequiredFilled() {
     if (
-      neighborhood_name !== '' &&
       city !== '' &&
       info_source !== '' &&
       case_type !== '' &&
@@ -251,18 +248,7 @@ export default function IndividualObservation() {
     ) {
       return true;
     } else {
-      if (neighborhood_name === '') {
-        setRequiredInputStyle(prev => ({
-          ...prev,
-          neighborhood: { borderColor: 'red' },
-          neighborhoodSelect: {
-            control: (base, state) => ({
-              ...base,
-              borderColor: 'red',
-            }),
-          }
-        }));
-      }
+
       if (city === '') {
         setRequiredInputStyle(prev => ({
           ...prev,
@@ -333,11 +319,9 @@ export default function IndividualObservation() {
                 placeholder="Bairro"
                 className="col-md-12 form-control"
                 value={neighborhood_name}
-                style={requiredInputStyle.neighborhood}
                 onChange={(e) => {
                   setNeighborhood('');
                   setNeighborhood_name(e.target.value);
-                  setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }))
                 }}
               ></input>
 
@@ -352,10 +336,8 @@ export default function IndividualObservation() {
                 defaultValue={[]}
                 isClearable
                 isSearchable
-                style={requiredInputStyle.neighborhoodSelect}
                 onChange={(e) => {
                   handleNeighborhoodChoice(e)
-                  setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }))
                 }}
                 options={neighborhooods}
               />
