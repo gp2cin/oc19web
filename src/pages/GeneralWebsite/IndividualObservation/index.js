@@ -47,7 +47,7 @@ export default function IndividualObservation() {
     } else if (event.target.value === 'false') {
       setCaseHouseholdContact(false);
     } else if (event.target.value === 'not-known') {
-      setCaseHouseholdContact('');
+      setCaseHouseholdContact(undefined);
     }
   };
   const [info_source, setInfoSource] = useState('');
@@ -269,7 +269,7 @@ export default function IndividualObservation() {
       if (case_gender === '') {
         setRequiredInputStyle(prev => ({ ...prev, caseGender: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
       }
-      if (caseHadPreExistingDiseases === '') {
+      if (household_contact_confirmed_case === null || household_contact_confirmed_case === undefined) {
         setRequiredInputStyle(prev => ({ ...prev, caseHadPreExistingDiseases: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
       }
       if (household_contact_confirmed_case === null || household_contact_confirmed_case === undefined) {
