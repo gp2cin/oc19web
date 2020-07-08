@@ -189,7 +189,7 @@ export default function GeneralObservation() {
           const image = images[index];
           if (image !== undefined) {
             let folder;
-            switch (ProcessingInstruction.env.REACT_APP_TYPE) {
+            switch (process.env.REACT_APP_TYPE) {
               case 'dev':
                 folder = 'testes/';
                 break;
