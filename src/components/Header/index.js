@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import { FiLogIn, FiHome, FiInfo, FiDatabase, FiUser, FiUserPlus, FiLogOut } from 'react-icons/fi';
 import { logout, isAuthenticated } from '../../services/auth';
 import CustomSnackBar from '../CustomSnackBar';
+import { ANALYST_PROFILE } from '../../routes/constants/analyst';
 
 export default class Header extends Component {
   state = {
@@ -17,8 +18,10 @@ export default class Header extends Component {
   };
 
   getUsername = () => localStorage.getItem('NAME');
+  getRole = () => localStorage.getItem('ROLE');
 
   componentDidMount() {
+    console.log(this.getRole());
     this.setState({ isAuth: isAuthenticated() });
   }
 
@@ -102,7 +105,10 @@ export default class Header extends Component {
                   Olá, {this.getUsername()}
                 </button>
                 <div className="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <Link to="/my-account" className={'btn dropdown-item'}>
+                  <Link
+                    to={this.getRole() === 'ANALYST' ? ANALYST_PROFILE : '/my-account'}
+                    className={'btn dropdown-item'}
+                  >
                     <FiUser size={20} /> {'Minha conta'}
                   </Link>
                   <button className={'btn dropdown-item'} onClick={this.handleLogout}>

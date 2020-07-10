@@ -44,8 +44,6 @@ export default function BulkObservation() {
     const report_type = 'social';
 
     const [requiredInputStyle, setRequiredInputStyle] = useState({
-        neighborhood: {},
-        neighborhoodSelect: {},
         city: {},
         numberOfCases: {},
         informationSource: {},
@@ -132,7 +130,6 @@ export default function BulkObservation() {
 
     function isRequiredFilled() {
         if (
-            neighborhood_name !== '' &&
             city !== '' &&
             case_type !== '' &&
             (number_of_cases !== 0 && number_of_cases !== '' && number_of_cases !== '0') &&
@@ -140,18 +137,7 @@ export default function BulkObservation() {
         ) {
             return true;
         }
-        if (neighborhood_name === '') {
-            setRequiredInputStyle(prev => ({
-                ...prev,
-                neighborhood: { borderColor: 'red' },
-                neighborhoodSelect: {
-                    control: (base, state) => ({
-                        ...base,
-                        borderColor: 'red',
-                    }),
-                }
-            }))
-        }
+
         if (city === '') {
             setRequiredInputStyle(prev => ({
                 ...prev,
@@ -250,11 +236,9 @@ export default function BulkObservation() {
                                 placeholder="Bairro"
                                 className="col-md-12 form-control"
                                 value={neighborhood_name}
-                                style={requiredInputStyle.neighborhood}
                                 onChange={(e) => {
                                     setNeighborhood('');
                                     setNeighborhood_name(e.target.value);
-                                    setRequiredInputStyle(prev => ({ ...prev, neighborhood: {} }));
                                 }}
                             ></input>
 
@@ -271,10 +255,8 @@ export default function BulkObservation() {
                                 isSearchable
                                 onChange={(e) => {
                                     handleNeighborhoodChoice(e)
-                                    setRequiredInputStyle(prev => ({ ...prev, neighborhoodSelect: {} }));
                                 }}
                                 options={neighborhooods}
-                                style={requiredInputStyle.neighborhoodSelect}
                             />
                         }
                         {
