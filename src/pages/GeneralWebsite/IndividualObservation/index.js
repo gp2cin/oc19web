@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import DatePicker from 'react-datepicker';
+import MaskedInput from 'react-maskedinput';
 import api from '../../../services/api';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -59,7 +60,7 @@ export default function IndividualObservation() {
     caseGender: {},
     caseHadPreExistingDiseases: {},
     householdContactConfirmedCase: {},
-    informationSource: {}
+    informationSource: {},
   });
 
   const history = useHistory();
@@ -177,17 +178,17 @@ export default function IndividualObservation() {
       setCity_ca(formatName(choice.label));
       //Get Recife's neighborhoods form backend
       if (choice.label === 'Recife') {
-        console.log('Recife!!')
+        console.log('Recife!!');
         setLoading(true);
         setIsRecifeSelected(true);
         try {
-          const response = await api.get('api/v1/neighborhoods?cidade=recife')
+          const response = await api.get('api/v1/neighborhoods?cidade=recife');
           console.log(response);
           if (response !== null) {
-            console.log('Resposta Recife!!')
+            console.log('Resposta Recife!!');
             console.log(response);
             if (response.data !== null) {
-              console.log('Resposta Bairros!!')
+              console.log('Resposta Bairros!!');
               console.log(response.data);
               let arr = [];
               for (const i in response.data) {
@@ -201,13 +202,12 @@ export default function IndividualObservation() {
             }
           } else {
             setLoading(false);
-            console.log('BAIRROS NULOS')
+            console.log('BAIRROS NULOS');
           }
         } catch (error) {
-          console.log(`Erro ao buscar bairros ${error}`)
+          console.log(`Erro ao buscar bairros ${error}`);
           setLoading(false);
         }
-
       } else {
         setNeighborhoods([]);
         setIsRecifeSelected(false);
@@ -244,36 +244,46 @@ export default function IndividualObservation() {
       case_gender !== '' &&
       caseHadPreExistingDiseases !== '' &&
       household_contact_confirmed_case !== ''
-
     ) {
       return true;
     } else {
-
       if (city === '') {
-        setRequiredInputStyle(prev => ({
+        setRequiredInputStyle((prev) => ({
           ...prev,
           city: {
             control: (base, state) => ({
               ...base,
               borderColor: 'red',
             }),
-          }
-        }))
+          },
+        }));
       }
       if (info_source === '') {
-        setRequiredInputStyle(prev => ({ ...prev, informationSource: { borderColor: 'red' } }))
+        setRequiredInputStyle((prev) => ({ ...prev, informationSource: { borderColor: 'red' } }));
       }
       if (case_type === '') {
-        setRequiredInputStyle(prev => ({ ...prev, caseType: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+        setRequiredInputStyle((prev) => ({
+          ...prev,
+          caseType: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+        }));
       }
       if (case_gender === '') {
-        setRequiredInputStyle(prev => ({ ...prev, caseGender: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+        setRequiredInputStyle((prev) => ({
+          ...prev,
+          caseGender: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+        }));
       }
       if (household_contact_confirmed_case === null || household_contact_confirmed_case === undefined) {
-        setRequiredInputStyle(prev => ({ ...prev, caseHadPreExistingDiseases: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+        setRequiredInputStyle((prev) => ({
+          ...prev,
+          caseHadPreExistingDiseases: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+        }));
       }
       if (household_contact_confirmed_case === null || household_contact_confirmed_case === undefined) {
-        setRequiredInputStyle(prev => ({ ...prev, householdContactConfirmedCase: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+        setRequiredInputStyle((prev) => ({
+          ...prev,
+          householdContactConfirmedCase: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+        }));
       }
       setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios' });
       setOpenSnack(true);
@@ -306,15 +316,14 @@ export default function IndividualObservation() {
               styles={requiredInputStyle.city}
               onChange={(e) => {
                 handleCityChoice(e);
-                setRequiredInputStyle(prev => ({ ...prev, city: {} }))
+                setRequiredInputStyle((prev) => ({ ...prev, city: {} }));
               }}
               options={cities}
             />
           </div>
           <div className="neighborhood col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
             <p>Bairro:*</p>
-            {
-              (!isRecifeSelected) &&
+            {!isRecifeSelected && (
               <input
                 placeholder="Bairro"
                 className="col-md-12 form-control"
@@ -324,10 +333,8 @@ export default function IndividualObservation() {
                   setNeighborhood_name(e.target.value);
                 }}
               ></input>
-
-            }
-            {
-              (isRecifeSelected && !loading) &&
+            )}
+            {isRecifeSelected && !loading && (
               <Select
                 className="select"
                 placeholder="Escolha"
@@ -337,15 +344,12 @@ export default function IndividualObservation() {
                 isClearable
                 isSearchable
                 onChange={(e) => {
-                  handleNeighborhoodChoice(e)
+                  handleNeighborhoodChoice(e);
                 }}
                 options={neighborhooods}
               />
-            }
-            {
-              (isRecifeSelected && loading) &&
-              <CircularProgress />
-            }
+            )}
+            {isRecifeSelected && loading && <CircularProgress />}
           </div>
         </div>
         <div className="individual-info col-md-12">
@@ -357,8 +361,8 @@ export default function IndividualObservation() {
                 name={'q2'}
                 value={case_type}
                 onChange={(e) => {
-                  setCaseType(e.target.value)
-                  setRequiredInputStyle(prev => ({ ...prev, caseType: {} }))
+                  setCaseType(e.target.value);
+                  setRequiredInputStyle((prev) => ({ ...prev, caseType: {} }));
                 }}
               >
                 <FormControlLabel value={'suspect'} control={<Radio />} label={'Caso Suspeito'} />
@@ -367,20 +371,21 @@ export default function IndividualObservation() {
               </RadioGroup>
             </FormControl>
           </div>
-          {
-            case_type === 'death' &&
+          {case_type === 'death' && (
             <div className="death-date col-md-9">
               <p>{'Data do óbito:'}</p>
               <DatePicker
+                placeholderText="DD/MM/AAAA"
                 maxDate={new Date()}
-                className={'date-picker form-control col-md-9'}
+                className={'date-picker form-control'}
                 dateFormat={'dd/MM/yyyy'}
                 locale={'BR'}
                 selected={date}
                 onChange={(date) => handleDeathDate(date)}
+                customInput={<MaskedInput mask="11/11/1111" />}
               />
             </div>
-          }
+          )}
           <div className="third-inputs col-md-12">
             <div className="name col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
               <p>Nome:</p>
@@ -412,8 +417,8 @@ export default function IndividualObservation() {
                 name={'q3'}
                 value={case_gender}
                 onChange={(e) => {
-                  setCaseGender(e.target.value)
-                  setRequiredInputStyle(prev => ({ ...prev, caseGender: {} }))
+                  setCaseGender(e.target.value);
+                  setRequiredInputStyle((prev) => ({ ...prev, caseGender: {} }));
                 }}
               >
                 <FormControlLabel value={'male'} control={<Radio />} label={'Masculino'} />
@@ -430,8 +435,8 @@ export default function IndividualObservation() {
                 name={'q4'}
                 value={caseHadPreExistingDiseases}
                 onChange={(e) => {
-                  setCaseHadPreExistingDiseases(e.target.value)
-                  setRequiredInputStyle(prev => ({ ...prev, caseHadPreExistingDiseases: {} }))
+                  setCaseHadPreExistingDiseases(e.target.value);
+                  setRequiredInputStyle((prev) => ({ ...prev, caseHadPreExistingDiseases: {} }));
                 }}
               >
                 <FormControlLabel value={'yes'} control={<Radio />} label={'Sim'} />
@@ -440,8 +445,7 @@ export default function IndividualObservation() {
               </RadioGroup>
             </FormControl>
           </div>
-          {
-            caseHadPreExistingDiseases === 'yes' &&
+          {caseHadPreExistingDiseases === 'yes' && (
             <div className={'deseases-container col-md-9'}>
               <p>{'Quais doenças preexistentes?'}</p>
               <Select
@@ -457,7 +461,7 @@ export default function IndividualObservation() {
                 options={diseaseOptions}
               />
             </div>
-          }
+          )}
           <div className="had-household-contact col-md-9" style={requiredInputStyle.householdContactConfirmedCase}>
             <FormControl component={'fieldset'} className="col-md-9">
               <p>{'O paciente manteve contato domiciliar com caso confirmado por COVID-19 nos últimos 14 dias?*'}</p>
@@ -466,8 +470,8 @@ export default function IndividualObservation() {
                 name={'q5'}
                 value={household_contact_confirmed_case}
                 onChange={(e) => {
-                  handleChangeQ5(e)
-                  setRequiredInputStyle(prev => ({ ...prev, householdContactConfirmedCase: {} }))
+                  handleChangeQ5(e);
+                  setRequiredInputStyle((prev) => ({ ...prev, householdContactConfirmedCase: {} }));
                 }}
               >
                 <FormControlLabel value={'true'} control={<Radio />} label={'Sim'} />
@@ -485,8 +489,8 @@ export default function IndividualObservation() {
                 style={requiredInputStyle.informationSource}
                 value={info_source}
                 onChange={(e) => {
-                  setInfoSource(e.target.value)
-                  setRequiredInputStyle(prev => ({ ...prev, informationSource: {} }))
+                  setInfoSource(e.target.value);
+                  setRequiredInputStyle((prev) => ({ ...prev, informationSource: {} }));
                 }}
               ></input>
             </div>
