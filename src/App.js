@@ -14,9 +14,11 @@ Chart.helpers.extend(Chart.elements.Rectangle.prototype, {
   draw: chartjs.draw,
 });
 
-console.log(theme);
+
 
 const App = () => {
+  console.log(process.env);
+  
   return (
     <ThemeProvider theme={theme}>
       {/* <div className={'container'}> */}
