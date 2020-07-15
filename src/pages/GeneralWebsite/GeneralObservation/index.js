@@ -3,12 +3,14 @@ import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import api from '../../../services/api';
-import { awsApi } from '../../../services/api';
+
 import CustomSnackBar from '../../../components/CustomSnackBar';
 
 import formatName from '../../../utils/formatName';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
+import { uploadFile } from '../../../helpers/SendFileObservation';
+import FileInput from '../../../components/FileInput';
 
 export default function GeneralObservation() {
   const observer_name = '';
@@ -167,50 +169,12 @@ export default function GeneralObservation() {
       const response = await api.post('api/v1/general-observation-auth', data);
       console.log(response);
       if (response.data.generalObservation && images.length > 0 && images !== undefined) {
-        errorMessage = 'Observação cadastrada, mas erro ao buscar URL de cadastro da imagem.';
-        console.log(response.data.generalObservation._id);
-        setUploadMessage('Carregando ...');
-        let error = false;
-
-        for (const index in images) {
-          const image = images[index];
-          if (image !== undefined) {
-            let folder;
-            switch (process.env.REACT_APP_TYPE) {
-              case 'dev':
-                folder = 'testes/';
-                break;
-              case 'prod':
-                folder = 'producao/';
-                break;
-              case 'homolog':
-                folder = 'homologacao/';
-                break;
-
-              default:
-                folder = 'testes/';
-                break;
-            }
-            const options = {
-              params: {
-                Key: folder + response.data.generalObservation._id + '/' + image.name,
-                ContentType: image.type,
-              },
-              headers: {
-                'Content-Type': image.type,
-              },
-            };
-            const res = await api.get('api/v1/generate-put-url', options);
-            if (res.data.putURL !== null && res.data.putURL !== undefined) {
-              console.log(res.data.putURL);
-              errorMessage = 'Observação cadastrada, mas erro ao cadastrar imagem da observação.';
-              await awsApi.put(res.data.putURL, image, options);
-              setUploadMessage('Upload Successful!');
-            } else {
-              error = true;
-            }
-          }
-        }
+        const error = await uploadFile({
+          setUploadMessage,
+          images,
+          id: response.data.generalObservation._id,
+          type: 'GeneralObservation',
+        });
 
         if (!error) {
           setSnack({ type: 'success', message: 'Cadastrado com successo' });
@@ -322,44 +286,7 @@ export default function GeneralObservation() {
             ></textarea>
           </div>
         </div>
-        <div
-          className="col-md-12 image"
-          style={{
-            justifyContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <p>Cadastro de imagem:</p>
-            <input
-              style={{ marginTop: '5px', padding: '0px' }}
-              id="upload-image"
-              className="upload-image col-md-12"
-              type="file"
-              accept=""
-              multiple
-              onChange={(e) => getImage(e)}
-            />
-            <p>{uploadMessage}</p>
-          </div>
-
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            {images.map((image) => {
-              return (
-                <div style={{ display: 'flex' }}>
-                  <button type="button" class="btn btn-outline-secondary btn-sm">
-                    {image.name}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        </div>
+        <FileInput images={images} getImage={getImage} uploadMessage={uploadMessage} />
         <section className={'col-md-12'}>
           <button
             disabled={sendDisabled}
