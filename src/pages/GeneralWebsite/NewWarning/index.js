@@ -229,7 +229,7 @@ export default function WarningCreation() {
       const error = await uploadFile({
         setUploadMessage,
         images,
-        id: response.data.observerReport._id,
+        id: 1,
         type: 'newWarning',
       });
 
