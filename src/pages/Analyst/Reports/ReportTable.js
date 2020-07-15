@@ -18,7 +18,7 @@ import {
 
 import mockData from './data';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   root: {},
   content: {
     padding: 0,
@@ -30,55 +30,70 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'center',
   },
-  // status: {
-  //   marginRight: theme.spacing(1),
-  // },
+
   actions: {
     justifyContent: 'flex-end',
   },
 }));
 
-// const statusColors = {
-//   delivered: 'success',
-//   pending: 'info',
-//   refunded: 'danger',
-// };
-
 const ReportTable = (props) => {
-  const { className, ...rest } = props;
+  const { className, type, data, agent, ...rest } = props;
 
   const classes = useStyles();
 
   const [orders] = useState(mockData);
 
+  const renderTitles = () => {
+    const titles = {
+      Observador: {
+        'Observações Gerais': ['id', 'Nome observador', 'Email observador', 'Bairro'],
+        'Observações individuais': ['id'],
+        'Observações em lote': ['id'],
+      },
+      Indivíduo: { 'Auto-casos': ['id'], 'Observações Gerais': ['id'] },
+    };
+
+    return titles[agent][type].map((title) => {
+      return <TableCell> {title} </TableCell>;
+    });
+  };
+
+  const renderInformation = (observation) => {
+    const titles = {
+      Observador: {
+        'Observações Gerais': [
+          observation._id,
+          observation.observer_name,
+          observation.observer_email,
+          observation.neighborhood_name,
+        ],
+        'Observações individuais': ['id'],
+        'Observações em lote': ['id'],
+      },
+      Indivíduo: { 'Auto-casos': ['id'], 'Observações Gerais': ['id'] },
+    };
+
+    return (
+      <TableRow hover key={observation.id}>
+        {titles[agent][type].map((info) => {
+          return <TableCell>{info}</TableCell>;
+        })}
+      </TableRow>
+    );
+  };
+
   return (
     <Card {...rest} className={clsx(classes.root, className)}>
-      <CardHeader title="Relatório de observações" />
+      <CardHeader title={'Observações - ' + agent} subheader={type} />
       <Divider />
       <CardContent style={{ padding: 0 }} className={classes.content}>
         <PerfectScrollbar>
           <div className={classes.inner}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>Order Ref</TableCell>
-                  <TableCell>Customer</TableCell>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Status</TableCell>
-                </TableRow>
+                <TableRow>{renderTitles()}</TableRow>
               </TableHead>
-              <TableBody>
-                {orders.map((order) => (
-                  <TableRow hover key={order.id}>
-                    <TableCell>{order.ref}</TableCell>
-                    <TableCell>{order.customer.name}</TableCell>
-                    <TableCell>{moment(order.createdAt).format('DD/MM/YYYY')}</TableCell>
-                    <TableCell>
-                      <div className={classes.statusContainer}>{order.status}</div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
+              <TableBody>{data.map((observation) => renderInformation(observation))}</TableBody>
             </Table>
           </div>
         </PerfectScrollbar>

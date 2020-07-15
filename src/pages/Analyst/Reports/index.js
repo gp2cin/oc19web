@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 
-import { Select, Paper, Grid, Typography, Button } from '@material-ui/core';
+import { Select, Paper, Grid, Typography, Button, CircularProgress } from '@material-ui/core';
 
 import MenuItem from '@material-ui/core/MenuItem';
 import ReportTable from './ReportTable';
+import api from '../../../services/api';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -37,101 +38,116 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Reports() {
-  const classes = useStyles();
+  // const classes = useStyles();
 
+  const agentType = ['Observador', 'Indivíduo'];
   const observerTypes = ['Observações Gerais', 'Observações individuais', 'Observações em lote'];
   const userTypes = ['Auto-casos', 'Observações Gerais'];
 
   const [value, setValue] = React.useState(0);
   const [observerType, setObserverType] = React.useState(0);
   const [secondBar, setSecondBar] = React.useState(observerTypes);
+  const [actualConfig, setActualConfig] = React.useState({ agent: agentType[0], type: secondBar[0] });
+
+  const [loading, setLoading] = React.useState(true);
+  const [data, setData] = React.useState([]);
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   const handleChange = (e, newValue) => {
     setValue(e.target.value);
     setObserverType(0);
-    setSecondBar(newValue === 0 ? observerTypes : userTypes);
+    setSecondBar(newValue.props.value === 0 ? observerTypes : userTypes);
+  };
+
+  const handleSearch = () => {
+    setActualConfig({ agent: agentType[value], type: secondBar[observerType] });
+    getData();
   };
 
   const changeObserverType = (e) => {
     setObserverType(e.target.value);
   };
 
+  const getData = async () => {
+    setLoading(true);
+
+    if (value === 0) {
+      if (observerTypes[observerType] === 'Observações Gerais') {
+        const response = await api.get('api/v1/general-observations');
+
+        setData(response.data.generalObservations);
+      }
+    }
+    setLoading(false);
+  };
+
   return (
-    <div className={classes.root}>
-      {/* <AppBar position="static" color="default"> */}
-      <Grid container spacing={2} direction="column">
-        <Grid item>
-          <Paper style={{ padding: 15 }}>
-            <Grid container direction="row" alignItems="center" spacing={3}>
-              <Grid item>
-                <Grid container direction="row" spacing={2}>
-                  <Grid item style={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography>Agente</Typography>
-                  </Grid>
-                  <Grid item>
-                    <Select
-                      value={value}
-                      margin="dense"
-                      variant="outlined"
-                      onChange={handleChange}
-                      style={{ width: 150 }}
-                    >
-                      {['Observador', 'Indivíduo'].map((name, index) => {
-                        return <MenuItem value={index}>{name}</MenuItem>;
-                      })}
-                    </Select>
-                  </Grid>
+    <Grid container spacing={2}>
+      <Grid item xs={12}>
+        <Paper style={{ padding: 15 }}>
+          <Grid container direction="row" alignItems="center" spacing={3}>
+            <Grid item>
+              <Grid container direction="row" spacing={2}>
+                <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography>Agente</Typography>
                 </Grid>
-              </Grid>
-              <Grid item>
-                <Grid container direction="row" spacing={2}>
-                  <Grid item style={{ display: 'flex', alignItems: 'center' }}>
-                    <Typography>Tipo: </Typography>
-                  </Grid>
-                  <Grid item>
-                    <Select
-                      value={observerType}
-                      margin="dense"
-                      variant="outlined"
-                      onChange={changeObserverType}
-                      style={{ width: 220 }}
-                    >
-                      {secondBar.map((name, i) => {
-                        return <MenuItem value={i}>{name}</MenuItem>;
-                      })}
-                    </Select>
-                  </Grid>
+                <Grid item>
+                  <Select
+                    value={value}
+                    margin="dense"
+                    variant="outlined"
+                    onChange={handleChange}
+                    style={{ width: 150 }}
+                  >
+                    {agentType.map((name, index) => {
+                      return <MenuItem value={index}>{name}</MenuItem>;
+                    })}
+                  </Select>
                 </Grid>
-              </Grid>
-              <Grid item>
-                <Button variant="outlined">Buscar</Button>
               </Grid>
             </Grid>
-          </Paper>
-        </Grid>
-        <Grid item>
-          <ReportTable />
-        </Grid>
+            <Grid item>
+              <Grid container direction="row" spacing={2}>
+                <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                  <Typography>Tipo: </Typography>
+                </Grid>
+                <Grid item>
+                  <Select
+                    value={observerType}
+                    margin="dense"
+                    variant="outlined"
+                    onChange={changeObserverType}
+                    style={{ width: 220 }}
+                  >
+                    {secondBar.map((name, i) => {
+                      return <MenuItem value={i}>{name}</MenuItem>;
+                    })}
+                  </Select>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item>
+              <Button variant="outlined" onClick={() => handleSearch()}>
+                Buscar
+              </Button>
+            </Grid>
+          </Grid>
+        </Paper>
       </Grid>
-
-      {/* <Tabs value={value} onChange={handleChange} aria-label="simple tabs example">
-          {['Observador', 'Usuário'].map((name) => {
-            return <Tab label={name} />;
-          })}
-        </Tabs>
-      </AppBar>
-      <AppBar position="static" color="default" style={{ marginTop: 8 }}>
-        <Tabs value={observerType} onChange={changeObserverType} aria-label="simple tabs example">
-          {secondBar.map((name) => {
-            return <Tab label={name} />;
-          })}
-        </Tabs> */}
-      {/* </AppBar> */}
-      {/* <TabPanel value={observerType} index={0}>
-        <Card>
-          <CardHeader title="nsei" />
-        </Card>
-      </TabPanel> */}
-    </div>
+      <Grid item xs={12}>
+        {loading ? (
+          <Grid container alignItems="center" justify="center">
+            <Grid item>
+              <CircularProgress />
+            </Grid>
+          </Grid>
+        ) : (
+          <ReportTable agent={actualConfig.agent} type={actualConfig.type} data={data} />
+        )}
+      </Grid>
+    </Grid>
   );
 }
