@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Select from 'react-select';
 import makeAnimated from 'react-select/animated';
 import DatePicker from 'react-datepicker';
+import MaskedInput from 'react-maskedinput';
 import api from '../../../services/api';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -397,12 +398,14 @@ export default function IndividualObservation() {
             <div className="death-date col-md-9">
               <p>{'Data do óbito:'}</p>
               <DatePicker
+                placeholderText="DD/MM/AAAA"
                 maxDate={new Date()}
-                className={'date-picker form-control col-md-9'}
+                className={'date-picker form-control'}
                 dateFormat={'dd/MM/yyyy'}
                 locale={'BR'}
                 selected={date}
                 onChange={(date) => handleDeathDate(date)}
+                customInput={<MaskedInput mask="11/11/1111" />}
               />
             </div>
           )}
