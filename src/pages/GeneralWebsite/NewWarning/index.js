@@ -224,7 +224,7 @@ export default function WarningCreation() {
 
   async function postWarning(data) {
     try {
-      const response = await api.post('api/v1/warnings', data);
+      await api.post('api/v1/warnings', data);
 
       const error = await uploadFile({
         setUploadMessage,
