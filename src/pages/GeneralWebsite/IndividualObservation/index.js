@@ -15,12 +15,16 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import CustomSnackBar from '../../../components/CustomSnackBar';
+import FileInput from '../../../components/FileInput';
+import { uploadFile } from '../../../helpers/SendFileObservation';
 
 export default function IndividualObservation() {
   const [city, setCity] = useState('');
   const [city_ca, setCity_ca] = useState('');
   const [neighborhood, setNeighborhood] = useState('');
   const [neighborhood_name, setNeighborhood_name] = useState('');
+
+  const [images, setImages] = useState([]);
   //List of Recife's neighborhoods from backend
   const [neighborhooods, setNeighborhoods] = useState([]);
   //List of cities from IBGE API
@@ -30,6 +34,7 @@ export default function IndividualObservation() {
   const animatedComponents = makeAnimated();
   const [loading, setLoading] = useState(false);
   const [sendDisabled, setSendDisabled] = useState(false);
+  const [uploadMessage, setUploadMessage] = useState('');
 
   // Snack
   const [snack, setSnack] = useState({ type: 'success', message: '' });
@@ -64,6 +69,13 @@ export default function IndividualObservation() {
   });
 
   const history = useHistory();
+
+  function getImage(e) {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setImages([...files]);
+    }
+  }
 
   //List of diseases to construct the select on frontend
   const diseaseOptions = [
@@ -155,16 +167,27 @@ export default function IndividualObservation() {
 
   async function postObserverReport(data) {
     try {
-      await api.post('api/v1/observer-report', data).then((d) => {
-        console.log(d);
-      });
-      //console.log(data);
-      setSnack({ type: 'success', message: 'Cadastrado com successo' });
-      setOpenSnack(true);
+      const response = await api.post('api/v1/observer-report', data);
+      
+      const error = await uploadFile({ setUploadMessage, images, id: response.data.observerReport._id, type: 'individualObservation' });
 
-      setSendDisabled(false);
-      setTimeout(() => history.push('/'), 3000);
+      if (!error) {
+        setSnack({ type: 'success', message: 'Cadastrado com successo' });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        setTimeout(() => history.push('/'), 3000);
+      } else {
+        setSnack({
+          type: 'success',
+          message: 'Observação cadastrada, mas erro ao cadastrar os arquivos da observação.',
+        });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        setTimeout(() => history.push('/'), 3000);
+      }
+      //console.log(data);
     } catch (error) {
+      console.log({ error });
       setSnack({ type: 'error', message: 'Erro ao cadastrar, tente novamente' });
       setOpenSnack(true);
       setSendDisabled(false);
@@ -516,6 +539,8 @@ export default function IndividualObservation() {
             </div>
           </div>
         </div>
+
+        <FileInput images={images} getImage={getImage} uploadMessage={uploadMessage} />
 
         <section className={'col-md-12'}>
           <button
