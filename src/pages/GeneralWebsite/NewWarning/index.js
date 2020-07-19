@@ -340,11 +340,18 @@ export default function WarningCreation() {
         setTimeout(() => history.push('/'), 3000);
       }
     } catch (error) {
-      setSnack({ type: 'error', message: 'Erro ao cadastrar caso, tente novamente.' });
-      setOpenSnack(true);
-
-      setSendDisabled(false);
-      console.log(data);
+      if (error.response && error.response.data && error.response.data.message && error.response.data.message === 'Token has expired') {
+        setSnack({ type: 'error', message: 'Seu login expirou. Faça login novamente' });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        console.log(data);
+        setTimeout(() => history.push('/signin'), 3000);
+      } else {
+        setSnack({ type: 'error', message: 'Erro ao cadastrar caso, tente novamente.' });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        console.log(data);
+      }
     }
   }
 

@@ -168,7 +168,7 @@ export default function IndividualObservation() {
   async function postObserverReport(data) {
     try {
       const response = await api.post('api/v1/observer-report', data);
-      
+
       const error = await uploadFile({ setUploadMessage, images, id: response.data.observerReport._id, type: 'individualObservation' });
 
       if (!error) {
@@ -187,11 +187,18 @@ export default function IndividualObservation() {
       }
       //console.log(data);
     } catch (error) {
-      console.log({ error });
-      setSnack({ type: 'error', message: 'Erro ao cadastrar, tente novamente' });
-      setOpenSnack(true);
-      setSendDisabled(false);
-      console.log(data);
+      if (error.response && error.response.data && error.response.data.message && error.response.data.message === 'Token has expired') {
+        setSnack({ type: 'error', message: 'Seu login expirou. Faça login novamente' });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        console.log(data);
+        setTimeout(() => history.push('/signin'), 3000);
+      } else {
+        setSnack({ type: 'error', message: 'Erro ao cadastrar, tente novamente' });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        console.log(data);
+      }
     }
   }
 
