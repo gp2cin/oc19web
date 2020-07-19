@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { getToken } from './auth';
+import { getToken, logout } from './auth';
 const { REACT_APP_API_URL } = process.env;
 
 const api = axios.create({
@@ -12,6 +12,16 @@ api.interceptors.request.use(async (config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
+});
+
+api.interceptors.response.use(function (response) {
+  return response;
+}, function (error) {
+  console.log(error.response.data.message);
+  if (error.response.data.message && error.response.data.message === 'Token has expired') {
+    logout();
+  }
+  return Promise.reject(error);
 });
 
 export const awsApi = axios.create({});

@@ -206,11 +206,20 @@ export default function GeneralObservation() {
                 setSendDisabled(false);
             }
         } catch (error) {
-            setUploadMessage('');
-            setSnack({ type: 'error', message: `${errorMessage} ${error}` });
-            setOpenSnack(true);
-            setSendDisabled(false);
-            console.log(data);
+            if (error.response && error.response.data && error.response.data.message && error.response.data.message === 'Token has expired') {
+                setUploadMessage('');
+                setSnack({ type: 'error', message: 'Seu login expirou. Faça login novamente' });
+                setOpenSnack(true);
+                setSendDisabled(false);
+                console.log(data);
+                setTimeout(() => history.push('/signin'), 3000);
+            } else {
+                setUploadMessage('');
+                setSnack({ type: 'error', message: `${errorMessage} ${error}` });
+                setOpenSnack(true);
+                setSendDisabled(false);
+                console.log(data);
+            }
         }
     }
 
