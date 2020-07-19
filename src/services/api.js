@@ -17,8 +17,7 @@ api.interceptors.request.use(async (config) => {
 api.interceptors.response.use(function (response) {
   return response;
 }, function (error) {
-  console.log(error.response.data.message);
-  if (error.response.data.message && error.response.data.message === 'Token has expired') {
+  if (error.response && error.response.data && error.response.data.message && error.response.data.message === 'Token has expired') {
     logout();
   }
   return Promise.reject(error);
