@@ -82,8 +82,12 @@ export default function MyAccount() {
                 }
 
             }
-        } catch (e) {
-            console.log(e);
+        } catch (error) {
+            if (error.response && error.response.data && error.response.data.message && error.response.data.message === 'Token has expired') {
+                setTimeout(() => history.push('/signin'), 3000);
+            } else {
+                console.log(error);
+            }
         }
     }
 
