@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MaskedInput from 'react-maskedinput';
 import DatePicker from 'react-datepicker';
 import { useHistory } from 'react-router-dom';
@@ -18,6 +18,11 @@ import Header from '../../../components/Header';
 import { Container } from './styles';
 import api from '../../../services/api';
 import CustomSnackBar from '../../../components/CustomSnackBar';
+import FileInput from '../../../components/FileInput';
+import { uploadFile } from '../../../helpers/SendFileObservation';
+import CircularProgress from '@material-ui/core/CircularProgress';
+
+import formatName from '../../../utils/formatName';
 
 export default function WarningCreation() {
   const [sendDisabled, setSendDisabled] = useState(false);
@@ -25,28 +30,118 @@ export default function WarningCreation() {
   const [date, setDate] = useState(null);
   const [birthdate, setBirthdate] = useState('');
 
+  const [images, setImages] = useState([]);
+  const [uploadMessage, setUploadMessage] = useState('');
+
   // snackbar
   const [snack, setSnack] = useState({ type: 'success', message: '' });
   const [openSnack, setOpenSnack] = useState(false);
 
   const animatedComponents = makeAnimated();
+  const [loading, setLoading] = useState(false);
   const history = useHistory();
+
+  const [city, setCity] = useState('');
+  const [city_ca, setCity_ca] = useState('');
+  const [neighborhood, setNeighborhood] = useState('');
+  const [neighborhood_name, setNeighborhood_name] = useState('');
+  //List of Recife's neighborhoods from backend
+  const [neighborhooods, setNeighborhoods] = useState([]);
+  //List of cities from IBGE API
+  const [cities, setCities] = useState([]);
+  const [isRecifeSelected, setIsRecifeSelected] = useState(false);
+
+  useEffect(() => {
+    //base de dados do IBGE, código de Pernambuco: 26
+    fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/26/municipios`)
+      .then((res) => res.json())
+      .then((data) => {
+        let arr = [];
+        for (const i in data) {
+          const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
+          arr = [...arr, itemToAdd];
+        }
+        setCities(arr);
+      })
+      .catch((error) => {
+        setSnack({
+          type: 'error',
+          message: `Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`,
+        });
+        setOpenSnack(true);
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function handleCityChoice(choice) {
+    if (choice !== null) {
+      setCity(choice.label);
+      setCity_ca(formatName(choice.label));
+      //Get Recife's neighborhoods form backend
+      if (choice.label === 'Recife') {
+        console.log('Recife!!');
+        setLoading(true);
+        setIsRecifeSelected(true);
+        try {
+          const response = await api.get('api/v1/neighborhoods?cidade=recife');
+          console.log(response);
+          if (response !== null) {
+            console.log('Resposta Recife!!');
+            console.log(response);
+            if (response.data !== null) {
+              console.log('Resposta Bairros!!');
+              console.log(response.data);
+              let arr = [];
+              for (const i in response.data) {
+                const itemToAdd = { value: `${response.data[i]._id}`, label: `${response.data[i].name}` };
+                arr = [...arr, itemToAdd];
+              }
+              setNeighborhoods(arr);
+              setLoading(false);
+            } else {
+              setLoading(false);
+            }
+          } else {
+            setLoading(false);
+            console.log('BAIRROS NULOS');
+          }
+        } catch (error) {
+          console.log(`Erro ao buscar bairros ${error}`);
+          setLoading(false);
+        }
+      } else {
+        setNeighborhoods([]);
+        setIsRecifeSelected(false);
+        setLoading(false);
+      }
+    } else {
+      setNeighborhoods([]);
+      setIsRecifeSelected(false);
+      setLoading(false);
+    }
+  }
+
+  function handleNeighborhoodChoice(choice) {
+    if (choice !== null) {
+      setNeighborhood(choice.value);
+      setNeighborhood_name(choice.label);
+    }
+  }
 
   const [symptomsControl, setSymptomsControl] = useState([]);
 
   const [requiredInputStyle, setRequiredInputStyle] = useState({
+    city: {},
     email: {},
-    birthdate: {},
+    birthdate: { padding: 0, paddingLeft: '10px' },
     contactSuspectOrConfirmedCase: {},
     householdContactConfirmedCase: {},
     beenInHealthUnit: {},
     hadEvaluationForSymptoms: {},
     covidTested: {},
     covid19WasDiscarded: {},
-    covidResult: {}
+    covidResult: {},
   });
-
-
 
   //Symptoms object wich goes to the backend
   const symptoms = {
@@ -221,103 +316,90 @@ export default function WarningCreation() {
 
   async function postWarning(data) {
     try {
-      await api.post('api/v1/warnings', data).then((d) => {
-        console.log(d);
+      await api.post('api/v1/warnings', data);
+
+      const error = await uploadFile({
+        setUploadMessage,
+        images,
+        id: 1,
+        type: 'newWarning',
       });
-      //console.log(data);
 
-      setSnack({ type: 'success', message: 'Caso cadastrado com successo' });
-      setOpenSnack(true);
-      setSendDisabled(false);
-      setTimeout(() => history.push('/'), 3000);
+      if (!error) {
+        setSnack({ type: 'success', message: 'Cadastrado com successo' });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        setTimeout(() => history.push('/'), 3000);
+      } else {
+        setSnack({
+          type: 'success',
+          message: 'Observação cadastrada, mas erro ao cadastrar os arquivos da observação.',
+        });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        setTimeout(() => history.push('/'), 3000);
+      }
     } catch (error) {
-      setSnack({ type: 'error', message: 'Erro ao cadastrar caso, tente novamente.' });
-      setOpenSnack(true);
-
-      setSendDisabled(false);
-      console.log(data);
+      if (error.response && error.response.data && error.response.data.message && error.response.data.message === 'Token has expired') {
+        setSnack({ type: 'error', message: 'Seu login expirou. Faça login novamente' });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        console.log(data);
+        setTimeout(() => history.push('/signin'), 3000);
+      } else {
+        setSnack({ type: 'error', message: 'Erro ao cadastrar caso, tente novamente.' });
+        setOpenSnack(true);
+        setSendDisabled(false);
+        console.log(data);
+      }
     }
   }
 
   async function handleNewWarning(e) {
     e.preventDefault();
+    setSendDisabled(true);
     if (validateEmail(email) && isRequiredFilled()) {
-      if (navigator.geolocation) {
-        setSendDisabled(true);
-        navigator.geolocation.getCurrentPosition((position) => {
-          console.log(position);
-
-          const address = {
-            location: {
-              type: 'Point',
-              coordinates: [`${position.coords.latitude}`, `${position.coords.longitude}`],
-            },
-          };
-
-          if (diseasesControl.length !== 0) {
-            for (let key in diseases) {
-              for (const i in diseasesControl) {
-                if (key === diseasesControl[i].value) {
-                  diseases[key] = true;
-                }
-              }
+      if (diseasesControl.length !== 0) {
+        for (let key in diseases) {
+          for (const i in diseasesControl) {
+            if (key === diseasesControl[i].value) {
+              diseases[key] = true;
             }
           }
-
-          if (symptomsControl.length !== 0) {
-            for (let simpKey in symptoms) {
-              for (const i in symptomsControl) {
-                if (simpKey === symptomsControl[i].value) {
-                  symptoms[simpKey] = true;
-                }
-              }
-            }
-          }
-
-          const data = {
-            email,
-            address,
-            birthdate,
-            diseases,
-            symptoms,
-            contact_suspect_or_confirmed_case,
-            household_contact_confirmed_case,
-            been_in_health_unit,
-            had_evaluation_for_symptoms,
-            covid19_was_discarded,
-            covid_tested,
-            covid_result,
-          };
-          console.log(data);
-          postWarning(data);
-        }, handleLocationError);
-      } else {
-        setSendDisabled(false);
+        }
       }
-    }
-  }
 
-  function handleLocationError(error) {
-    switch (error.code) {
-      case error.PERMISSION_DENIED:
-        alert('User denied the request for Geolocation.');
-        setSendDisabled(false);
-        break;
-      case error.POSITION_UNAVAILABLE:
-        alert('Location information is unavailable.');
-        setSendDisabled(false);
-        break;
-      case error.TIMEOUT:
-        alert('The request to get user location timed out.');
-        setSendDisabled(false);
-        break;
-      case error.UNKNOWN_ERROR:
-        alert('An unknown error occurred.');
-        setSendDisabled(false);
-        break;
-      default:
-        alert('An unknown error occurred.');
-        setSendDisabled(false);
+      if (symptomsControl.length !== 0) {
+        for (let simpKey in symptoms) {
+          for (const i in symptomsControl) {
+            if (simpKey === symptomsControl[i].value) {
+              symptoms[simpKey] = true;
+            }
+          }
+        }
+      }
+
+      const data = {
+        email,
+        city,
+        city_ca,
+        neighborhood,
+        neighborhood_name,
+        birthdate,
+        diseases,
+        symptoms,
+        contact_suspect_or_confirmed_case,
+        household_contact_confirmed_case,
+        been_in_health_unit,
+        had_evaluation_for_symptoms,
+        covid19_was_discarded,
+        covid_tested,
+        covid_result,
+      };
+      console.log(data);
+      postWarning(data);
+    } else {
+      setSendDisabled(false);
     }
   }
 
@@ -325,7 +407,7 @@ export default function WarningCreation() {
     if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
       return true;
     }
-    setRequiredInputStyle(prev => ({ ...prev, email: { borderColor: 'red' } }))
+    setRequiredInputStyle((prev) => ({ ...prev, email: { borderColor: 'red' } }));
     setSnack({ type: 'error', message: 'Você preencheu um endereço de e-mail inválido!' });
     setOpenSnack(true);
     return false;
@@ -334,6 +416,7 @@ export default function WarningCreation() {
   function isRequiredFilled() {
     if (
       email !== '' &&
+      city !== '' &&
       birthdate !== '' &&
       contact_suspect_or_confirmed_case !== {} &&
       contact_suspect_or_confirmed_case !== '' &&
@@ -346,28 +429,52 @@ export default function WarningCreation() {
       covid_tested !== {} &&
       covid_tested !== ''
     ) {
-      if (had_evaluation_for_symptoms === true && (covid19_was_discarded === {} || covid19_was_discarded === null || covid19_was_discarded === undefined)) {
+      if (
+        had_evaluation_for_symptoms === true &&
+        (covid19_was_discarded === {} || covid19_was_discarded === null || covid19_was_discarded === undefined)
+      ) {
         if (covid_tested === true && (covid_result === {} || covid_result === null || covid_result === undefined)) {
-          setRequiredInputStyle(prev => ({ ...prev, covid19WasDiscarded: { borderWidth: 1, borderStyle: 'solid', borderColor: 'red' } }))
-          setRequiredInputStyle(prev => ({ ...prev, covidResult: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+          setRequiredInputStyle((prev) => ({
+            ...prev,
+            covid19WasDiscarded: { borderWidth: 1, borderStyle: 'solid', borderColor: 'red' },
+          }));
+          setRequiredInputStyle((prev) => ({
+            ...prev,
+            covidResult: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+          }));
           setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
           setOpenSnack(true);
           return false;
         }
-        setRequiredInputStyle(prev => ({ ...prev, covid19WasDiscarded: { borderWidth: 1, borderStyle: 'solid', borderColor: 'red' } }))
+        setRequiredInputStyle((prev) => ({
+          ...prev,
+          covid19WasDiscarded: { borderWidth: 1, borderStyle: 'solid', borderColor: 'red' },
+        }));
         setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
         setOpenSnack(true);
         return false;
       }
       if (covid_tested === true && (covid_result === {} || covid_result === null || covid_result === undefined)) {
-        if (had_evaluation_for_symptoms === true && (covid19_was_discarded === {} || covid19_was_discarded === null || covid19_was_discarded === undefined)) {
-          setRequiredInputStyle(prev => ({ ...prev, covidResult: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
-          setRequiredInputStyle(prev => ({ ...prev, covid19WasDiscarded: { borderWidth: 1, borderStyle: 'solid', borderColor: 'red' } }))
+        if (
+          had_evaluation_for_symptoms === true &&
+          (covid19_was_discarded === {} || covid19_was_discarded === null || covid19_was_discarded === undefined)
+        ) {
+          setRequiredInputStyle((prev) => ({
+            ...prev,
+            covidResult: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+          }));
+          setRequiredInputStyle((prev) => ({
+            ...prev,
+            covid19WasDiscarded: { borderWidth: 1, borderStyle: 'solid', borderColor: 'red' },
+          }));
           setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
           setOpenSnack(true);
           return false;
         }
-        setRequiredInputStyle(prev => ({ ...prev, covidResult: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+        setRequiredInputStyle((prev) => ({
+          ...prev,
+          covidResult: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+        }));
         setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
         setOpenSnack(true);
         return false;
@@ -375,30 +482,70 @@ export default function WarningCreation() {
       return true;
     }
     if (email === '') {
-      setRequiredInputStyle(prev => ({ ...prev, email: { borderColor: 'red' } }))
+      setRequiredInputStyle((prev) => ({ ...prev, email: { borderColor: 'red' } }));
+    }
+    if (city === '') {
+      setRequiredInputStyle((prev) => ({
+        ...prev,
+        city: {
+          control: (base, state) => ({
+            ...base,
+            borderColor: 'red',
+          }),
+        },
+      }));
     }
     if (birthdate === '') {
-      console.log('AQUI TESTE')
-      setRequiredInputStyle(prev => ({ ...prev, birthdate: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+      console.log('AQUI TESTE');
+      setRequiredInputStyle((prev) => ({
+        ...prev,
+        birthdate: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red', padding: 0, paddingLeft: '10px' },
+      }));
     }
     if (contact_suspect_or_confirmed_case === null || contact_suspect_or_confirmed_case === undefined) {
-      setRequiredInputStyle(prev => ({ ...prev, contactSuspectOrConfirmedCase: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+      setRequiredInputStyle((prev) => ({
+        ...prev,
+        contactSuspectOrConfirmedCase: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+      }));
     }
     if (household_contact_confirmed_case === null || household_contact_confirmed_case === undefined) {
-      setRequiredInputStyle(prev => ({ ...prev, householdContactConfirmedCase: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+      setRequiredInputStyle((prev) => ({
+        ...prev,
+        householdContactConfirmedCase: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+      }));
     }
     if (been_in_health_unit === {} || been_in_health_unit === null || been_in_health_unit === undefined) {
-      setRequiredInputStyle(prev => ({ ...prev, beenInHealthUnit: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+      setRequiredInputStyle((prev) => ({
+        ...prev,
+        beenInHealthUnit: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+      }));
     }
-    if (had_evaluation_for_symptoms === {} || had_evaluation_for_symptoms === null || had_evaluation_for_symptoms === undefined) {
-      setRequiredInputStyle(prev => ({ ...prev, hadEvaluationForSymptoms: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+    if (
+      had_evaluation_for_symptoms === {} ||
+      had_evaluation_for_symptoms === null ||
+      had_evaluation_for_symptoms === undefined
+    ) {
+      setRequiredInputStyle((prev) => ({
+        ...prev,
+        hadEvaluationForSymptoms: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+      }));
     }
     if (covid_tested === {} || covid_tested === null || covid_tested === undefined) {
-      setRequiredInputStyle(prev => ({ ...prev, covidTested: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+      setRequiredInputStyle((prev) => ({
+        ...prev,
+        covidTested: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+      }));
     }
     setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
     setOpenSnack(true);
     return false;
+  }
+
+  function getImage(e) {
+    const files = e.target.files;
+    if (files && files.length > 0) {
+      setImages([...files]);
+    }
   }
 
   return (
@@ -416,7 +563,7 @@ export default function WarningCreation() {
           <div className={'content col-md-12 row'}>
             <form>
               <div className={'personal-info col-md-12'}>
-                <div className={'email col-md-9'}>
+                <div className={'email col-md-9'} style={{ padding: 0, paddingRight: '10px' }}>
                   <p>{'E-mail*'}</p>
                   <input
                     placeholder={'E-mail'}
@@ -425,8 +572,8 @@ export default function WarningCreation() {
                     type={'e-mail'}
                     style={requiredInputStyle.email}
                     onChange={(e) => {
-                      setEmail(e.target.value)
-                      setRequiredInputStyle(prev => ({ ...prev, email: {} }))
+                      setEmail(e.target.value);
+                      setRequiredInputStyle((prev) => ({ ...prev, email: {} }));
                     }}
                   ></input>
                 </div>
@@ -440,18 +587,68 @@ export default function WarningCreation() {
                     locale={'BR'}
                     selected={date}
                     onChange={(date) => {
-                      handleBirthdate(date)
-                      setRequiredInputStyle(prev => ({ ...prev, birthdate: {} }))
+                      handleBirthdate(date);
+                      setRequiredInputStyle((prev) => ({ ...prev, birthdate: { padding: 0, paddingLeft: '10px' } }));
                     }}
                     customInput={<MaskedInput mask="11/11/1111" />}
                   />
                 </div>
               </div>
-              <div className={'select-container col-md-6'}>
-                <div className={'symptoms-container '}>
+              <div className="personal-info col-md-12">
+                <div className="city-select col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
+                  <p>Cidade:*</p>
+                  <Select
+                    className="select"
+                    placeholder="Escolha"
+                    closeMenuOnSelect={true}
+                    components={animatedComponents}
+                    defaultValue={[]}
+                    isClearable
+                    isSearchable
+                    onChange={(e) => {
+                      handleCityChoice(e);
+                      setRequiredInputStyle((prev) => ({ ...prev, city: {} }));
+                    }}
+                    options={cities}
+                    styles={requiredInputStyle.city}
+                  />
+                </div>
+                <div className="neighborhood col-md-6" style={{ padding: 0, paddingLeft: '10px' }}>
+                  <p>Bairro:*</p>
+                  {!isRecifeSelected && (
+                    <input
+                      placeholder="Bairro"
+                      className="col-md-12 form-control"
+                      value={neighborhood_name}
+                      onChange={(e) => {
+                        setNeighborhood('');
+                        setNeighborhood_name(e.target.value);
+                      }}
+                    ></input>
+                  )}
+                  {isRecifeSelected && !loading && (
+                    <Select
+                      className="select"
+                      placeholder="Escolha"
+                      closeMenuOnSelect={true}
+                      components={animatedComponents}
+                      defaultValue={[]}
+                      isClearable
+                      isSearchable
+                      onChange={(e) => {
+                        handleNeighborhoodChoice(e);
+                      }}
+                      options={neighborhooods}
+                    />
+                  )}
+                  {isRecifeSelected && loading && <CircularProgress />}
+                </div>
+              </div>
+              <div className={'select-container col-md-12'}>
+                <div className={'symptoms-container col-md-6'} style={{ padding: 0, paddingRight: '10px' }}>
                   <p>{'Quais dos sintomas abaixo você está apresentando?'}</p>
                   <Select
-                    className={'select col-md-12 '}
+                    className={'select'}
                     placeholder={'Escolha'}
                     closeMenuOnSelect={false}
                     components={animatedComponents}
@@ -463,69 +660,87 @@ export default function WarningCreation() {
                     options={symptomOptions}
                   />
                 </div>
-              </div>
-              <div className={'deseases-container col-md-6'}>
-                <p>{'Você é portador de alguma dessas morbidades?'}</p>
-                <Select
-                  className={'select col-md-12'}
-                  placeholder={'Escolha'}
-                  closeMenuOnSelect={false}
-                  components={animatedComponents}
-                  defaultValue={[]}
-                  isMulti
-                  isClearable
-                  isSearchable
-                  onChange={handleDeseasesChange}
-                  options={deseaseOptions}
-                />
+                <div className={'deseases-container col-md-6'} style={{ padding: 0, paddingLeft: '10px' }}>
+                  <p>{'Você é portador de alguma dessas morbidades?'}</p>
+                  <Select
+                    className={'select'}
+                    placeholder={'Escolha'}
+                    closeMenuOnSelect={false}
+                    components={animatedComponents}
+                    defaultValue={[]}
+                    isMulti
+                    isClearable
+                    isSearchable
+                    onChange={handleDeseasesChange}
+                    options={deseaseOptions}
+                  />
+                </div>
               </div>
 
               <div className={'questions-container col-md-12'}>
                 <div className={'questions-div'}>
-                  <FormControl component={'fieldset'} className="from-control" style={requiredInputStyle.contactSuspectOrConfirmedCase}>
+                  <FormControl
+                    component={'fieldset'}
+                    className="from-control"
+                    style={requiredInputStyle.contactSuspectOrConfirmedCase}
+                  >
                     <p>{'Você manteve contato com caso suspeito ou confirmado para COVID-19 nos últimos 14 dias?*'}</p>
                     <RadioGroup
                       aria-label={'q'}
                       name={'q1'}
                       value={contact_suspect_or_confirmed_case}
                       onChange={(e) => {
-                        handleChangeQ1(e)
-                        setRequiredInputStyle(prev => ({ ...prev, contactSuspectOrConfirmedCase: {} }))
+                        handleChangeQ1(e);
+                        setRequiredInputStyle((prev) => ({ ...prev, contactSuspectOrConfirmedCase: {} }));
                       }}
                     >
                       <FormControlLabel value={'true'} control={<Radio />} label={'Sim'} />
                       <FormControlLabel value={'false'} control={<Radio />} label={'Não'} />
                     </RadioGroup>
                   </FormControl>
-                  <FormControl component={'fieldset'} className={'col-md-9 from-control'} style={requiredInputStyle.householdContactConfirmedCase}>
+                  <FormControl
+                    component={'fieldset'}
+                    className={'col-md-9 from-control'}
+                    style={requiredInputStyle.householdContactConfirmedCase}
+                  >
                     <p>Você manteve contato domiciliar com caso confirmado por COVID-19 nos últimos 14 dias?*</p>
                     <RadioGroup
                       aria-label={'q'}
                       name={'q2'}
                       value={household_contact_confirmed_case}
                       onChange={(e) => {
-                        handleChangeQ2(e)
-                        setRequiredInputStyle(prev => ({ ...prev, householdContactConfirmedCase: {} }))
+                        handleChangeQ2(e);
+                        setRequiredInputStyle((prev) => ({ ...prev, householdContactConfirmedCase: {} }));
                       }}
                     >
                       <FormControlLabel value={'true'} control={<Radio />} label={'Sim'} />
                       <FormControlLabel value={'false'} control={<Radio />} label={'Não'} />
                     </RadioGroup>
                   </FormControl>
-                  <FormControl component={'fieldset'} className={'col-md-9 from-control'} style={requiredInputStyle.beenInHealthUnit}>
+                  <FormControl
+                    component={'fieldset'}
+                    className={'col-md-9 from-control'}
+                    style={requiredInputStyle.beenInHealthUnit}
+                  >
                     <p>{'Você esteve em alguma unidade de saúde nos 14 dias antes do início dos sintomas?*'}</p>
                     <RadioGroup
-                      aria-label={'q'} name={'q3'}
+                      aria-label={'q'}
+                      name={'q3'}
                       value={been_in_health_unit}
                       onChange={(e) => {
-                        handleChangeQ3(e)
-                        setRequiredInputStyle(prev => ({ ...prev, beenInHealthUnit: {} }))
-                      }}>
+                        handleChangeQ3(e);
+                        setRequiredInputStyle((prev) => ({ ...prev, beenInHealthUnit: {} }));
+                      }}
+                    >
                       <FormControlLabel value={'true'} control={<Radio />} label={'Sim'} />
                       <FormControlLabel value={'false'} control={<Radio />} label={'Não'} />
                     </RadioGroup>
                   </FormControl>
-                  <FormControl component={'fieldset'} className={'col-md-9 from-control'} style={requiredInputStyle.hadEvaluationForSymptoms}>
+                  <FormControl
+                    component={'fieldset'}
+                    className={'col-md-9 from-control'}
+                    style={requiredInputStyle.hadEvaluationForSymptoms}
+                  >
                     <p>
                       {
                         'Você passou por alguma avaliação médica para tratar dos sintomas que você está apresentando no momento?*'
@@ -536,55 +751,76 @@ export default function WarningCreation() {
                       name={'q4'}
                       value={had_evaluation_for_symptoms}
                       onChange={(e) => {
-                        handleChangeQ4(e)
-                        setRequiredInputStyle(prev => ({ ...prev, hadEvaluationForSymptoms: {} }))
+                        handleChangeQ4(e);
+                        setRequiredInputStyle((prev) => ({ ...prev, hadEvaluationForSymptoms: {} }));
                       }}
                     >
                       <FormControlLabel value={'true'} control={<Radio />} label={'Sim'} />
                       <FormControlLabel value={'false'} control={<Radio />} label={'Não'} />
                     </RadioGroup>
                   </FormControl>
-                  <FormControl component={'fieldset'} className={'col-md-9 from-control'} style={requiredInputStyle.covid19WasDiscarded}>
+                  <FormControl
+                    component={'fieldset'}
+                    className={'col-md-9 from-control'}
+                    style={requiredInputStyle.covid19WasDiscarded}
+                  >
                     <p>
                       {`Caso afirmativo para a questão anterior, a contaminação por COVID-19 foi descartada?${isRequiredQ5}`}
                     </p>
-                    <RadioGroup aria-label={'q'}
+                    <RadioGroup
+                      aria-label={'q'}
                       name={'q5'}
                       value={covid19_was_discarded}
                       onChange={(e) => {
-                        handleChangeQ5(e)
-                        setRequiredInputStyle(prev => ({ ...prev, covid19WasDiscarded: {} }))
-                      }}>
+                        handleChangeQ5(e);
+                        setRequiredInputStyle((prev) => ({ ...prev, covid19WasDiscarded: {} }));
+                      }}
+                    >
                       <FormControlLabel value={'true'} control={<Radio />} label={'Sim'} />
                       <FormControlLabel value={'false'} control={<Radio />} label={'Não'} />
                     </RadioGroup>
                   </FormControl>
-                  <FormControl component={'fieldset'} className={'col-md-9 from-control'} style={requiredInputStyle.covidTested}>
+                  <FormControl
+                    component={'fieldset'}
+                    className={'col-md-9 from-control'}
+                    style={requiredInputStyle.covidTested}
+                  >
                     <p>{'Você fez algum exame para detectar o coronavírus?*'}</p>
-                    <RadioGroup aria-label={'q'}
-                      name={'q6'} value={covid_tested}
+                    <RadioGroup
+                      aria-label={'q'}
+                      name={'q6'}
+                      value={covid_tested}
                       onChange={(e) => {
-                        handleChangeQ6(e)
-                        setRequiredInputStyle(prev => ({ ...prev, covidTested: {} }))
-                      }}>
+                        handleChangeQ6(e);
+                        setRequiredInputStyle((prev) => ({ ...prev, covidTested: {} }));
+                      }}
+                    >
                       <FormControlLabel value={'true'} control={<Radio />} label={'Sim'} />
                       <FormControlLabel value={'false'} control={<Radio />} label={'Não'} />
                     </RadioGroup>
                   </FormControl>
-                  <FormControl component={'fieldset'} className={'col-md-9 from-control'} style={requiredInputStyle.covidResult}>
+                  <FormControl
+                    component={'fieldset'}
+                    className={'col-md-9 from-control'}
+                    style={requiredInputStyle.covidResult}
+                  >
                     <p>{`Caso afirmativo para a questão anterior, qual o resultado do exame?${isRequiredQ7}`}</p>
-                    <RadioGroup aria-label={'q'}
-                      name={'q7'} value={covid_result}
+                    <RadioGroup
+                      aria-label={'q'}
+                      name={'q7'}
+                      value={covid_result}
                       onChange={(e) => {
-                        handleChangeQ7(e)
-                        setRequiredInputStyle(prev => ({ ...prev, covidResult: {} }))
-                      }}>
+                        handleChangeQ7(e);
+                        setRequiredInputStyle((prev) => ({ ...prev, covidResult: {} }));
+                      }}
+                    >
                       <FormControlLabel value={'true'} control={<Radio />} label={'Positivo'} />
                       <FormControlLabel value={'false'} control={<Radio />} label={'Negativo'} />
                     </RadioGroup>
                   </FormControl>
                 </div>
               </div>
+              <FileInput images={images} getImage={getImage} uploadMessage={uploadMessage} />
             </form>
             <section className={'col-md-12'}>
               {/* <p>{'Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.'}</p> */}

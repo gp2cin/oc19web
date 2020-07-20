@@ -13,6 +13,8 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
+import { uploadFile } from '../../../helpers/SendFileObservation';
+import FileInput from '../../../components/FileInput';
 
 export default function BulkObservation() {
     const [city, setCity] = useState('');
@@ -24,6 +26,9 @@ export default function BulkObservation() {
     //List of cities from IBGE API
     const [cities, setCities] = useState([]);
     const [isRecifeSelected, setIsRecifeSelected] = useState(false);
+
+    const [images, setImages] = useState([]);
+    const [uploadMessage, setUploadMessage] = useState('');
 
     const [snack, setSnack] = useState({ type: 'success', message: '' });
     const [openSnack, setOpenSnack] = useState(false);
@@ -47,7 +52,7 @@ export default function BulkObservation() {
         city: {},
         numberOfCases: {},
         informationSource: {},
-        caseType: {}
+        caseType: {},
     });
 
     const history = useHistory();
@@ -55,22 +60,25 @@ export default function BulkObservation() {
     useEffect(() => {
         //base de dados do IBGE, código de Pernambuco: 26
         fetch(`https://servicodados.ibge.gov.br/api/v1/localidades/estados/26/municipios`)
-            .then(res => res.json())
+            .then((res) => res.json())
             .then((data) => {
-                console.log(cities)
-                let arr = []
+                console.log(cities);
+                let arr = [];
                 for (const i in data) {
                     const itemToAdd = { value: `${data[i].id}`, label: `${data[i].nome}` };
-                    arr = [...arr, itemToAdd]
+                    arr = [...arr, itemToAdd];
                 }
                 setCities(arr);
-            }).catch(error => {
-                setSnack({ type: 'error', message: `Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}` });
+            })
+            .catch((error) => {
+                setSnack({
+                    type: 'error',
+                    message: `Erro ao carregar cidades da API do IBGE. Verifique sua conexão e recarregue a página. ${error}`,
+                });
                 setOpenSnack(true);
             });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
+    }, []);
 
     async function handleCityChoice(choice) {
         if (choice !== null) {
@@ -78,17 +86,17 @@ export default function BulkObservation() {
             setCity_ca(formatName(choice.label));
             //Get Recife's neighborhoods form backend
             if (choice.label === 'Recife') {
-                console.log('Recife!!')
+                console.log('Recife!!');
                 setLoading(true);
                 setIsRecifeSelected(true);
                 try {
-                    const response = await api.get('api/v1/neighborhoods?cidade=recife')
+                    const response = await api.get('api/v1/neighborhoods?cidade=recife');
                     console.log(response);
                     if (response !== null) {
-                        console.log('Resposta Recife!!')
+                        console.log('Resposta Recife!!');
                         console.log(response);
                         if (response.data !== null) {
-                            console.log('Resposta Bairros!!')
+                            console.log('Resposta Bairros!!');
                             console.log(response.data);
                             let arr = [];
                             for (const i in response.data) {
@@ -102,13 +110,12 @@ export default function BulkObservation() {
                         }
                     } else {
                         setLoading(false);
-                        console.log('BAIRROS NULOS')
+                        console.log('BAIRROS NULOS');
                     }
                 } catch (error) {
-                    console.log(`Erro ao buscar bairros ${error}`)
+                    console.log(`Erro ao buscar bairros ${error}`);
                     setLoading(false);
                 }
-
             } else {
                 setNeighborhoods([]);
                 setIsRecifeSelected(false);
@@ -132,31 +139,36 @@ export default function BulkObservation() {
         if (
             city !== '' &&
             case_type !== '' &&
-            (number_of_cases !== 0 && number_of_cases !== '' && number_of_cases !== '0') &&
+            number_of_cases !== 0 &&
+            number_of_cases !== '' &&
+            number_of_cases !== '0' &&
             info_source !== ''
         ) {
             return true;
         }
 
         if (city === '') {
-            setRequiredInputStyle(prev => ({
+            setRequiredInputStyle((prev) => ({
                 ...prev,
                 city: {
                     control: (base, state) => ({
                         ...base,
                         borderColor: 'red',
                     }),
-                }
-            }))
+                },
+            }));
         }
         if (case_type === '') {
-            setRequiredInputStyle(prev => ({ ...prev, caseType: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' } }))
+            setRequiredInputStyle((prev) => ({
+                ...prev,
+                caseType: { borderWidth: '1px', borderStyle: 'solid', borderColor: 'red' },
+            }));
         }
         if (number_of_cases === 0 || number_of_cases === '' || number_of_cases === '0') {
-            setRequiredInputStyle(prev => ({ ...prev, numberOfCases: { borderColor: 'red' } }))
+            setRequiredInputStyle((prev) => ({ ...prev, numberOfCases: { borderColor: 'red' } }));
         }
         if (info_source === '') {
-            setRequiredInputStyle(prev => ({ ...prev, informationSource: { borderColor: 'red' } }))
+            setRequiredInputStyle((prev) => ({ ...prev, informationSource: { borderColor: 'red' } }));
         }
         setSnack({ type: 'error', message: 'Você precisa preencher todos os campos obrigatórios!' });
         setOpenSnack(true);
@@ -182,26 +194,63 @@ export default function BulkObservation() {
                 info_source_link,
                 general_comments,
                 number_of_cases,
-            }
+            };
             postObserverReport(data);
         }
     }
 
     async function postObserverReport(data) {
         try {
-            await api.post('api/v1/observer-report', data).then((d) => {
-                console.log(d);
-            });
+            const response = await api.post('api/v1/observer-report', data);
+            console.log(response);
+            let hasError = false;
+
+            for (const i in response.data.resp.insertedIds) {
+                const id = response.data.resp.insertedIds[i];
+                const error = await uploadFile({
+                    setUploadMessage,
+                    images,
+                    id: id,
+                    type: 'bulkObservation',
+                });
+                if (error) hasError = true;
+            }
+
+            if (!hasError) {
+                setSnack({ type: 'success', message: 'Cadastrado com successo' });
+                setOpenSnack(true);
+                setSendDisabled(false);
+                setTimeout(() => history.push('/'), 3000);
+            } else {
+                setSnack({
+                    type: 'success',
+                    message: 'Observação cadastrada, mas erro ao cadastrar os arquivos da observação.',
+                });
+                setOpenSnack(true);
+                setSendDisabled(false);
+                setTimeout(() => history.push('/'), 3000);
+            }
             //console.log(data);
-            setSnack({ type: 'success', message: 'Cadastrado com successo' });
-            setOpenSnack(true);
-            setSendDisabled(false);
-            setTimeout(() => history.push('/'), 3000);
         } catch (error) {
-            setSnack({ type: 'error', message: `Erro ao cadastrar, tente novamente. ${error}` });
-            setOpenSnack(true);
-            setSendDisabled(false);
-            console.log(data);
+            if (error.response && error.response.data && error.response.data.message && error.response.data.message === 'Token has expired') {
+                setSnack({ type: 'error', message: 'Seu login expirou. Faça login novamente' });
+                setOpenSnack(true);
+                setSendDisabled(false);
+                console.log(data);
+                setTimeout(() => history.push('/signin'), 3000);
+            } else {
+                setSnack({ type: 'error', message: 'Erro ao cadastrar, tente novamente' });
+                setOpenSnack(true);
+                setSendDisabled(false);
+                console.log(data);
+            }
+        }
+    }
+
+    function getImage(e) {
+        const files = e.target.files;
+        if (files && files.length > 0) {
+            setImages([...files]);
         }
     }
 
@@ -221,8 +270,8 @@ export default function BulkObservation() {
                             isClearable
                             isSearchable
                             onChange={(e) => {
-                                handleCityChoice(e)
-                                setRequiredInputStyle(prev => ({ ...prev, city: {} }))
+                                handleCityChoice(e);
+                                setRequiredInputStyle((prev) => ({ ...prev, city: {} }));
                             }}
                             options={cities}
                             styles={requiredInputStyle.city}
@@ -230,8 +279,7 @@ export default function BulkObservation() {
                     </div>
                     <div className="neighborhood col-md-6" style={{ padding: 0, paddingRight: '10px' }}>
                         <p>Bairro:*</p>
-                        {
-                            (!isRecifeSelected) &&
+                        {!isRecifeSelected && (
                             <input
                                 placeholder="Bairro"
                                 className="col-md-12 form-control"
@@ -241,10 +289,8 @@ export default function BulkObservation() {
                                     setNeighborhood_name(e.target.value);
                                 }}
                             ></input>
-
-                        }
-                        {
-                            (isRecifeSelected && !loading) &&
+                        )}
+                        {isRecifeSelected && !loading && (
                             <Select
                                 className="select"
                                 placeholder="Escolha"
@@ -254,15 +300,12 @@ export default function BulkObservation() {
                                 isClearable
                                 isSearchable
                                 onChange={(e) => {
-                                    handleNeighborhoodChoice(e)
+                                    handleNeighborhoodChoice(e);
                                 }}
                                 options={neighborhooods}
                             />
-                        }
-                        {
-                            (isRecifeSelected && loading) &&
-                            <CircularProgress />
-                        }
+                        )}
+                        {isRecifeSelected && loading && <CircularProgress />}
                     </div>
                 </div>
                 <div className="social-info col-md-12">
@@ -274,8 +317,8 @@ export default function BulkObservation() {
                                 name={'q2'}
                                 value={case_type}
                                 onChange={(e) => {
-                                    setCaseType(e.target.value)
-                                    setRequiredInputStyle(prev => ({ ...prev, caseType: {} }));
+                                    setCaseType(e.target.value);
+                                    setRequiredInputStyle((prev) => ({ ...prev, caseType: {} }));
                                 }}
                             >
                                 <FormControlLabel value={'suspect'} control={<Radio />} label={'Caso Suspeito'} />
@@ -295,8 +338,8 @@ export default function BulkObservation() {
                                 step="1"
                                 value={number_of_cases}
                                 onChange={(e) => {
-                                    setNumberOfCases(e.target.value)
-                                    setRequiredInputStyle(prev => ({ ...prev, numberOfCases: {} }));
+                                    setNumberOfCases(e.target.value);
+                                    setRequiredInputStyle((prev) => ({ ...prev, numberOfCases: {} }));
                                 }}
                                 style={requiredInputStyle.numberOfCases}
                             ></input>
@@ -308,8 +351,8 @@ export default function BulkObservation() {
                                 className="col-md-12 form-control"
                                 value={info_source}
                                 onChange={(e) => {
-                                    setInfoSource(e.target.value)
-                                    setRequiredInputStyle(prev => ({ ...prev, informationSource: {} }));
+                                    setInfoSource(e.target.value);
+                                    setRequiredInputStyle((prev) => ({ ...prev, informationSource: {} }));
                                 }}
                                 style={requiredInputStyle.informationSource}
                             ></input>
@@ -337,13 +380,19 @@ export default function BulkObservation() {
                     </div>
                 </div>
 
+                <FileInput images={images} getImage={getImage} uploadMessage={uploadMessage} />
+
                 <section className={'col-md-12'}>
-                    <button disabled={sendDisabled} onClick={handleNewObserverReport} className={'btn btn-primary col-md-12'} type={'submit'}>
+                    <button
+                        disabled={sendDisabled}
+                        onClick={handleNewObserverReport}
+                        className={'btn btn-primary col-md-12'}
+                        type={'submit'}
+                    >
                         {'Enviar'}
                     </button>
                 </section>
             </div>
-
         </div>
     );
 }
