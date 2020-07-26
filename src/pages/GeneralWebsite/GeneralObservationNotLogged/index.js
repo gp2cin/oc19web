@@ -9,6 +9,8 @@ import formatName from '../../../utils/formatName';
 
 import CircularProgress from '@material-ui/core/CircularProgress';
 
+import FileInput from '../../../components/FileInput';
+
 export default function GeneralObservation() {
     const [observer_name, set_observer_name] = useState('');
     const [observer_email, set_observer_email] = useState('');
@@ -169,13 +171,6 @@ export default function GeneralObservation() {
                 image_url,
             };
             postObservation(data);
-        }
-    }
-
-    function getImage(e) {
-        const files = e.target.files;
-        if (files && files.length > 0) {
-            setImages([...files]);
         }
     }
 
@@ -387,44 +382,7 @@ export default function GeneralObservation() {
                     </div>
                 </div>
 
-                <div
-                    className="col-md-12 image"
-                    style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}
-                >
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                        <p>Cadastro de imagem:</p>
-                        <input
-                            style={{ marginTop: '5px', padding: '0px' }}
-                            id="upload-image"
-                            className="upload-image col-md-12"
-                            type="file"
-                            accept=""
-                            multiple
-                            onChange={(e) => getImage(e)}
-                        />
-                        <p>{uploadMessage}</p>
-                    </div>
-
-                    <div
-                        style={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                        }}
-                    >
-                        {images.map((image) => {
-                            return (
-                                <div style={{ display: 'flex' }}>
-                                    <button type="button" class="btn btn-outline-secondary btn-sm">
-                                        {image.name}
-                                    </button>
-                                </div>
-                            );
-                        })}
-                    </div>
-                </div>
+                <FileInput images={images} setImages={setImages} uploadMessage={uploadMessage} setUploadMessage={setUploadMessage} />
 
                 <section className={'col-md-12'}>
                     <button

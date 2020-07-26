@@ -70,13 +70,6 @@ export default function IndividualObservation() {
 
   const history = useHistory();
 
-  function getImage(e) {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      setImages([...files]);
-    }
-  }
-
   //List of diseases to construct the select on frontend
   const diseaseOptions = [
     { value: 'diabetes', label: 'Diabetes' },
@@ -547,7 +540,7 @@ export default function IndividualObservation() {
           </div>
         </div>
 
-        <FileInput images={images} getImage={getImage} uploadMessage={uploadMessage} />
+        <FileInput images={images} setImages={setImages} uploadMessage={uploadMessage} setUploadMessage={setUploadMessage} />
 
         <section className={'col-md-12'}>
           <button
