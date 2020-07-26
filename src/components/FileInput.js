@@ -4,7 +4,7 @@ export default function FileInput({ images, setImages, uploadMessage, setUploadM
 
   function fileIsInSizeLimit(event) {
     let files = event.target.files;
-    let size = 5000000000;
+    let size = 5000000;
     let err = "";
     for (var x = 0; x < files.length; x++) {
       if (files[x].size > size) {
