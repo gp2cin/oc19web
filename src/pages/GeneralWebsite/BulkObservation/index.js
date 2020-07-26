@@ -247,13 +247,6 @@ export default function BulkObservation() {
         }
     }
 
-    function getImage(e) {
-        const files = e.target.files;
-        if (files && files.length > 0) {
-            setImages([...files]);
-        }
-    }
-
     return (
         <div>
             <CustomSnackBar open={openSnack} setOpen={setOpenSnack} message={snack.message} type={snack.type} />
@@ -380,7 +373,7 @@ export default function BulkObservation() {
                     </div>
                 </div>
 
-                <FileInput images={images} getImage={getImage} uploadMessage={uploadMessage} />
+                <FileInput images={images} setImages={setImages} uploadMessage={uploadMessage} setUploadMessage={setUploadMessage} />
 
                 <section className={'col-md-12'}>
                     <button
