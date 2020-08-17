@@ -223,13 +223,6 @@ export default function GeneralObservation() {
         }
     }
 
-    function getImage(e) {
-        const files = e.target.files;
-        if (files && files.length > 0) {
-            setImages([...files]);
-        }
-    }
-
     return (
         <div>
             <CustomSnackBar open={openSnack} setOpen={setOpenSnack} message={snack.message} type={snack.type} />
@@ -314,6 +307,7 @@ export default function GeneralObservation() {
                             placeholder="Digite sua observação aqui"
                             className="col-md-12 form-control"
                             value={observation}
+                            title=" "
                             style={requiredInputStyle.observation}
                             onChange={(e) => {
                                 setObservation(e.target.value);
@@ -322,7 +316,7 @@ export default function GeneralObservation() {
                         ></textarea>
                     </div>
                 </div>
-                <FileInput images={images} getImage={getImage} uploadMessage={uploadMessage} />
+                <FileInput images={images} setImages={setImages} uploadMessage={uploadMessage} setUploadMessage={setUploadMessage} />
                 <section className={'col-md-12'}>
                     <button
                         disabled={sendDisabled}

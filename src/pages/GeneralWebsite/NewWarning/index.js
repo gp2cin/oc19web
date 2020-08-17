@@ -541,13 +541,6 @@ export default function WarningCreation() {
     return false;
   }
 
-  function getImage(e) {
-    const files = e.target.files;
-    if (files && files.length > 0) {
-      setImages([...files]);
-    }
-  }
-
   return (
     <div style={{ overflow: 'auto' }}>
       <Header />
@@ -820,7 +813,7 @@ export default function WarningCreation() {
                   </FormControl>
                 </div>
               </div>
-              <FileInput images={images} getImage={getImage} uploadMessage={uploadMessage} />
+              <FileInput images={images} setImages={setImages} uploadMessage={uploadMessage} setUploadMessage={setUploadMessage} />
             </form>
             <section className={'col-md-12'}>
               {/* <p>{'Nós precisaremos coletar sua localização. Por favor, autorize quando requisitado.'}</p> */}
