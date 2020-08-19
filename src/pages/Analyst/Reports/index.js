@@ -1,6 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 
 import { Select, Paper, Grid, Typography, Button, CircularProgress, TextField } from '@material-ui/core';
 
@@ -12,7 +13,6 @@ import Table2 from './Table2';
 
 import { cities } from './data';
 import { DatePicker } from '@material-ui/pickers';
-import moment from 'moment';
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -37,11 +37,11 @@ TabPanel.propTypes = {
   value: PropTypes.any.isRequired,
 };
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-}));
+// const useStyles = makeStyles((theme) => ({
+//   root: {
+//     flexGrow: 1,
+//   },
+// }));
 
 export default function Reports() {
   const agentType = ['Observador', 'Indivíduo', 'Todos'];

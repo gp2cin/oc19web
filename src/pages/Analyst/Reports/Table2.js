@@ -49,7 +49,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 export default function MaterialTableDemo(props) {
-  const { className, type, data, agent, ...rest } = props;
+  const { type, data, agent } = props;
   const classes = useStyles();
 
   const renderColumns = () => {
