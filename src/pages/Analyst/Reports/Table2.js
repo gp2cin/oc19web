@@ -60,14 +60,15 @@ export default function MaterialTableDemo(props) {
           { title: 'Nome observador', field: 'observerName' },
           { title: 'Email observador', field: 'observerEmail' },
           { title: 'Bairro', field: 'neigborhood' },
+          { title: 'Cidade', field: 'city' },
         ],
-        'Observações individuais': [
+        'Observações Individuais': [
           { title: 'id', field: 'id' },
           { title: 'Nome observador', field: 'Nome observador' },
           { title: 'Email observador', field: 'Email observador' },
           { title: 'Bairro', field: 'Bairro' },
         ],
-        'Observações em lote': [
+        'Observações em Lote': [
           { title: 'id', field: 'id' },
           { title: 'Nome observador', field: 'Nome observador' },
           { title: 'Email observador', field: 'Email observador' },
@@ -75,8 +76,14 @@ export default function MaterialTableDemo(props) {
         ],
       },
       Indivíduo: {
-        'Auto-casos': [{ title: 'id', field: 'id' }],
-        'Observações Gerais': [{ title: 'id', field: 'id' }],
+        'Auto Casos': [{ title: 'id', field: 'id' }],
+        'Observações Gerais': [
+          { title: 'id', field: 'id' },
+          { title: 'Nome indivíduo', field: 'observerName' },
+          { title: 'Email indivíduo', field: 'observerEmail' },
+          { title: 'Bairro', field: 'neigborhood' },
+          { title: 'Cidade', field: 'city' },
+        ],
       },
     };
 
@@ -92,12 +99,23 @@ export default function MaterialTableDemo(props) {
             observerName: observation.observer_name,
             observerEmail: observation.observer_email,
             neigborhood: observation.neighborhood_name,
+            city: observation.city,
           },
-          'Observações individuais': { id: 1 },
-          'Observações em lote': { id: 1 },
+          'Observações Individuais': { id: 1 },
+          'Observações em Lote': { id: 1 },
         },
-        Indivíduo: { 'Auto-casos': { id: 1 }, 'Observações Gerais': { id: 1 } },
+        Indivíduo: {
+          'Auto Casos': { id: observation._id },
+          'Observações Gerais': {
+            id: observation._id,
+            observerName: observation.observer_name,
+            observerEmail: observation.observer_email,
+            neigborhood: observation.neighborhood_name,
+            city: observation.city,
+          },
+        },
       };
+
       return dataCells[agent][type];
     });
   };
@@ -132,7 +150,7 @@ export default function MaterialTableDemo(props) {
       title={
         <div className={classes.rootTitle}>
           <h2 className={classes.title}>{'Observações - ' + agent}</h2>
-          <h5 className={classes.subTitle}>{type} +2</h5>
+          <h5 className={classes.subTitle}>{type}</h5>
         </div>
       }
       icons={tableIcons}

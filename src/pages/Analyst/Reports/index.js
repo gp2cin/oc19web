@@ -44,28 +44,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function Reports() {
-  // const classes = useStyles();
-
-  const agentType = ['Observador', 'Indivíduo'];
-  const observerTypes = ['Observações Gerais', 'Observações individuais', 'Observações em lote'];
-  const userTypes = ['Auto-casos', 'Observações Gerais'];
+  const agentType = ['Observador', 'Indivíduo', 'Todos'];
+  const observerTypes = ['Observações Gerais', 'Observações Individuais', 'Observações em Lote'];
+  const userTypes = ['Auto Casos', 'Observações Gerais'];
 
   const [value, setValue] = React.useState(0);
   const [observerType, setObserverType] = React.useState(0);
   const [secondBar, setSecondBar] = React.useState(observerTypes);
   const [actualConfig, setActualConfig] = React.useState({ agent: agentType[0], type: secondBar[0] });
 
-  const [city, setCity] = React.useState(cities[0]);
+  const [city, setCity] = React.useState();
   const [openSelectNeighborhood, setOpenSelectNeighborhood] = React.useState(false);
 
   const [neighborhoodList, setNeighborhoodList] = React.useState([]);
   const [loadingList, setLoadingList] = React.useState(false);
 
   const [neighborhood, setNeighborhood] = React.useState('');
-  const [dataRange, setDataRange] = React.useState(moment());
 
   const [loading, setLoading] = React.useState(true);
   const [data, setData] = React.useState([]);
+
+  const [fromDate, setFromDate] = React.useState(null);
+  const [toDate, setToDate] = React.useState(null);
 
   useEffect(() => {
     getData();
@@ -82,7 +82,7 @@ export default function Reports() {
     const list = response.data.map(({ name }) => name);
     try {
       setNeighborhoodList(list);
-      setNeighborhood(list[0]);
+      // setNeighborhood(list[0]);
     } catch (error) {}
     setLoadingList(false);
   };
@@ -94,7 +94,7 @@ export default function Reports() {
   };
 
   const handleSearch = () => {
-    setActualConfig({ agent: agentType[value], type: secondBar[observerType] });
+    setActualConfig({ agent: agentType[value], type: observerType === 2 ? '' : secondBar[observerType] });
     getData();
   };
 
@@ -102,23 +102,43 @@ export default function Reports() {
     setObserverType(e.target.value);
   };
 
-  const getData = async () => {
-    setLoading(true);
+  const getData = async (noHaveFilters) => {
+    try {
+      setLoading(true);
 
-    if (value === 0) {
-      if (observerTypes[observerType] === 'Observações Gerais') {
-        const filters = {
-          agentType: agentType[value],
-          observerType: secondBar[observerType],
+      let filters = {
+        agentType: agentType[value],
+        observerType: secondBar[observerType],
+      };
+      if (!noHaveFilters) {
+        filters = {
+          ...filters,
           city,
           neighborhood,
+          fromDate,
+          toDate,
         };
-        const response = await api.get('api/v1/general-observations', { params: filters });
-
-        setData(response.data.generalObservations);
       }
+
+      const response = await api.get('api/v1/dashboard/filters', { params: filters });
+
+      setData(response.data);
+
+      setLoading(false);
+    } catch (error) {
+      setData([]);
     }
-    setLoading(false);
+  };
+
+  const clearFilters = () => {
+    setValue(0);
+    setObserverType(0);
+
+    setCity('');
+    setNeighborhood('');
+    setFromDate(null);
+    setToDate(null);
+    getData(true);
   };
 
   return (
@@ -148,28 +168,32 @@ export default function Reports() {
                     </Grid>
                   </Grid>
                 </Grid>
-
-                <Grid item>
-                  <Grid container direction="row" spacing={2}>
-                    <Grid item style={{ display: 'flex', alignItems: 'center' }}>
-                      <Typography>Tipo: </Typography>
-                    </Grid>
-                    <Grid item>
-                      <Select
-                        value={observerType}
-                        margin="dense"
-                        variant="outlined"
-                        onChange={changeObserverType}
-                        style={{ width: 220 }}
-                      >
-                        {secondBar.map((name, i) => {
-                          return <MenuItem value={i}>{name}</MenuItem>;
-                        })}
-                      </Select>
+                {value !== 2 && (
+                  <Grid item>
+                    <Grid container direction="row" spacing={2}>
+                      <Grid item style={{ display: 'flex', alignItems: 'center' }}>
+                        <Typography>Tipo: </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Select
+                          value={observerType}
+                          margin="dense"
+                          variant="outlined"
+                          onChange={changeObserverType}
+                          style={{ width: 220 }}
+                        >
+                          {secondBar.map((name, i) => {
+                            return <MenuItem value={i}>{name}</MenuItem>;
+                          })}
+                        </Select>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-
+                )}
+              </Grid>
+            </Grid>
+            <Grid item xs={12}>
+              <Grid container direction="row" alignItems="center" spacing={3}>
                 <Grid item>
                   <Grid container direction="row" spacing={2}>
                     <Grid item style={{ display: 'flex', alignItems: 'center' }}>
@@ -229,14 +253,13 @@ export default function Reports() {
                           )}
                         </>
                       ) : (
-                        <TextField />
+                        <TextField margin="dense" id="outlined-basic" variant="outlined" />
                       )}
                     </Grid>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-
             <Grid item xs={12}>
               <Grid container direction="row" alignItems="center" spacing={3}>
                 <Grid item>
@@ -249,8 +272,8 @@ export default function Reports() {
                         margin="dense"
                         inputVariant="outlined"
                         format="DD/MM/yyyy"
-                        value={dataRange}
-                        onChange={setDataRange}
+                        value={fromDate}
+                        onChange={setFromDate}
                         animateYearScrolling
                       />
                     </Grid>
@@ -262,8 +285,8 @@ export default function Reports() {
                         margin="dense"
                         inputVariant="outlined"
                         format="DD/MM/yyyy"
-                        value={dataRange}
-                        onChange={setDataRange}
+                        value={toDate}
+                        onChange={setToDate}
                         animateYearScrolling
                       />
                     </Grid>
@@ -273,6 +296,11 @@ export default function Reports() {
                 <Grid item>
                   <Button variant="outlined" onClick={() => handleSearch()}>
                     Buscar
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button variant="outlined" color="secondary" onClick={() => clearFilters()}>
+                    Limpar filtros
                   </Button>
                 </Grid>
               </Grid>
