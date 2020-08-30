@@ -28,6 +28,7 @@ import { Home as AnalystHome, Reports as AnalystReports, UserList as AnalystUser
 import { DashboardProfile } from '../pages/SharedViewsDash';
 
 import { ANALYST_HOME, ANALYST_PROFILE, ANALYST_REPORTS, ANALYST_USER_LIST } from './constants/analyst';
+import ObserverAvatar from '../pages/ObserverAvatar';
 
 // const PrivateRoute = ({ component: Component, ...rest }) => (
 //   <Route
@@ -130,8 +131,8 @@ const GeneralObservationRoute = ({ component: Component, ...rest }) => (
           </Container>
         </div>
       ) : (
-          <CompG />
-        );
+        <CompG />
+      );
     }}
   />
 );
@@ -151,13 +152,13 @@ const Routes = () => (
       <Route path={'/signin'} component={() => <PageWithContainer Page={SignIn} />} />
       <Route path={'/signup'} component={() => <PageWithContainer Page={SignUp} />} />
       <Route path={'/my-account'} component={() => <PageWithContainer Page={MyAccount} />} />
+      <Route path={'/v2/my-account'} component={() => <ObserverAvatar />} />
 
       <RouteWithLayout component={AnalystHome} exact layout={MainLayout} path={ANALYST_HOME} />
       <RouteWithLayout component={DashboardProfile} exact layout={MainLayout} path={ANALYST_PROFILE} />
       <RouteWithLayout component={AnalystReports} exact layout={MainLayout} path={ANALYST_REPORTS} />
       <RouteWithLayout component={AnalystUserList} exact layout={MainLayout} path={ANALYST_USER_LIST} />
       <Route path={'*'} component={() => <h1>Page not found</h1>} />
-
     </Switch>
   </BrowserRouter>
 );
