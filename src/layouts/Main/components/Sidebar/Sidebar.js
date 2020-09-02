@@ -10,7 +10,12 @@ import ListIcon from '@material-ui/icons/List';
 
 import { Profile, SidebarNav } from './components';
 
-import { ANALYST_REPORTS, ANALYST_PROFILE, ANALYST_HOME, ANALYST_USER_LIST } from '../../../../routes/constants/analyst';
+import {
+  ANALYST_REPORTS,
+  ANALYST_PROFILE,
+  ANALYST_HOME,
+  ANALYST_USER_LIST,
+} from '../../../../routes/constants/analyst';
 
 const useStyles = makeStyles((theme) => ({
   drawer: {
@@ -47,6 +52,11 @@ const Sidebar = (props) => {
       icon: <DashboardIcon />,
     },
     {
+      title: 'Usuários',
+      href: ANALYST_USER_LIST,
+      icon: <ListIcon />,
+    },
+    {
       title: 'Relatórios',
       href: ANALYST_REPORTS,
       icon: <PeopleIcon />,
@@ -55,11 +65,6 @@ const Sidebar = (props) => {
       title: 'Perfil',
       href: ANALYST_PROFILE,
       icon: <Person />,
-    },
-    {
-      title: 'Usuários',
-      href: ANALYST_USER_LIST,
-      icon: <ListIcon />,
     },
   ];
 

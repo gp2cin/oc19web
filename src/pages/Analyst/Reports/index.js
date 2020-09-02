@@ -44,7 +44,7 @@ TabPanel.propTypes = {
 // }));
 
 export default function Reports() {
-  const agentType = ['Observador', 'Indivíduo', 'Todos'];
+  const agentType = ['Observador', 'Indivíduo'];
   const observerTypes = ['Observações Gerais', 'Observações Individuais', 'Observações em Lote'];
   const userTypes = ['Auto Casos', 'Observações Gerais'];
 
