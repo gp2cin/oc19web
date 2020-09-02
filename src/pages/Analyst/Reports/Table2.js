@@ -54,40 +54,40 @@ export default function MaterialTableDemo(props) {
   const { type, data, agent } = props;
   const classes = useStyles();
 
-  const symptomOptions = [
-    { value: 'headache', label: 'Dor de cabeça' },
-    { value: 'runny_nose', label: 'Coriza' },
-    { value: 'breathlessness', label: 'Dificuldade para respirar' },
-    { value: 'cough', label: 'Tosse' },
-    { value: 'dry_cough', label: 'Tosse seca' },
-    { value: 'sore_throat', label: 'Dor de garganta' },
-    { value: 'muscle_weakness_or_pain', label: 'Fraqueza ou dor muscular' },
-    { value: 'sputum_production', label: 'Produção de escarro' },
-    { value: 'sutuffy_nose', label: 'Obstrução do nariz' },
-    { value: 'red_eyes', label: 'Vermelhidão nos olhos' },
-    { value: 'dificulty_swallowing', label: 'Dificuldade para engolir' },
-    { value: 'chills', label: 'Calafrios' },
-    { value: 'body_red_spots', label: 'Manchas vermelhas no corpo' },
-    { value: 'diarrhea', label: 'Diarreia' },
-    { value: 'nausea', label: 'Náusea' },
-    { value: 'vomiting', label: 'Vômito' },
-    { value: 'lack_of_appetite', label: 'Falta de apetite' },
-    { value: 'fever', label: 'Febre' },
-  ];
+  // const symptomOptions = [
+  //   { value: 'headache', label: 'Dor de cabeça' },
+  //   { value: 'runny_nose', label: 'Coriza' },
+  //   { value: 'breathlessness', label: 'Dificuldade para respirar' },
+  //   { value: 'cough', label: 'Tosse' },
+  //   { value: 'dry_cough', label: 'Tosse seca' },
+  //   { value: 'sore_throat', label: 'Dor de garganta' },
+  //   { value: 'muscle_weakness_or_pain', label: 'Fraqueza ou dor muscular' },
+  //   { value: 'sputum_production', label: 'Produção de escarro' },
+  //   { value: 'sutuffy_nose', label: 'Obstrução do nariz' },
+  //   { value: 'red_eyes', label: 'Vermelhidão nos olhos' },
+  //   { value: 'dificulty_swallowing', label: 'Dificuldade para engolir' },
+  //   { value: 'chills', label: 'Calafrios' },
+  //   { value: 'body_red_spots', label: 'Manchas vermelhas no corpo' },
+  //   { value: 'diarrhea', label: 'Diarreia' },
+  //   { value: 'nausea', label: 'Náusea' },
+  //   { value: 'vomiting', label: 'Vômito' },
+  //   { value: 'lack_of_appetite', label: 'Falta de apetite' },
+  //   { value: 'fever', label: 'Febre' },
+  // ];
 
-  const deseaseOptions = [
-    { value: 'diabetes', label: 'Diabetes' },
-    { value: 'neurological_disorders', label: 'Doença Neurológica' },
-    { value: 'HIV_infection', label: 'Infecção pelo HIV' },
-    { value: 'neoplasm', label: 'Neoplasia (Cancer)' },
-    { value: 'kidney_disease', label: 'Doença renal (doença nos rins)' },
-    { value: 'heart_disease', label: 'Doença cardiovascular (doença no coração), incluindo hipertensão' },
-    { value: 'liver_disease', label: 'Doença Hepática (doença no fígado)' },
-    { value: 'immunodeficiency', label: 'Imunodeficiência (imunidade baixa)' },
-    { value: 'lung_disease', label: 'Doença pulmonar crônica (doença nos pulmões)' },
-    { value: 'neuromuscular_disease', label: 'Doença neuromuscular (doença muscular)' },
-    { value: 'obesity', label: 'Obesidade' },
-  ];
+  // const deseaseOptions = [
+  //   { value: 'diabetes', label: 'Diabetes' },
+  //   { value: 'neurological_disorders', label: 'Doença Neurológica' },
+  //   { value: 'HIV_infection', label: 'Infecção pelo HIV' },
+  //   { value: 'neoplasm', label: 'Neoplasia (Cancer)' },
+  //   { value: 'kidney_disease', label: 'Doença renal (doença nos rins)' },
+  //   { value: 'heart_disease', label: 'Doença cardiovascular (doença no coração), incluindo hipertensão' },
+  //   { value: 'liver_disease', label: 'Doença Hepática (doença no fígado)' },
+  //   { value: 'immunodeficiency', label: 'Imunodeficiência (imunidade baixa)' },
+  //   { value: 'lung_disease', label: 'Doença pulmonar crônica (doença nos pulmões)' },
+  //   { value: 'neuromuscular_disease', label: 'Doença neuromuscular (doença muscular)' },
+  //   { value: 'obesity', label: 'Obesidade' },
+  // ];
 
   const renderColumns = () => {
     const titles = {
